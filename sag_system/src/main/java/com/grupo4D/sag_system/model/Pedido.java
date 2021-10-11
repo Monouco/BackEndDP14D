@@ -18,7 +18,7 @@ public class Pedido {
     @Column(name="plazoEntrega")
     private int plazoEntrega;
 
-    @Column(name="cantidadGLP")
+    @Column(name="cantidadGlp")
     private double cantidadGLP;
 
     @Column(name="fechaPedido")
