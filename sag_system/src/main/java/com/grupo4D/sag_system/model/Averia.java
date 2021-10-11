@@ -32,4 +32,6 @@ public class Averia {
 
     @Column(name="activo")
     private boolean activo = true;
+
+
 }

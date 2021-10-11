@@ -36,4 +36,77 @@ public class Pedido {
     @Column(name="activo")
     private boolean activo = true;
 
+    public Pedido(int id, int plazoEntrega, double cantidadGLP, LocalDateTime fechaPedido, LocalDateTime fechaEntrega, String estadoPedido, Nodo nodo) {
+        this.id = id;
+        this.plazoEntrega = plazoEntrega;
+        this.cantidadGLP = cantidadGLP;
+        this.fechaPedido = fechaPedido;
+        this.fechaEntrega = fechaEntrega;
+        this.estadoPedido = estadoPedido;
+        this.nodo = nodo;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public int getPlazoEntrega() {
+        return plazoEntrega;
+    }
+
+    public void setPlazoEntrega(int plazoEntrega) {
+        this.plazoEntrega = plazoEntrega;
+    }
+
+    public double getCantidadGLP() {
+        return cantidadGLP;
+    }
+
+    public void setCantidadGLP(double cantidadGLP) {
+        this.cantidadGLP = cantidadGLP;
+    }
+
+    public LocalDateTime getFechaPedido() {
+        return fechaPedido;
+    }
+
+    public void setFechaPedido(LocalDateTime fechaPedido) {
+        this.fechaPedido = fechaPedido;
+    }
+
+    public LocalDateTime getFechaEntrega() {
+        return fechaEntrega;
+    }
+
+    public void setFechaEntrega(LocalDateTime fechaEntrega) {
+        this.fechaEntrega = fechaEntrega;
+    }
+
+    public String getEstadoPedido() {
+        return estadoPedido;
+    }
+
+    public void setEstadoPedido(String estadoPedido) {
+        this.estadoPedido = estadoPedido;
+    }
+
+    public Nodo getNodo() {
+        return nodo;
+    }
+
+    public void setNodo(Nodo nodo) {
+        this.nodo = nodo;
+    }
+
+    public boolean isActivo() {
+        return activo;
+    }
+
+    public void setActivo(boolean activo) {
+        this.activo = activo;
+    }
 }
