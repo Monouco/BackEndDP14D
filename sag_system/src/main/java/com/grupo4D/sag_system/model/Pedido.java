@@ -37,13 +37,16 @@ public class Pedido {
     private boolean activo = true;
 
     public Pedido(int id, int plazoEntrega, double cantidadGLP, LocalDateTime fechaPedido, LocalDateTime fechaEntrega, String estadoPedido, Nodo nodo) {
-        this.id = id;
-        this.plazoEntrega = plazoEntrega;
-        this.cantidadGLP = cantidadGLP;
-        this.fechaPedido = fechaPedido;
-        this.fechaEntrega = fechaEntrega;
-        this.estadoPedido = estadoPedido;
-        this.nodo = nodo;
+        this.setId(id);
+        this.setPlazoEntrega(plazoEntrega);
+        this.setCantidadGLP(cantidadGLP);
+        this.setFechaPedido(fechaPedido);
+        this.setFechaEntrega(fechaEntrega);
+        this.setEstadoPedido(estadoPedido);
+        this.setNodo(nodo);
+    }
+
+    public Pedido() {
     }
 
     public int getId() {

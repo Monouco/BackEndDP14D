@@ -24,4 +24,36 @@ public class Nodo {
 
     @Column(name="activo")
     private boolean activo = true;
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public int getPlazoEntrega() {
+        return plazoEntrega;
+    }
+
+    public void setPlazoEntrega(int plazoEntrega) {
+        this.plazoEntrega = plazoEntrega;
+    }
+
+    public double getCantidadGLP() {
+        return cantidadGLP;
+    }
+
+    public void setCantidadGLP(double cantidadGLP) {
+        this.cantidadGLP = cantidadGLP;
+    }
+
+    public boolean isActivo() {
+        return activo;
+    }
+
+    public void setActivo(boolean activo) {
+        this.activo = activo;
+    }
 }
