@@ -1,4 +1,32 @@
 package com.grupo4D.sag_system.controller;
 
+import com.grupo4D.sag_system.model.Planta;
+import com.grupo4D.sag_system.service.PlantaService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+@RestController
+@RequestMapping("/planta")
+//@CrossOrigin("*")
 public class PlantaController {
+    @Autowired
+    private PlantaService plantaService;
+
+    @PostMapping("/guardarPlanta")
+    public Planta guardarPlanta(@RequestBody Planta plantaModel){
+        return plantaService.guardarPlanta(plantaModel);
+    }
+
+    @PostMapping("/registrarPlantaNueva")
+    public Planta registrarPlantaNueva(@RequestBody Planta plantaModel){
+        return plantaService.guardarPlantaNueva(plantaModel);
+    }
+
+    @GetMapping("/listarPlantas")
+    public List<Planta> listarPlantas(){
+        return plantaService.listarPlantas();
+    }
 }
+

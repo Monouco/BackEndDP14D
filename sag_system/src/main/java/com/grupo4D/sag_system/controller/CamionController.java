@@ -1,4 +1,32 @@
 package com.grupo4D.sag_system.controller;
 
+import com.grupo4D.sag_system.model.Camion;
+import com.grupo4D.sag_system.service.CamionService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+@RestController
+@RequestMapping("/camion")
+//@CrossOrigin("*")
 public class CamionController {
+    @Autowired
+    private CamionService camionService;
+
+    @PostMapping("/guardarCamion")
+    public Camion guardarCamion(@RequestBody Camion camionModel){
+        return camionService.guardarCamion(camionModel);
+    }
+
+    @PostMapping("/registrarCamionNuevo")
+    public Camion registrarCamionNuevo(@RequestBody Camion camionModel){
+        return camionService.guardarCamionNuevo(camionModel);
+    }
+
+    @GetMapping("/listarCamiones")
+    public List<Camion> listarCamiones(){
+        return camionService.listarCamiones();
+    }
 }
+
