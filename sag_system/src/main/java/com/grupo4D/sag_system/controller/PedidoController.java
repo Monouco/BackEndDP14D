@@ -25,8 +25,8 @@ public class PedidoController {
         return pedidoService.guardarPedidoNuevo(pedidoModel);
     }
 
-    @GetMapping("/pedido")
-    public List<Pedido> listarPedido(){
+    @GetMapping("/listarPedidos")
+    public List<Pedido> listarPedidos(){
         return pedidoService.listarPedidos();
     }
 }

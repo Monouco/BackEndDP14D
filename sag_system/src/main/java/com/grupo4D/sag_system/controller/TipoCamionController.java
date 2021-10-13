@@ -24,7 +24,7 @@ public class TipoCamionController {
         return tipoCamionService.guardarTipoCamionNuevo(tipoCamionModel);
     }
 
-    @GetMapping("/listarTipoCamion")
+    @GetMapping("/listarTiposCamion")
     public List<TipoCamion> listarTiposCamion(){
         return tipoCamionService.listarTiposCamion();
     }

@@ -1,5 +1,7 @@
 package com.grupo4D.sag_system.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
@@ -21,9 +23,11 @@ public class Pedido {
     @Column(name="cantidadGlp")
     private double cantidadGLP;
 
+    @JsonFormat(pattern = "yyyy-MM-dd@HH:mm:ss")
     @Column(name="fechaPedido")
     private LocalDateTime fechaPedido;
 
+    @JsonFormat(pattern = "yyyy-MM-dd@HH:mm:ss")
     @Column(name="fechaEntrega")
     private LocalDateTime fechaEntrega;
 

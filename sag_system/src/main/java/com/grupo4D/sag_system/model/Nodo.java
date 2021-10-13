@@ -16,14 +16,15 @@ public class Nodo {
 
     //Resto de atributos
 
-    @Column(name="coordenadX")
-    private int plazoEntrega;
+    @Column(name="coordenadaX")
+    private int coordenadaX;
 
     @Column(name="coordenadaY")
-    private double cantidadGLP;
+    private int coordenadaY;
 
     @Column(name="activo")
     private boolean activo = true;
+
 
     public int getId() {
         return id;
@@ -33,20 +34,20 @@ public class Nodo {
         this.id = id;
     }
 
-    public int getPlazoEntrega() {
-        return plazoEntrega;
+    public int getCoordenadaX() {
+        return coordenadaX;
     }
 
-    public void setPlazoEntrega(int plazoEntrega) {
-        this.plazoEntrega = plazoEntrega;
+    public void setCoordenadaX(int coordenadaX) {
+        this.coordenadaX = coordenadaX;
     }
 
-    public double getCantidadGLP() {
-        return cantidadGLP;
+    public int getCoordenadaY() {
+        return coordenadaY;
     }
 
-    public void setCantidadGLP(double cantidadGLP) {
-        this.cantidadGLP = cantidadGLP;
+    public void setCoordenadaY(int coordenadaY) {
+        this.coordenadaY = coordenadaY;
     }
 
     public boolean isActivo() {

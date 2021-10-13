@@ -24,7 +24,7 @@ public class UsuarioController {
         return usuarioService.guardarUsuarioNuevo(usuarioModel);
     }
 
-    @GetMapping("/listarUsuario")
+    @GetMapping("/listarUsuarios")
     public List<Usuario> listarUsuarios(){
         return usuarioService.listarUsuarios();
     }

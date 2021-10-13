@@ -24,7 +24,7 @@ public class RutaXPedidoController {
         return rutaXPedidoService.guardarRutaXPedidoNuevo(rutaXPedidoModel);
     }
 
-    @GetMapping("/listarRutaXPedido")
+    @GetMapping("/listarRutasXPedido")
     public List<RutaXPedido> listarRutaXPedido(){
         return rutaXPedidoService.listarRutasXPedido();
     }
