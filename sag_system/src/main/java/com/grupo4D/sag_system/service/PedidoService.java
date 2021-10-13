@@ -14,6 +14,7 @@ import java.util.ArrayList;
 public class PedidoService {
     @Autowired
     PedidoRepository pedidoRepository;
+    @Autowired
     NodoRepository nodoRepository;
 
     public Pedido guardarPedido(Pedido pedido){
@@ -27,8 +28,8 @@ public class PedidoService {
 //            Nodo nodo = nodoRepository.findIdNodoByCoordenadaXAndCoordenadaY(pedido.getNodo().getCoordenadaX(), pedido.getNodo().getCoordenadaY());
 //            pedido.getNodo().setId(nodo.getId());
 //        }
-        //Nodo nodo = nodoRepository.findIdNodoByCoordenadaXAndCoordenadaY(pedido.getNodo().getCoordenadaX(), pedido.getNodo().getCoordenadaY());
-        //pedido.getNodo().setId(nodo.getId());
+        Nodo nodo = nodoRepository.findIdNodoByCoordenadaXAndCoordenadaYAndActivoTrue(pedido.getNodo().getCoordenadaX(), pedido.getNodo().getCoordenadaY());
+        pedido.getNodo().setId(nodo.getId());
 
 
         return pedidoRepository.save(pedido);

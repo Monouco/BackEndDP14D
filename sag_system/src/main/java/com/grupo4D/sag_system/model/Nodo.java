@@ -25,7 +25,6 @@ public class Nodo {
     @Column(name="activo")
     private boolean activo = true;
 
-
     public int getId() {
         return id;
     }
