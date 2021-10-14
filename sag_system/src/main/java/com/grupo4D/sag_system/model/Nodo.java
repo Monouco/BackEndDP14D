@@ -25,6 +25,15 @@ public class Nodo {
     @Column(name="activo")
     private boolean activo = true;
 
+    public Nodo(int i,int j){
+        coordenadaX = i;
+        coordenadaY = j;
+    }
+
+    public  Nodo(){
+
+    }
+
     public int getId() {
         return id;
     }

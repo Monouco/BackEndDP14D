@@ -9,7 +9,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/bloqueo")
-//@CrossOrigin("*")
+@CrossOrigin(origins = "*", methods= {RequestMethod.GET,RequestMethod.PUT,RequestMethod.POST})
 public class BloqueoController {
     @Autowired
     private BloqueoService bloqueoService;

@@ -9,7 +9,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/nodo")
-//@CrossOrigin("*")
+@CrossOrigin(origins = "*", methods= {RequestMethod.GET,RequestMethod.PUT,RequestMethod.POST})
 public class NodoController {
     @Autowired
     private NodoService nodoService;
@@ -27,6 +27,12 @@ public class NodoController {
     @GetMapping("/listarNodos")
     public List<Nodo> listarNodos(){
         return nodoService.listarNodos();
+    }
+
+
+    @PostMapping("/generarNodos")
+    public String generarNodos(){
+        return nodoService.generarNodos();
     }
 }
 

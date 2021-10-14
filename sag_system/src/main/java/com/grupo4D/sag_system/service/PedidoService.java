@@ -23,20 +23,18 @@ public class PedidoService {
 
     public Pedido guardarPedidoNuevo(Pedido pedido){
         pedido.setEstadoPedido("Nuevo");
-
-//        if (nodoRepository.findIdNodoByCoordenadaXAndCoordenadaY(pedido.getNodo().getCoordenadaX(), pedido.getNodo().getCoordenadaY()) != null){
-//            Nodo nodo = nodoRepository.findIdNodoByCoordenadaXAndCoordenadaY(pedido.getNodo().getCoordenadaX(), pedido.getNodo().getCoordenadaY());
-//            pedido.getNodo().setId(nodo.getId());
-//        }
         Nodo nodo = nodoRepository.findIdNodoByCoordenadaXAndCoordenadaYAndActivoTrue(pedido.getNodo().getCoordenadaX(), pedido.getNodo().getCoordenadaY());
         pedido.getNodo().setId(nodo.getId());
-
-
         return pedidoRepository.save(pedido);
     }
 
     public ArrayList<Pedido> listarPedidos() {
         return (ArrayList<Pedido>) pedidoRepository.findAll();
+    }
+
+    public ArrayList<Pedido> listarPedidosSinAsignar() {
+        String estado = "Nuevo";
+        return (ArrayList<Pedido>) pedidoRepository.findPedidosByEstadoPedido(estado);
     }
 
 

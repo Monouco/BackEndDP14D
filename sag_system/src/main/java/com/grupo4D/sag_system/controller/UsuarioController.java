@@ -9,7 +9,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/usuario")
-//@CrossOrigin("*")
+@CrossOrigin(origins = "*", methods= {RequestMethod.GET,RequestMethod.PUT,RequestMethod.POST})
 public class UsuarioController {
     @Autowired
     private UsuarioService usuarioService;

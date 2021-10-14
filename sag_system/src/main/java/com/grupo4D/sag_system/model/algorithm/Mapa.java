@@ -8,7 +8,7 @@ public class Mapa {
     private char [][] map;
     private int height;
     private int width;
-    private int [] plantaPrincipal={10,8};
+    private int [] plantaPrincipal={12,8};
     private ArrayList<DepositGLP> deposits;
 
     public Mapa(int height, int width) {

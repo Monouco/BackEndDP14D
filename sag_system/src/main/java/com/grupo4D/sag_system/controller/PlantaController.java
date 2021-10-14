@@ -9,7 +9,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/planta")
-//@CrossOrigin("*")
+@CrossOrigin(origins = "*", methods= {RequestMethod.GET,RequestMethod.PUT,RequestMethod.POST})
 public class PlantaController {
     @Autowired
     private PlantaService plantaService;

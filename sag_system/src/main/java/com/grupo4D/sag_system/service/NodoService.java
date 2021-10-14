@@ -24,5 +24,15 @@ public class NodoService{
         return (ArrayList<Nodo>) nodoRepository.findAll();
     }
 
+    public String generarNodos(){
+        for(int i = 0; i < 70; i++){
+            for(int j = 0; j < 50; j++){
+                Nodo nodo = new Nodo(i,j);
+                nodoRepository.save(nodo);
+            }
+        }
+        return "CREADOS";
+    }
+
 }
 

@@ -10,7 +10,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/rolXUsuario")
-//@CrossOrigin("*")
+@CrossOrigin(origins = "*", methods= {RequestMethod.GET,RequestMethod.PUT,RequestMethod.POST})
 public class RolXUsuarioController {
     @Autowired
     private RolXUsuarioService rolXUsuarioService;
