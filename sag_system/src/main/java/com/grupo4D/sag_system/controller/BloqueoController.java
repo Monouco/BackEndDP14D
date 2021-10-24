@@ -24,6 +24,11 @@ public class BloqueoController {
         return bloqueoService.guardarBloqueoNuevo(bloqueoModel);
     }
 
+    @PostMapping("/registrarListaBloqueos")
+    public Bloqueo registrarListaBloqueos(@RequestBody Bloqueo bloqueoModel){
+        return bloqueoService.guardarBloqueoNuevo(bloqueoModel);
+    }
+
     @GetMapping("/listarBloqueos")
     public List<Bloqueo> listarBloqueos(){
         return bloqueoService.listarBloqueos();

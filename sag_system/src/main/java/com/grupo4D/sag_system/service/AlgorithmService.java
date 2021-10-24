@@ -37,10 +37,15 @@ public class AlgorithmService {
     RutaXPedidoRepository rutaXPedidoRepository;
 
     //public ArrayList<RutaFront> asignarPedidos(LocalDateTime horaInicio){
-    public ArrayList<RutaFront> asignarPedidos(String fecha){
+    //public ArrayList<RutaFront> asignarPedidos(String fecha){
+    public ArrayList<RutaFront> asignarPedidos(Fecha fecha){
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd@HH:mm:ss");
-        System.out.print("INICIO\n" +fecha+"\nFECHA RECIBIDA\n");
-        LocalDateTime horaInicio = LocalDateTime.parse(fecha, formatter);
+        //System.out.print("INICIO\n" +fecha+"\nFECHA RECIBIDA\n");
+        //String[] fechas = fecha.split(":");
+       //System.out.print("INICIO\n" +fechas[0]+"\nFECHA RECIBIDA\n");
+        //System.out.print("INICIO\n" +fechas[1]+"\nFECHA RECIBIDA\n");
+        //LocalDateTime horaInicio = LocalDateTime.parse(fecha, formatter);
+        LocalDateTime horaInicio = fecha.getFecha();
 
         ArrayList<RutaFront> solucion = new ArrayList<>();
 

@@ -3,9 +3,11 @@ package com.grupo4D.sag_system.controller;
 
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.grupo4D.sag_system.model.Fecha;
 import com.grupo4D.sag_system.model.response.RutaFront;
 import com.grupo4D.sag_system.service.AlgorithmService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
@@ -19,12 +21,23 @@ public class AlgorithmController {
     @Autowired
     private AlgorithmService algoritmoService;
 
-    @JsonFormat(pattern = "yyyy-MM-dd@HH:mm:ss")
+//    @JsonFormat(pattern = "yyyy-MM-dd@HH:mm:ss")
+//    @PostMapping("/generarSolucion")
+//    public ArrayList<RutaFront> generarSolucion(@RequestParam(name = "horaInicio") String horaInicio){
+//        return algoritmoService.asignarPedidos(horaInicio);
+//    }
+
+    @JsonFormat(pattern="yyyy-MM-dd@HH:mm:ss")
+    @DateTimeFormat(iso = DateTimeFormat.ISO.TIME)
     @PostMapping("/generarSolucion")
-    public ArrayList<RutaFront> generarSolucion(@RequestParam(name = "horaInicio") String horaInicio){
+    public ArrayList<RutaFront> generarSolucion(@RequestBody Fecha horaInicio){
         return algoritmoService.asignarPedidos(horaInicio);
     }
-//    public ArrayList<RutaFront> generarSolucion(LocalDateTime horaInicio){
+
+//    @JsonFormat(pattern="yyyy-MM-dd@HH:mm:ss")
+//    @DateTimeFormat(iso = DateTimeFormat.ISO.TIME)
+//    @PostMapping("/generarSolucion")
+//    public ArrayList<RutaFront> generarSolucion(@RequestBody String horaInicio){
 //        return algoritmoService.asignarPedidos(horaInicio);
 //    }
 
