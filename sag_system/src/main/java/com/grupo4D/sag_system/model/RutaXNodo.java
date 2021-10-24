@@ -22,6 +22,9 @@ public class RutaXNodo {
     @ManyToOne @JoinColumn(name="idNodo")
     private Nodo nodo;
 
+    @Column(name = "pedidoRel")
+    private int pedido;
+
     @Column(name="activo")
     private boolean activo = true;
 
@@ -63,5 +66,13 @@ public class RutaXNodo {
 
     public void setActivo(boolean activo) {
         this.activo = activo;
+    }
+
+    public int getPedido() {
+        return pedido;
+    }
+
+    public void setPedido(int pedido) {
+        this.pedido = pedido;
     }
 }
