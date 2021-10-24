@@ -132,6 +132,11 @@ public class AlgorithmService {
                 RutaXNodo rutaXNodo = new RutaXNodo();
                 rutaXNodo.setNodo(nodo);
                 rutaXNodo.setRuta(ruta);
+                if(j.length ==3){
+                    rutaXNodo.setPedido(j[2]);
+                }else{
+                    rutaXNodo.setPedido(-1);
+                }
                 rutaXNodoRepository.save(rutaXNodo);
 
                 //respuesta para el front
