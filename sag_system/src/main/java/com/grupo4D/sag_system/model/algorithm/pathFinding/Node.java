@@ -8,11 +8,13 @@ public class Node {
     private int[] state; //Pos X Y del nodo
     private Node parent;
     private int path_cost;
+    private int timeStep;
 
-    public Node(int x, int y, Node parent, int p_cost) {
+    public Node(int x, int y, Node parent, int p_cost, int t) {
         this.state = new int[2];
         this.state[0] = x;
         this.state[1] = y;
+        this.timeStep = t;
         this.parent = parent;
         this.path_cost = p_cost;
     }
@@ -23,6 +25,10 @@ public class Node {
 
     public int[] getState() {
         return state;
+    }
+
+    public int getTimeStep() {
+        return timeStep;
     }
 
     public Node getParent() {
@@ -37,22 +43,22 @@ public class Node {
         //Izquierda
         if(x_pos - 1 >= 0){
             children.add(new Node(x_pos-1,y_pos,this,
-                    astar.cost_function(new int[]{x_pos-1,y_pos}, path_cost)));
+                    astar.cost_function(new int[]{x_pos-1,y_pos}, path_cost), this.timeStep+1));
         }
         //Derecha
         if(x_pos + 1 < mapa.getWidth()){
             children.add(new Node(x_pos+1,y_pos,this,
-                    astar.cost_function(new int[]{x_pos+1,y_pos}, path_cost)));
+                    astar.cost_function(new int[]{x_pos+1,y_pos}, path_cost), this.timeStep+1));
         }
         //Arriba
         if(y_pos - 1 >= 0){
             children.add(new Node(x_pos,y_pos-1,this,
-                    astar.cost_function(new int[]{x_pos,y_pos-1}, path_cost)));
+                    astar.cost_function(new int[]{x_pos,y_pos-1}, path_cost), this.timeStep+1));
         }
         //Abajo
         if(y_pos + 1 < mapa.getHeight()){
             children.add(new Node(x_pos,y_pos+1,this,
-                    astar.cost_function(new int[]{x_pos,y_pos+1}, path_cost)));
+                    astar.cost_function(new int[]{x_pos,y_pos+1}, path_cost), this.timeStep+1));
         }
 
         return children;

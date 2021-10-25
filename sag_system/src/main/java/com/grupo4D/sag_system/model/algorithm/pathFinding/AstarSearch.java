@@ -24,7 +24,7 @@ public class AstarSearch {
 
     public ArrayList<int []> astar_search(int[] start, int[]goal){
         this.destination = goal;
-        Frontier frontier = new Frontier(new Node(start[0], start[1], null, 0));
+        Frontier frontier = new Frontier(new Node(start[0], start[1], null, 0, 0));
         ArrayList<int []> explored = new ArrayList<>();
         ArrayList<Node> children;
         Node n = null;
@@ -38,10 +38,10 @@ public class AstarSearch {
             if (goalTest(n.getState(), goal))
                 break;
             //El nodo ya fue explorado
-            explored.add(n.getState());
+            explored.add(new int[] {n.getState()[0],n.getState()[1],n.getTimeStep()});
             children = n.expand(this);
             for(Node child: children){
-                auxChildState = child.getState();
+                auxChildState =new int[] {child.getState()[0], child.getState()[1],n.getTimeStep()};
                 if(!isExplored(explored,auxChildState) && !isInFrontier(frontier, auxChildState)){
                     frontier.addNode(child);
                 }

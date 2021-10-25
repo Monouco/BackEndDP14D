@@ -1,5 +1,7 @@
 package com.grupo4D.sag_system.model.algorithm;
 
+import com.grupo4D.sag_system.model.Bloqueo;
+
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.util.ArrayList;
@@ -10,6 +12,7 @@ public class Mapa {
     private int width;
     private int [] plantaPrincipal={12,8};
     private ArrayList<DepositGLP> deposits;
+    private ArrayList<Bloqueo> roadBlocks;
 
     public Mapa(int height, int width) {
         this.height = height;
@@ -17,6 +20,7 @@ public class Mapa {
         this.map = new char [height][width];
         this.initializeMap();
         this.deposits = new ArrayList<>();
+        this.roadBlocks = new ArrayList<>();
     }
 
     public Mapa(Mapa mapa) {
