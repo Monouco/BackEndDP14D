@@ -1,11 +1,15 @@
 package com.grupo4D.sag_system.controller;
 
 
+import com.grupo4D.sag_system.model.Nodo;
 import com.grupo4D.sag_system.model.Pedido;
+import com.grupo4D.sag_system.model.request.PedidoFront;
 import com.grupo4D.sag_system.service.PedidoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @RestController
@@ -21,7 +25,25 @@ public class PedidoController {
     }
 
     @PostMapping("/registrarPedidoNuevo")
-    public Pedido registrarPedidoNuevo(@RequestBody Pedido pedidoModel){
+    public Pedido registrarPedidoNuevo(@RequestBody PedidoFront pedidoFront){
+        Pedido pedidoModel = new Pedido();
+
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd@HH:mm:ss");
+        String fecha = pedidoFront.getFechaPedido()+"@"+pedidoFront.getHora();
+        LocalDateTime date = LocalDateTime.parse(fecha, formatter);
+
+        pedidoModel.setFechaEntrega(date.plusHours(pedidoFront.getPlazoEntrega()));
+        pedidoModel.setFechaPedido(date);
+
+        pedidoModel.setPlazoEntrega(pedidoFront.getPlazoEntrega());
+        pedidoModel.setCantidadGLP(pedidoFront.getCantidadGLP());
+
+        Nodo nodo = new Nodo();
+        nodo.setCoordenadaX(pedidoFront.getUbicacionX());
+        nodo.setCoordenadaY(pedidoFront.getUbicacionY());
+        pedidoModel.setNodo(nodo);
+
         return pedidoService.guardarPedidoNuevo(pedidoModel);
     }
 
