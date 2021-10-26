@@ -4,6 +4,8 @@ package com.grupo4D.sag_system.controller;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.grupo4D.sag_system.model.Fecha;
+import com.grupo4D.sag_system.model.ObjObtenerRutasSolucion;
+import com.grupo4D.sag_system.model.response.RespuestaRutaFront;
 import com.grupo4D.sag_system.model.response.RutaFront;
 import com.grupo4D.sag_system.service.AlgorithmService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,5 +42,10 @@ public class AlgorithmController {
 //    public ArrayList<RutaFront> generarSolucion(@RequestBody String horaInicio){
 //        return algoritmoService.asignarPedidos(horaInicio);
 //    }
+
+    @PostMapping("/obtenerRutas")
+    public ArrayList<RespuestaRutaFront> obtenerRutas(@RequestBody ObjObtenerRutasSolucion obj){
+        return algoritmoService.obtenerRutasSolucion(obj.getFecha(), obj.getVelocidad());
+    }
 
 }
