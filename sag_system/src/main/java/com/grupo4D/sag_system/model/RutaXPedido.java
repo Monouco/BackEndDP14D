@@ -25,6 +25,9 @@ public class RutaXPedido {
     @ManyToOne @JoinColumn(name="idPedido")
     private Pedido pedido;
 
+    @Column(name = "secuencia")
+    private int secuencia;
+
     @Column(name="activo")
     private boolean activo = true;
 
@@ -74,5 +77,13 @@ public class RutaXPedido {
 
     public void setActivo(boolean activo) {
         this.activo = activo;
+    }
+
+    public int getSecuencia() {
+        return secuencia;
+    }
+
+    public void setSecuencia(int secuencia) {
+        this.secuencia = secuencia;
     }
 }

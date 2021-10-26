@@ -212,4 +212,47 @@ public class AlgorithmService {
         }
         return solucion;
     }
+
+    public ArrayList<RespuestaRutaFront> obtenerRutasActivas(Fecha fecha, double velocidad){
+        //parametros varios
+        int tiempoAtencion =  600;
+        double velocity = 500;
+
+        //arreglo con la solucion de toda la flota
+        ArrayList<RutaFront> solucion = new ArrayList<>();
+        solucion = this.asignarPedidos(fecha);
+
+        //arreglo para pasar a front
+        ArrayList<RespuestaRutaFront> respuesta = new ArrayList<>();
+
+        for (RutaFront ruta:solucion) {
+            RespuestaRutaFront nodoRRF = new RespuestaRutaFront();
+            nodoRRF.setStartDate(ruta.getStartDate());
+            nodoRRF.setEndDate(ruta.getStartDate()); // TODO: corregir el endDate
+            nodoRRF.setTimeAttention((int)(tiempoAtencion/velocidad));
+            nodoRRF.setVelocity(velocity);
+            nodoRRF.setRoute(ruta);
+            ArrayList<NodoFront> nodos = ruta.getPath();
+
+            for (int i=0; i< nodos.size();i++){
+                RespuestaNodoFront orderRNF = new RespuestaNodoFront();
+                if(nodos.get(i).getPedido()>=0){
+                    orderRNF.setX(nodos.get(i).getX());
+                    orderRNF.setY(nodos.get(i).getY());
+                    orderRNF.setIndexRoute(i);
+                    orderRNF.setDeliveryDate(ruta.getStartDate());
+                    orderRNF.setLeftDate(ruta.getStartDate().plusSeconds(nodoRRF.getTimeAttention()));
+                    nodoRRF.getOrders().add(orderRNF);
+                }
+            }
+//            if(nodoRRF.getOrders().size()==0){
+//                RespuestaNodoFront orderRNF = new RespuestaNodoFront();
+//                nodoRRF.getOrders().add(orderRNF);
+//            }
+            if(nodoRRF.getOrders().size()>0){
+                respuesta.add(nodoRRF);
+            }
+        }
+        return respuesta;
+    }
 }
