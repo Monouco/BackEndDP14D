@@ -268,7 +268,13 @@ public class ACSAlgorithm {
         int next = -1-numAlmacenes;
         double [] probabilidades = new double [numOrders];
         int camino = camion.getRoute().size();
-        double tiempoActual = ( ( (camino == 0 ) ? 1 : camino) - 1) / camion.getVelocity();
+        double tiempoActual = ( ( (camino == 0 ) ? 1 : camino) - 1) / camion.getVelocity() ;
+        int atendidos=0;
+        for (int pedido:
+             camion.getSolution()) {
+            if(pedido >= 0 ) atendidos ++;
+        }
+        tiempoActual += (1/6)*atendidos;
 
         //verificando que el camion tenga glp
         if(camion.getUsedCapacity() != 0.0){
@@ -333,7 +339,7 @@ public class ACSAlgorithm {
         manhattanBack = Math.abs(coorAlmacen[0] - pedido.getDesX()) + Math.abs( coorAlmacen[1]-pedido.getDesX());
         //Consideraremos que no deja combustible, asi tendremos un margen para hacerle frente a algun imprevisto
         if(!camion.tryOrder(manhattan + manhattanBack)) return 0;
-        tiempoEstimado = manhattan/camion.getVelocity();
+        tiempoEstimado = manhattan/camion.getVelocity() + 1/6;
         tiempoVuelta = manhattanBack/camion.getVelocity();
         //Calculo temporal
         tiempoRestante = pedido.getDeadLine() - tiempoActual;

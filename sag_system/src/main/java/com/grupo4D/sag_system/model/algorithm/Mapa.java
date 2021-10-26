@@ -5,6 +5,8 @@ import com.grupo4D.sag_system.model.Bloqueo;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Mapa {
     private char [][] map;
@@ -12,7 +14,8 @@ public class Mapa {
     private int width;
     private int [] plantaPrincipal={12,8};
     private ArrayList<DepositGLP> deposits;
-    private ArrayList<Bloqueo> roadBlocks;
+    //private ArrayList<Bloqueo> roadBlocks;
+    private Map<String, ArrayList<Bloqueo>> roadBlocks;
 
     public Mapa(int height, int width) {
         this.height = height;
@@ -20,7 +23,7 @@ public class Mapa {
         this.map = new char [height][width];
         this.initializeMap();
         this.deposits = new ArrayList<>();
-        this.roadBlocks = new ArrayList<>();
+        this.roadBlocks = new HashMap<String, ArrayList<Bloqueo>>();
     }
 
     public Mapa(Mapa mapa) {
@@ -113,6 +116,13 @@ public class Mapa {
 
     }
 
+    public Map<String, ArrayList<Bloqueo>> getRoadBlocks() {
+        return roadBlocks;
+    }
+
+    public void setRoadBlocks(Map<String, ArrayList<Bloqueo>> roadBlocks) {
+        this.roadBlocks = roadBlocks;
+    }
 
     private Roadblock parseRoadblock(String line){
         Roadblock rb = new Roadblock();
