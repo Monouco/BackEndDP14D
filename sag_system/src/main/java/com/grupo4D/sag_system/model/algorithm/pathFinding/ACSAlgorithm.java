@@ -523,13 +523,23 @@ public class ACSAlgorithm {
 
                 //Recordar hacer esto con A*
                 ruta = aStar.astar_search(new int[]{xIni, yIni}, new int[]{xDes, yDes});
+
+                int location = rutaSol.size()-1;
+
                 //Calculamos el costo de petroleo por hacer esta ruta
-                coordenate = new int[3];
+                /*coordenate = new int[3];
                 coordenate[0] = ruta.get(0)[0];
                 coordenate[1] = ruta.get(0)[1];
                 coordenate[2] = ordenAnterior;
 
-                ruta.set(0, coordenate);
+                ruta.set(0, coordenate);*/
+
+                coordenate = new int[3];
+                coordenate[0] = rutaSol.get(location)[0];
+                coordenate[1] = rutaSol.get(location)[1];
+                coordenate[2] = ordenAnterior;
+
+                rutaSol.set(location, coordenate);
                 rutaSol.addAll(ruta);
                 ordenAnterior = siguienteOrden;
         }
@@ -546,6 +556,12 @@ public class ACSAlgorithm {
             lastOrden = ordenes.get(ordenAnterior);
             xIni = lastOrden.getDesX();
             yIni = lastOrden.getDesY();
+            int location = rutaSol.size()-1;
+            coordenate = new int[3];
+            coordenate[0] = rutaSol.get(location)[0];
+            coordenate[1] = rutaSol.get(location)[1];
+            coordenate[2] = ordenAnterior;
+            rutaSol.set(location, coordenate);
         }
         //Posiciones del almacen principal
         xDes = depositos.get(0).getxPos();
