@@ -221,6 +221,9 @@ public class AlgorithmService {
                     pedidosNuevos.get(i).getCantidadGLP(),
                     pedidosNuevos.get(i).getPlazoEntrega());
             ordenes.add(orden);
+            //Actualizando estado
+            pedidosNuevos.get(i).setEstadoPedido("Atendido");
+            pedidoRepository.save(pedidosNuevos.get(i));
         }
 
         ACSAlgorithm algoritmoACS  = new ACSAlgorithm(numAlmacenes, numOrdenes,mapa1.getPlantaPrincipal(),hTurno);

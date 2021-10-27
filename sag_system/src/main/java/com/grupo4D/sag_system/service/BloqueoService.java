@@ -4,6 +4,7 @@ import com.grupo4D.sag_system.model.Bloqueo;
 import com.grupo4D.sag_system.model.Nodo;
 import com.grupo4D.sag_system.model.NodoXBloqueo;
 import com.grupo4D.sag_system.model.response.BloqueosFront;
+import com.grupo4D.sag_system.model.response.NodoFront;
 import com.grupo4D.sag_system.repository.BloqueoRepository;
 import com.grupo4D.sag_system.repository.NodoRepository;
 import com.grupo4D.sag_system.repository.NodoXBloqueoRepository;
@@ -40,12 +41,13 @@ public class BloqueoService{
         for(i = 0; bloqueos.size()> i; i++){
             BloqueosFront bloqueoFront = new BloqueosFront();
             Bloqueo bloqueo = bloqueos.get(i);
-            ArrayList<NodoXBloqueo> nodoBloqueados = nodoXBloqueoRepository.listarNodosXBloqueo(bloqueo.getNodo().getId());
+            ArrayList<NodoXBloqueo> nodoBloqueados = nodoXBloqueoRepository.listarNodosXBloqueo(bloqueo.getId());
             //bloqueo.setNodo(nodoBloqueado);
-            ArrayList<Nodo> nodos = new ArrayList<>();
+            ArrayList<NodoFront> nodos = new ArrayList<>();
             for (NodoXBloqueo nodoBloqueo:
                  nodoBloqueados) {
-                nodos.add(nodoRepository.findNodoById(nodoBloqueo.getNodo().getId()));
+
+                nodos.add(new NodoFront(nodoRepository.findNodoById(nodoBloqueo.getNodo().getId())));
             }
 
             bloqueoFront.setId(bloqueo.getId());

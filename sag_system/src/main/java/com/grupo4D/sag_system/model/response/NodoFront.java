@@ -1,5 +1,7 @@
 package com.grupo4D.sag_system.model.response;
 
+import com.grupo4D.sag_system.model.Nodo;
+
 public class NodoFront {
     private int x;
     private int y;
@@ -9,6 +11,11 @@ public class NodoFront {
         this.x = x;
         this.y = y;
         this.pedido = pedido;
+    }
+
+    public NodoFront(Nodo nodo){
+        this.x = nodo.getCoordenadaX();
+        this.y = nodo.getCoordenadaY();
     }
 
     public NodoFront() {

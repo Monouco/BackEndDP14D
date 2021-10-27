@@ -9,7 +9,7 @@ public class BloqueosFront {
     private int id;
     private LocalDateTime startDate;
     private LocalDateTime endDate;
-    private ArrayList<Nodo> path;
+    private ArrayList<NodoFront> path;
 
     public BloqueosFront() {
     }
@@ -38,11 +38,11 @@ public class BloqueosFront {
         this.endDate = endDate;
     }
 
-    public ArrayList<Nodo> getPath() {
+    public ArrayList<NodoFront> getPath() {
         return path;
     }
 
-    public void setPath(ArrayList<Nodo> path) {
+    public void setPath(ArrayList<NodoFront> path) {
         this.path = path;
     }
 }
