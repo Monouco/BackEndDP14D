@@ -9,11 +9,18 @@ public class Fecha {
     @JsonFormat(pattern = "yyyy-MM-dd@HH:mm:ss")
     private LocalDateTime fecha;
 
+    private double velocidad;
+
     public Fecha(LocalDateTime fecha) {
         this.fecha = fecha;
     }
     public Fecha(){
 
+    }
+
+    public Fecha(LocalDateTime fecha, double velocidad){
+        this.fecha = fecha;
+        this.velocidad = velocidad;
     }
 
     public LocalDateTime getFecha() {
@@ -23,4 +30,14 @@ public class Fecha {
     public void setFecha(LocalDateTime fecha) {
         this.fecha = fecha;
     }
+
+    public double getVelocidad() {
+        return velocidad;
+    }
+
+    public void setVelocidad(double velocidad) {
+        this.velocidad = velocidad;
+    }
+
+
 }

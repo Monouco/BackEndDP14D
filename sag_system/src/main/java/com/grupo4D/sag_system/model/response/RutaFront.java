@@ -3,7 +3,7 @@ package com.grupo4D.sag_system.model.response;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 
-public class RutaFront {
+    public class RutaFront {
     private int id;
     private LocalDateTime startDate;
     private ArrayList<NodoFront> path;

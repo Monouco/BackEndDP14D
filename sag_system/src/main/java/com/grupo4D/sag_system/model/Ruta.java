@@ -27,6 +27,9 @@ public class Ruta {
     @ManyToOne @JoinColumn(name="idCamion")
     private Camion camion;
 
+    @Column(name="estadoRuta")
+    private String estado;
+
     @Column(name="activo")
     private boolean activo = true;
 
@@ -68,5 +71,13 @@ public class Ruta {
 
     public void setActivo(boolean activo) {
         this.activo = activo;
+    }
+
+    public String getEstado() {
+        return estado;
+    }
+
+    public void setEstado(String estado) {
+        this.estado = estado;
     }
 }

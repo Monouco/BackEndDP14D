@@ -14,6 +14,7 @@ import com.grupo4D.sag_system.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.lang.reflect.Array;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -42,25 +43,82 @@ public class AlgorithmService {
     public ArrayList<RespuestaRutaFront> obtenerRutasSolucion(Fecha fecha, double velocidad){
         //parametros varios
         int tiempoAtencion =  600;
-        double velocity = 500;
+        double velocity = (double)500/36*velocidad; //a metros por segundo 500/36*velocidad
+//velocidad maxima = 100
 
-        //arreglo con la solucion de toda la flota
-        ArrayList<RutaFront> solucion = new ArrayList<>();
-        solucion = this.asignarPedidos(fecha);
+        //multiplicador de segundos a nano
+        long nanos = 1000000000;
+
+
 
         //arreglo para pasar a front
         ArrayList<RespuestaRutaFront> respuesta = new ArrayList<>();
 
+        //arreglo con la solucion de toda la flota
+        ArrayList<RutaFront> solucion = new ArrayList<>();
+        //solucion = this.asignarPedidos(fecha);
+        //Obtendremos todas las rutas iniciadas
+        ArrayList<Ruta> rutasSolucion = rutaRepository.findRutasByEstadoAndActivoTrue("Iniciado");
+        int i,j, atendidos;
+        for(i = 0; i < rutasSolucion.size(); i++){
+            ArrayList<NodoFront> nodos = new ArrayList<>();
+            Ruta ruta = rutasSolucion.get(i);
+            RespuestaRutaFront nodoRRF = new RespuestaRutaFront();
+            nodoRRF.setStartDate(ruta.getFechaInicio());
+            nodoRRF.setEndDate(ruta.getFechaFin()); // TODO: corregir el endDate
+            nodoRRF.setTimeAttention((int)(tiempoAtencion/velocidad));
+            nodoRRF.setVelocity(velocity);
+
+            /*ArrayList<RutaXNodo> nodoRutas = rutaXNodoRepository.findRutaXNodosByIdAndActivoTrueOrderBySecuenciaAsc(
+                    rutasSolucion.get(i).getId()
+            );*/
+
+            ArrayList<RutaXNodo> nodoRutas = rutaXNodoRepository.listarRutaXNodosPorRuta(
+                    rutasSolucion.get(i).getId()
+            );
+
+            if (nodoRutas.size() <= 2) continue;
+
+            RespuestaNodoFront orderRNF = new RespuestaNodoFront();
+            atendidos = 0;
+            for(RutaXNodo nodo: nodoRutas){
+                Nodo nodoCoor = nodoRepository.findNodoById(nodo.getNodo().getId());
+                //nodos.add(new int [] {nodoCoor.getCoordenadaX(),nodoCoor.getCoordenadaY(),nodo.getPedido()});
+
+                nodos.add(new NodoFront(nodoCoor.getCoordenadaX(),nodoCoor.getCoordenadaY(),nodo.getPedido()));
+
+                j = nodo.getSecuencia();
+
+                if(nodo.getPedido()>=0){
+                    orderRNF.setIndexRoute(j);
+                    long startAttention = (long)((tiempoAtencion/velocidad*atendidos + velocity*j)*nanos);
+                    long endAttention = (long) ((tiempoAtencion/velocidad*(atendidos+1) + velocity*j)*nanos);
+                    orderRNF.setDeliveryDate(ruta.getFechaInicio().plusNanos(startAttention));
+                    orderRNF.setLeftDate(ruta.getFechaInicio().plusNanos(endAttention));
+                    nodoRRF.getOrders().add(orderRNF);
+                    atendidos ++;
+                }
+
+            }
+
+            nodoRRF.setRoute(nodos);
+
+            //if(nodoRRF.getOrders().size()>0){
+                respuesta.add(nodoRRF);
+            //}
+            //rutasSolucion.get(i).set
+        }
+    /*
         for (RutaFront ruta:solucion) {
             RespuestaRutaFront nodoRRF = new RespuestaRutaFront();
             nodoRRF.setStartDate(ruta.getStartDate());
             nodoRRF.setEndDate(ruta.getStartDate()); // TODO: corregir el endDate
             nodoRRF.setTimeAttention((int)(tiempoAtencion/velocidad));
             nodoRRF.setVelocity(velocity);
-            nodoRRF.setRoute(ruta);
+            //nodoRRF.setRoute(ruta);
             ArrayList<NodoFront> nodos = ruta.getPath();
 
-            for (int i=0; i< nodos.size();i++){
+            for ( i=0; i< nodos.size();i++){
                 RespuestaNodoFront orderRNF = new RespuestaNodoFront();
                 if(nodos.get(i).getPedido()>=0){
                     orderRNF.setX(nodos.get(i).getX());
@@ -78,7 +136,7 @@ public class AlgorithmService {
             if(nodoRRF.getOrders().size()>0){
                 respuesta.add(nodoRRF);
             }
-        }
+        }*/
         return respuesta;
     }
 
@@ -166,6 +224,9 @@ public class AlgorithmService {
 
         //hormigas a camiones
         for (int i =0; i< camionesDisponibles.size();i++){
+
+            if(hormigas.get(i).getBestRoute().size() <= 2) continue;
+
             Ruta ruta = new Ruta();
             ruta.setCamion(camionesDisponibles.get(i));
 
@@ -173,12 +234,13 @@ public class AlgorithmService {
             rutaRepository.save(ruta);
 
             ArrayList<NodoFront> path = new ArrayList<>();
-
+            int k = 0;
             for (int[]j:hormigas.get(i).getBestRoute()) {
                 Nodo nodo = nodoRepository.findIdNodoByCoordenadaXAndCoordenadaYAndActivoTrue(j[0],j[1]);
                 RutaXNodo rutaXNodo = new RutaXNodo();
                 rutaXNodo.setNodo(nodo);
                 rutaXNodo.setRuta(ruta);
+                rutaXNodo.setSecuencia(k);
                 if(j.length ==3){
                     rutaXNodo.setPedido(j[2]);
                 }else{
@@ -196,6 +258,7 @@ public class AlgorithmService {
                     nodoFront.setPedido(-1);
                 }
                 path.add(nodoFront);
+                k++;
             }
 
             RutaFront rutaFront = new RutaFront(ruta.getId(), ruta.getFechaInicio(), path);
@@ -213,46 +276,4 @@ public class AlgorithmService {
         return solucion;
     }
 
-    public ArrayList<RespuestaRutaFront> obtenerRutasActivas(Fecha fecha, double velocidad){
-        //parametros varios
-        int tiempoAtencion =  600;
-        double velocity = 500;
-
-        //arreglo con la solucion de toda la flota
-        ArrayList<RutaFront> solucion = new ArrayList<>();
-        solucion = this.asignarPedidos(fecha);
-
-        //arreglo para pasar a front
-        ArrayList<RespuestaRutaFront> respuesta = new ArrayList<>();
-
-        for (RutaFront ruta:solucion) {
-            RespuestaRutaFront nodoRRF = new RespuestaRutaFront();
-            nodoRRF.setStartDate(ruta.getStartDate());
-            nodoRRF.setEndDate(ruta.getStartDate()); // TODO: corregir el endDate
-            nodoRRF.setTimeAttention((int)(tiempoAtencion/velocidad));
-            nodoRRF.setVelocity(velocity);
-            nodoRRF.setRoute(ruta);
-            ArrayList<NodoFront> nodos = ruta.getPath();
-
-            for (int i=0; i< nodos.size();i++){
-                RespuestaNodoFront orderRNF = new RespuestaNodoFront();
-                if(nodos.get(i).getPedido()>=0){
-                    orderRNF.setX(nodos.get(i).getX());
-                    orderRNF.setY(nodos.get(i).getY());
-                    orderRNF.setIndexRoute(i);
-                    orderRNF.setDeliveryDate(ruta.getStartDate());
-                    orderRNF.setLeftDate(ruta.getStartDate().plusSeconds(nodoRRF.getTimeAttention()));
-                    nodoRRF.getOrders().add(orderRNF);
-                }
-            }
-//            if(nodoRRF.getOrders().size()==0){
-//                RespuestaNodoFront orderRNF = new RespuestaNodoFront();
-//                nodoRRF.getOrders().add(orderRNF);
-//            }
-            if(nodoRRF.getOrders().size()>0){
-                respuesta.add(nodoRRF);
-            }
-        }
-        return respuesta;
-    }
 }

@@ -44,8 +44,8 @@ public class AlgorithmController {
 //    }
 
     @PostMapping("/obtenerRutas")
-    public ArrayList<RespuestaRutaFront> obtenerRutas(@RequestBody ObjObtenerRutasSolucion obj){
-        return algoritmoService.obtenerRutasSolucion(obj.getFecha(), obj.getVelocidad());
+    public ArrayList<RespuestaRutaFront> obtenerRutas(@RequestBody Fecha obj){
+        return algoritmoService.obtenerRutasSolucion(obj, obj.getVelocidad());
     }
 
 }

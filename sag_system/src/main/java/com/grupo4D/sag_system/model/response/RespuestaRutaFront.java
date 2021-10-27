@@ -1,5 +1,6 @@
 package com.grupo4D.sag_system.model.response;
 
+import java.lang.reflect.Array;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 
@@ -9,7 +10,7 @@ public class RespuestaRutaFront {
     private int timeAttention;
     private double velocity;
     private ArrayList<RespuestaNodoFront> orders;
-    private RutaFront route;
+    private ArrayList<NodoFront> route;
 
     public RespuestaRutaFront() {
         orders = new ArrayList<>();
@@ -55,11 +56,11 @@ public class RespuestaRutaFront {
         this.orders = orders;
     }
 
-    public RutaFront getRoute() {
+    public ArrayList<NodoFront> getRoute() {
         return route;
     }
 
-    public void setRoute(RutaFront route) {
+    public void setRoute(ArrayList<NodoFront> route) {
         this.route = route;
     }
 }
