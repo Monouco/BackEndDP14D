@@ -79,7 +79,6 @@ public class AlgorithmService {
 
             if (nodoRutas.size() <= 2) continue;
 
-            RespuestaNodoFront orderRNF = new RespuestaNodoFront();
             atendidos = 0;
             for(RutaXNodo nodo: nodoRutas){
                 Nodo nodoCoor = nodoRepository.findNodoById(nodo.getNodo().getId());
@@ -90,6 +89,7 @@ public class AlgorithmService {
                 j = nodo.getSecuencia();
 
                 if(nodo.getPedido()>=0){
+                    RespuestaNodoFront orderRNF = new RespuestaNodoFront();
                     orderRNF.setIndexRoute(j);
                     long startAttention = (long)((tiempoAtencion/velocidad*atendidos + velocity*j)*nanos);
                     long endAttention = (long) ((tiempoAtencion/velocidad*(atendidos+1) + velocity*j)*nanos);
