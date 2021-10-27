@@ -231,6 +231,7 @@ public class AlgorithmService {
             ruta.setCamion(camionesDisponibles.get(i));
 
             ruta.setFechaInicio(horaInicio.plusSeconds(20));
+            ruta.setEstado("Iniciado");
             rutaRepository.save(ruta);
 
             ArrayList<NodoFront> path = new ArrayList<>();
