@@ -18,6 +18,10 @@ public class Fecha {
 
     }
 
+    public Fecha(double velocidad){
+        this.velocidad = velocidad;
+    }
+
     public Fecha(LocalDateTime fecha, double velocidad){
         this.fecha = fecha;
         this.velocidad = velocidad;
