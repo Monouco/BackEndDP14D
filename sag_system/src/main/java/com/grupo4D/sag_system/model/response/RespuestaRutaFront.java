@@ -7,7 +7,7 @@ import java.util.ArrayList;
 public class RespuestaRutaFront {
     private LocalDateTime startDate;
     private LocalDateTime endDate;
-    private int timeAttention;
+    private int attentionTime;
     private double velocity;
     private ArrayList<RespuestaNodoFront> orders;
     private ArrayList<NodoFront> route;
@@ -32,12 +32,12 @@ public class RespuestaRutaFront {
         this.endDate = endDate;
     }
 
-    public int getTimeAttention() {
-        return timeAttention;
+    public int getAttentionTime() {
+        return attentionTime;
     }
 
-    public void setTimeAttention(int timeAttention) {
-        this.timeAttention = timeAttention;
+    public void setAttentionTime(int timeAttention) {
+        this.attentionTime = timeAttention;
     }
 
     public double getVelocity() {

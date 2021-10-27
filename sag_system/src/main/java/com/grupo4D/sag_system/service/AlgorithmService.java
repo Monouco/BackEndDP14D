@@ -66,7 +66,7 @@ public class AlgorithmService {
             RespuestaRutaFront nodoRRF = new RespuestaRutaFront();
             nodoRRF.setStartDate(ruta.getFechaInicio());
             nodoRRF.setEndDate(ruta.getFechaFin()); // TODO: corregir el endDate
-            nodoRRF.setTimeAttention((int)(tiempoAtencion/velocidad));
+            nodoRRF.setAttentionTime((int)(tiempoAtencion/velocidad));
             nodoRRF.setVelocity(velocity);
 
             /*ArrayList<RutaXNodo> nodoRutas = rutaXNodoRepository.findRutaXNodosByIdAndActivoTrueOrderBySecuenciaAsc(
@@ -92,8 +92,8 @@ public class AlgorithmService {
                 if(nodo.getPedido()>=0){
                     RespuestaNodoFront orderRNF = new RespuestaNodoFront();
                     orderRNF.setIndexRoute(j);
-                    long startAttention = (long)((tiempoAtencion/velocidad*atendidos + velocity*j*1000)*nanos);
-                    long endAttention = (long) ((tiempoAtencion/velocidad*(atendidos+1) + velocity*j*1000)*nanos);
+                    long startAttention = (long)((tiempoAtencion/velocidad*atendidos + (j*1000)/velocity)*nanos);
+                    long endAttention = (long) ((tiempoAtencion/velocidad*(atendidos+1) + (j*1000)/velocity)*nanos);
                     orderRNF.setDeliveryDate(ruta.getFechaInicio().plusNanos(startAttention));
                     orderRNF.setLeftDate(ruta.getFechaInicio().plusNanos(endAttention));
                     nodoRRF.getOrders().add(orderRNF);
@@ -104,7 +104,7 @@ public class AlgorithmService {
 
             nodoRRF.setRoute(nodos);
 
-            long wholeRouteTime = (long)((tiempoAtencion/velocidad*atendidos + velocity*j*1000)*nanos);
+            long wholeRouteTime = (long)((tiempoAtencion/velocidad*atendidos + (j*1000)/velocity)*nanos);
 
             nodoRRF.setEndDate(nodoRRF.getStartDate().plusNanos(wholeRouteTime));
 

@@ -38,10 +38,12 @@ public class AstarSearch {
             if (goalTest(n.getState(), goal))
                 break;
             //El nodo ya fue explorado
-            explored.add(new int[] {n.getState()[0],n.getState()[1],n.getTimeStep()});
+            //explored.add(new int[] {n.getState()[0],n.getState()[1],n.getTimeStep()});
+            explored.add(new int[] {n.getState()[0],n.getState()[1]});
             children = n.expand(this);
             for(Node child: children){
-                auxChildState =new int[] {child.getState()[0], child.getState()[1],n.getTimeStep()};
+                //auxChildState =new int[] {child.getState()[0], child.getState()[1],n.getTimeStep()};
+                auxChildState =new int[] {child.getState()[0], child.getState()[1]};
                 if(!isExplored(explored,auxChildState) && !isInFrontier(frontier, auxChildState)){
                     frontier.addNode(child);
                 }
