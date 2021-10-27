@@ -1,6 +1,7 @@
 package com.grupo4D.sag_system.controller;
 
 import com.grupo4D.sag_system.model.Bloqueo;
+import com.grupo4D.sag_system.model.response.BloqueosFront;
 import com.grupo4D.sag_system.service.BloqueoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -30,7 +31,7 @@ public class BloqueoController {
     }
 
     @GetMapping("/listarBloqueos")
-    public List<Bloqueo> listarBloqueos(){
+    public List<BloqueosFront> listarBloqueos(){
         return bloqueoService.listarBloqueos();
     }
 }
