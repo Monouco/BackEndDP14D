@@ -1,6 +1,11 @@
 package com.grupo4D.sag_system.model.algorithm;
 
 import com.grupo4D.sag_system.model.Bloqueo;
+import com.grupo4D.sag_system.model.Nodo;
+import com.grupo4D.sag_system.model.NodoXBloqueo;
+import com.grupo4D.sag_system.repository.BloqueoRepository;
+import com.grupo4D.sag_system.repository.NodoXBloqueoRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -16,7 +21,12 @@ public class Mapa {
     private int [] plantaPrincipal={12,8};
     private ArrayList<DepositGLP> deposits;
     //private ArrayList<Bloqueo> roadBlocks;
-    private Map<String, ArrayList<Bloqueo>> roadBlocks;
+    private Map<String, ArrayList<Roadblock>> roadBlocks;
+
+    @Autowired
+    private BloqueoRepository bloqueoRepository;
+    @Autowired
+    private NodoXBloqueoRepository nodoBloqueoRepository;
 
     public Mapa(int height, int width) {
         this.height = height;
@@ -24,7 +34,7 @@ public class Mapa {
         this.map = new char [height][width];
         this.initializeMap();
         this.deposits = new ArrayList<>();
-        this.roadBlocks = new HashMap<String, ArrayList<Bloqueo>>();
+        this.roadBlocks = new HashMap<String, ArrayList<Roadblock>>();
     }
 
     public Mapa(Mapa mapa) {
@@ -117,11 +127,11 @@ public class Mapa {
 
     }
 
-    public Map<String, ArrayList<Bloqueo>> getRoadBlocks() {
+    public Map<String, ArrayList<Roadblock>> getRoadBlocks() {
         return roadBlocks;
     }
 
-    public void setRoadBlocks(Map<String, ArrayList<Bloqueo>> roadBlocks) {
+    public void setRoadBlocks(Map<String, ArrayList<Roadblock>> roadBlocks) {
         this.roadBlocks = roadBlocks;
     }
 
@@ -198,7 +208,33 @@ public class Mapa {
     }
 
     public void initializeCurrentRoadBlocks(LocalDateTime startDate, LocalDateTime endDate){
+        ArrayList<Bloqueo> bloqueos = bloqueoRepository.listarBloqueos24Horas(startDate,endDate);
+        Roadblock rb;
+        int x, y;
+        String key;
+        ArrayList<Roadblock> roadNodes;
+        for (Bloqueo bloqueo:
+             bloqueos) {
+            ArrayList<NodoXBloqueo> nodos = nodoBloqueoRepository.listarNodosXBloqueo(bloqueo.getId());
+            for (NodoXBloqueo nodo:
+                 nodos) {
+                x = nodo.getNodo().getCoordenadaX();
+                y = nodo.getNodo().getCoordenadaY();
+                key = x + ","+ y;
+                rb = new Roadblock();
+                rb.setFechaIni(bloqueo.getFechaInicio());
+                rb.setFechaFin(bloqueo.getFechaFin());
+                rb.setNodo(new int [] {x,y});
+                roadNodes = this.roadBlocks.get(key);
+                if(roadNodes==null){
+                    roadNodes = new ArrayList<>();
+                }
+                roadNodes.add(rb);
+                this.roadBlocks.put(key, roadNodes);
 
+            }
+
+        }
     }
 
 }

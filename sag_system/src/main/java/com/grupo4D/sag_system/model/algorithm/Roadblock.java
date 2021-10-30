@@ -1,4 +1,5 @@
 package com.grupo4D.sag_system.model.algorithm;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 public class Roadblock {
@@ -8,7 +9,10 @@ public class Roadblock {
     private int diaFin;
     private int horaFin;
     private int minFin;
+    private LocalDateTime fechaIni;
+    private LocalDateTime fechaFin;
     private ArrayList<int []> nodes;
+    private int[] nodo;
 
 
     public Roadblock() {
@@ -79,5 +83,29 @@ public class Roadblock {
 
     public void appendNode(int x, int y){
         this.nodes.add(new int[]{x,y});
+    }
+
+    public LocalDateTime getFechaIni() {
+        return fechaIni;
+    }
+
+    public void setFechaIni(LocalDateTime fechaIni) {
+        this.fechaIni = fechaIni;
+    }
+
+    public LocalDateTime getFechaFin() {
+        return fechaFin;
+    }
+
+    public void setFechaFin(LocalDateTime fechaFin) {
+        this.fechaFin = fechaFin;
+    }
+
+    public int[] getNodo() {
+        return nodo;
+    }
+
+    public void setNodo(int[] nodo) {
+        this.nodo = nodo;
     }
 }

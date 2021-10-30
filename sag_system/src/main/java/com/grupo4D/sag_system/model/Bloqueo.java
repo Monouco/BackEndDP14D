@@ -27,7 +27,6 @@ public class Bloqueo {
     @Column(name="activo")
     private boolean activo = true;
 
-    private ArrayList<NodoXBloqueo> nodos;
 
     public int getId() {
         return id;
