@@ -20,7 +20,7 @@ public class Camion {
     private double velocidad;
 
     @Column(name="estado")
-    private double estado;
+    private String estado;
 
     @ManyToOne @JoinColumn(name="idTipoCamion")
     private TipoCamion tipoCamion;
@@ -52,11 +52,11 @@ public class Camion {
         this.velocidad = velocidad;
     }
 
-    public double getEstado() {
+    public String getEstado() {
         return estado;
     }
 
-    public void setEstado(double estado) {
+    public void setEstado(String estado) {
         this.estado = estado;
     }
 

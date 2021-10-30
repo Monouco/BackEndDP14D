@@ -11,6 +11,7 @@ import com.grupo4D.sag_system.model.response.RespuestaNodoFront;
 import com.grupo4D.sag_system.model.response.RespuestaRutaFront;
 import com.grupo4D.sag_system.model.response.RutaFront;
 import com.grupo4D.sag_system.repository.*;
+import org.apache.tomcat.jni.Local;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -152,7 +153,7 @@ public class AlgorithmService {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd@HH:mm:ss");
         //System.out.print("INICIO\n" +fecha+"\nFECHA RECIBIDA\n");
         //String[] fechas = fecha.split(":");
-       //System.out.print("INICIO\n" +fechas[0]+"\nFECHA RECIBIDA\n");
+        //System.out.print("INICIO\n" +fechas[0]+"\nFECHA RECIBIDA\n");
         //System.out.print("INICIO\n" +fechas[1]+"\nFECHA RECIBIDA\n");
         //LocalDateTime horaInicio = LocalDateTime.parse(fecha, formatter);
         LocalDateTime horaInicio = fecha.getFecha();
@@ -231,6 +232,8 @@ public class AlgorithmService {
         hormigas = algoritmoACS.findSolution(hormigas,ordenes,mapa1,cycles,steps, camionesDisponibles.size(),evaporationRate);
 
         //hormigas a camiones
+        ArrayList<RutaXNodo> secuenciaRuta = new ArrayList<>();
+        ArrayList<RutaXPedido> secuenciaPedido = new ArrayList<>();
         for (int i =0; i< camionesDisponibles.size();i++){
 
             if(hormigas.get(i).getBestRoute().size() <= 2) continue;
@@ -255,8 +258,8 @@ public class AlgorithmService {
                 }else{
                     rutaXNodo.setPedido(-1);
                 }
-                rutaXNodoRepository.save(rutaXNodo);
-
+                //rutaXNodoRepository.save(rutaXNodo);
+                secuenciaRuta.add(rutaXNodo);
                 //respuesta para el front
                 NodoFront nodoFront = new NodoFront();
                 nodoFront.setX(j[0]);
@@ -276,13 +279,33 @@ public class AlgorithmService {
                     RutaXPedido rutaXPedido = new RutaXPedido();
                     rutaXPedido.setPedido(pedidosNuevos.get(j));
                     rutaXPedido.setRuta(ruta);
-                    rutaXPedidoRepository.save(rutaXPedido);
+                    //rutaXPedidoRepository.save(rutaXPedido);
+                    secuenciaPedido.add(rutaXPedido);
                 }
             }
             rutaFront.setPath(path);
             solucion.add(rutaFront);
         }
+        rutaXNodoRepository.saveAll(secuenciaRuta);
+        rutaXPedidoRepository.saveAll(secuenciaPedido);
         return solucion;
     }
+
+    public ArrayList<Pedido> asignarPedidos3Dias(/*Fecha fecha, */ArrayList<Pedido> pedidos){
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd@HH:mm:ss");
+        LocalDateTime fechaInicio;
+        int i;
+        for(i = 0; i<pedidos.size();i++){
+            pedidos.get(i).setEstadoPedido("Nuevo");
+            Nodo nodo = nodoRepository.findIdNodoByCoordenadaXAndCoordenadaYAndActivoTrue(pedidos.get(i).getNodo().getCoordenadaX(),
+                    pedidos.get(i).getNodo().getCoordenadaY());
+            pedidos.get(i).getNodo().setId(nodo.getId());
+        }
+        pedidoRepository.saveAll(pedidos);
+
+        return pedidos;
+
+    }
+
 
 }
