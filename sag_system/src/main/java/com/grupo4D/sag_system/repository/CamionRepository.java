@@ -9,6 +9,6 @@ import java.util.ArrayList;
 @Repository
 public interface CamionRepository extends CrudRepository<Camion,Integer> {
 
-    public ArrayList<Camion> findCamionsByEstadoAndActivoTrue(double estado);
+    public ArrayList<Camion> findCamionsByEstadoAndActivoTrue(String estado);
 
 }

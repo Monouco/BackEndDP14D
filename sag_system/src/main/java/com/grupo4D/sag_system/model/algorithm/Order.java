@@ -1,5 +1,7 @@
 package com.grupo4D.sag_system.model.algorithm;
 
+import java.time.LocalDateTime;
+
 public class Order {
 
     private int dia;
@@ -9,11 +11,13 @@ public class Order {
     private int desY;
     private double glp;
     private double deadLine;
+    private LocalDateTime fechaInicio;
+    private LocalDateTime fechaFin;
 
     public Order() {
     }
 
-    public Order(int dia, int hora, int minuto, int desX, int desY, double glp, double deadLine){
+    public Order(int dia, int hora, int minuto, int desX, int desY, double glp, double deadLine, LocalDateTime fechaInicio, LocalDateTime fechafin){
         this.dia = dia;
         this.hora = hora;
         this.minuto = minuto;
@@ -21,6 +25,8 @@ public class Order {
         this.desY = desY;
         this.glp = glp;
         this.deadLine = deadLine;
+        this.fechaFin = fechafin;
+        this.fechaInicio = fechaInicio;
     }
 
     public int getDesX() {
@@ -77,5 +83,21 @@ public class Order {
 
     public void setMinuto(int minuto) {
         this.minuto = minuto;
+    }
+
+    public LocalDateTime getFechaInicio() {
+        return fechaInicio;
+    }
+
+    public void setFechaInicio(LocalDateTime fechaInicio) {
+        this.fechaInicio = fechaInicio;
+    }
+
+    public LocalDateTime getFechaFin() {
+        return fechaFin;
+    }
+
+    public void setFechaFin(LocalDateTime fechaFin) {
+        this.fechaFin = fechaFin;
     }
 }

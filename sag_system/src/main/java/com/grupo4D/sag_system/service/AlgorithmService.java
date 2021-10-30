@@ -169,7 +169,7 @@ public class AlgorithmService {
 
         //ver camiones disponibles
         ArrayList<Camion> camionesDisponibles = new ArrayList<>();
-        camionesDisponibles = camionRepository.findCamionsByEstadoAndActivoTrue(1); //Cambiar estado de double a string en BD y el resto
+        camionesDisponibles = camionRepository.findCamionsByEstadoAndActivoTrue("Operativo"); //Cambiar estado de double a string en BD y el resto
 
         //plantas
         Mapa mapa1 = new Mapa(50, 70);
@@ -195,6 +195,9 @@ public class AlgorithmService {
         int hTurno = 24;
         int cycles = 200;
         int steps = 100;
+        int tiempoAtencion = 600;
+        long nanos = 1000000000;
+        double velocity = (double)10/36;
         double evaporationRate = 0.3;
         //revisar
 
@@ -220,7 +223,11 @@ public class AlgorithmService {
                     pedidosNuevos.get(i).getNodo().getCoordenadaX(),
                     pedidosNuevos.get(i).getNodo().getCoordenadaY(),
                     pedidosNuevos.get(i).getCantidadGLP(),
-                    pedidosNuevos.get(i).getPlazoEntrega());
+                    pedidosNuevos.get(i).getPlazoEntrega(),
+                    pedidosNuevos.get(i).getFechaPedido(),
+                    pedidosNuevos.get(i).getFechaPedido().plusHours(
+                            pedidosNuevos.get(i).getPlazoEntrega()
+                    ));
             ordenes.add(orden);
             //Actualizando estado
             pedidosNuevos.get(i).setEstadoPedido("Atendido");
@@ -243,35 +250,41 @@ public class AlgorithmService {
 
             ruta.setFechaInicio(horaInicio.plusSeconds(20));
             ruta.setEstado("Iniciado");
+            //ruta.setFechaInicio(horaInicio.plusSeconds(20)+);
+
             rutaRepository.save(ruta);
 
             ArrayList<NodoFront> path = new ArrayList<>();
-            int k = 0;
+            int k = 0, atendidos = 0;
             for (int[]j:hormigas.get(i).getBestRoute()) {
                 Nodo nodo = nodoRepository.findIdNodoByCoordenadaXAndCoordenadaYAndActivoTrue(j[0],j[1]);
                 RutaXNodo rutaXNodo = new RutaXNodo();
                 rutaXNodo.setNodo(nodo);
                 rutaXNodo.setRuta(ruta);
                 rutaXNodo.setSecuencia(k);
-                if(j.length ==3){
-                    rutaXNodo.setPedido(j[2]);
-                }else{
-                    rutaXNodo.setPedido(-1);
-                }
                 //rutaXNodoRepository.save(rutaXNodo);
-                secuenciaRuta.add(rutaXNodo);
+
                 //respuesta para el front
                 NodoFront nodoFront = new NodoFront();
                 nodoFront.setX(j[0]);
                 nodoFront.setY(j[1]);
                 if(j.length ==3){
                     nodoFront.setPedido(j[2]);
+                    rutaXNodo.setPedido(j[2]);
+                    if(j[2] >= 0){
+                        atendidos++;
+                    }
                 }else{
+                    rutaXNodo.setPedido(-1);
                     nodoFront.setPedido(-1);
                 }
                 path.add(nodoFront);
+                secuenciaRuta.add(rutaXNodo);
                 k++;
             }
+            long tiempoRuta = (long)(( (velocity * hormigas.get(i).getVelocity())/(1000 * k) + atendidos * tiempoAtencion) * nanos);
+            ruta.setFechaFin(ruta.getFechaInicio().plusNanos(tiempoRuta));
+            rutaRepository.save(ruta);
 
             RutaFront rutaFront = new RutaFront(ruta.getId(), ruta.getFechaInicio(), path);
             for (int j: hormigas.get(i).getBestSolution()) {
@@ -302,6 +315,12 @@ public class AlgorithmService {
             pedidos.get(i).getNodo().setId(nodo.getId());
         }
         pedidoRepository.saveAll(pedidos);
+
+        //Despues de tener todos los pedidos, ejecutamos el algoritmo
+
+
+
+        //Devolvemos la salida del algoritmo
 
         return pedidos;
 
