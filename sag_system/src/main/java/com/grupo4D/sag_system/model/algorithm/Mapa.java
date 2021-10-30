@@ -4,6 +4,7 @@ import com.grupo4D.sag_system.model.Bloqueo;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -194,6 +195,10 @@ public class Mapa {
              ) {
             this.map[x[1]][x[0]] = car;
         }
+    }
+
+    public void initializeCurrentRoadBlocks(LocalDateTime startDate, LocalDateTime endDate){
+
     }
 
 }

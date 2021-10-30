@@ -2,6 +2,7 @@ package com.grupo4D.sag_system.model;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 
 @Entity
 @Table(name="Bloqueo")
@@ -25,6 +26,8 @@ public class Bloqueo {
 
     @Column(name="activo")
     private boolean activo = true;
+
+    private ArrayList<NodoXBloqueo> nodos;
 
     public int getId() {
         return id;
