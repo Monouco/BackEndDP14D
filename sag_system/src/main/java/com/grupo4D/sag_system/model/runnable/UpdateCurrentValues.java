@@ -26,6 +26,7 @@ public class UpdateCurrentValues implements Runnable{
         try{
             //
             while (true) {
+                System.out.println(LocalDateTime.now() + " Actualizando valores");
                 camionRepository.updatingValues(LocalDateTime.now().minusHours(5));
                 Thread.sleep(sleepTime);
             }
