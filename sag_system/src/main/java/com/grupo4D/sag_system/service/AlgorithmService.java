@@ -117,7 +117,7 @@ public class AlgorithmService {
 
                 nodoRRF.setRoute(nodos);
 
-                long wholeRouteTime = (long)((tiempoAtencion/velocidad*atendidos + (j*1000)/velocity)*nanos - desfase);
+                long wholeRouteTime = (long)((tiempoAtencion/velocidad*atendidos + (j*1000)/velocity)*nanos);
 
                 nodoRRF.setEndDate(nodoRRF.getStartDate().plusNanos(wholeRouteTime));
 
