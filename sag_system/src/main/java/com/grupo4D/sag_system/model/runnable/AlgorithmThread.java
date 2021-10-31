@@ -71,7 +71,7 @@ public class AlgorithmThread implements Runnable {
                     algorithmService.asignarPedidos(simulationDate, orders, type, offset);
                     System.out.println(LocalDateTime.now() + " Pedidos atendidos para el tipo " + type);
                 } else {
-                    System.out.println("No hubieron pedidos para el tipo " + type);
+                    System.out.println("No hubieron pedidos para el tipo " + type + " Tiempo de simulacion " + simulationDate);
                 }
                 this.simulationDate.plusSeconds(sleepTime / 1000 * multiplier);
                 Thread.sleep(sleepTime);
