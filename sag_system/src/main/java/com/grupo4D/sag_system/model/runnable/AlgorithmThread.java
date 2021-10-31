@@ -75,6 +75,8 @@ public class AlgorithmThread implements Runnable {
                     System.out.println("No hubieron pedidos para el tipo " + type + " Tiempo de simulacion " + simulationDate);
                 }
                 this.simulationDate = this.simulationDate.plusSeconds(sleepTime / 1000 * multiplier);
+                this.startDate = this.startDate.plusSeconds(sleepTime/1000);
+                this.offset = ChronoUnit.NANOS.between(startDate,simulationDate);
                 Thread.sleep(sleepTime);
             }
         }
