@@ -105,8 +105,8 @@ public class AlgorithmService {
                     if(nodo.getPedido()>=0){
                         RespuestaNodoFront orderRNF = new RespuestaNodoFront();
                         orderRNF.setIndexRoute(j);
-                        long startAttention = (long)((tiempoAtencion/velocidad*atendidos + (j*1000)/velocity)*nanos + desfase);
-                        long endAttention = (long) ((tiempoAtencion/velocidad*(atendidos+1) + (j*1000)/velocity)*nanos + desfase);
+                        long startAttention = (long)((tiempoAtencion/velocidad*atendidos + (j*1000)/velocity)*nanos);
+                        long endAttention = (long) ((tiempoAtencion/velocidad*(atendidos+1) + (j*1000)/velocity)*nanos );
                         orderRNF.setDeliveryDate(ruta.getFechaInicio().plusNanos(startAttention));
                         orderRNF.setLeftDate(ruta.getFechaInicio().plusNanos(endAttention));
                         nodoRRF.getOrders().add(orderRNF);
@@ -117,7 +117,7 @@ public class AlgorithmService {
 
                 nodoRRF.setRoute(nodos);
 
-                long wholeRouteTime = (long)((tiempoAtencion/velocidad*atendidos + (j*1000)/velocity)*nanos + desfase);
+                long wholeRouteTime = (long)((tiempoAtencion/velocidad*atendidos + (j*1000)/velocity)*nanos);
 
                 nodoRRF.setEndDate(nodoRRF.getStartDate().plusNanos(wholeRouteTime));
 
@@ -388,7 +388,7 @@ public class AlgorithmService {
 
         //Creamos un thread para el algoritmo
         StaticValues.mult = 14;
-        StaticValues.start = LocalDateTime.now();
+        StaticValues.start = LocalDateTime.now().minusHours(5);
         StaticValues.virtualDate = fechaInicio.plusMinutes(15);
         StaticValues.simulationType = 2;
         StaticValues.end = fechaFin;
