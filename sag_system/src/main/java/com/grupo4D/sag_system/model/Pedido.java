@@ -57,6 +57,15 @@ public class Pedido {
         this.setNodo(nodo);
     }
 
+    public Pedido(int id, int plazoEntrega, double cantidadGLP, LocalDateTime fechaPedido, String estadoPedido, Nodo nodo) {
+        this.setId(id);
+        this.setPlazoEntrega(plazoEntrega);
+        this.setCantidadGLP(cantidadGLP);
+        this.setFechaPedido(fechaPedido);
+        this.setEstadoPedido(estadoPedido);
+        this.setNodo(nodo);
+    }
+
     public Pedido() {
     }
 

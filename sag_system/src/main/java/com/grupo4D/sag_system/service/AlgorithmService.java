@@ -105,8 +105,8 @@ public class AlgorithmService {
                     if(nodo.getPedido()>=0){
                         RespuestaNodoFront orderRNF = new RespuestaNodoFront();
                         orderRNF.setIndexRoute(j);
-                        long startAttention = (long)((tiempoAtencion/velocidad*atendidos + (j*1000)/velocity)*nanos);
-                        long endAttention = (long) ((tiempoAtencion/velocidad*(atendidos+1) + (j*1000)/velocity)*nanos );
+                        long startAttention = (long)((tiempoAtencion/velocidad*atendidos + (j*1000)/velocity)*nanos + desfase);
+                        long endAttention = (long) ((tiempoAtencion/velocidad*(atendidos+1) + (j*1000)/velocity)*nanos + desfase);
                         orderRNF.setDeliveryDate(ruta.getFechaInicio().plusNanos(startAttention));
                         orderRNF.setLeftDate(ruta.getFechaInicio().plusNanos(endAttention));
                         nodoRRF.getOrders().add(orderRNF);
@@ -117,7 +117,7 @@ public class AlgorithmService {
 
                 nodoRRF.setRoute(nodos);
 
-                long wholeRouteTime = (long)((tiempoAtencion/velocidad*atendidos + (j*1000)/velocity)*nanos);
+                long wholeRouteTime = (long)((tiempoAtencion/velocidad*atendidos + (j*1000)/velocity)*nanos + desfase);
 
                 nodoRRF.setEndDate(nodoRRF.getStartDate().plusNanos(wholeRouteTime));
 
