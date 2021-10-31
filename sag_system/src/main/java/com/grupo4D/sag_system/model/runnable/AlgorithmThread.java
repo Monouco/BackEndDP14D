@@ -69,7 +69,7 @@ public class AlgorithmThread implements Runnable {
                 orders = pedidoRepository.listarPedidosDisponibles(simulationDate, type);
                 if (!orders.isEmpty()) {
                     algorithmService.asignarPedidos(simulationDate, orders, type, offset);
-                    System.out.println("Pedidos atendidos para el tipo " + type);
+                    System.out.println(LocalDateTime.now() + " Pedidos atendidos para el tipo " + type);
                 } else {
                     System.out.println("No hubieron pedidos para el tipo " + type);
                 }
