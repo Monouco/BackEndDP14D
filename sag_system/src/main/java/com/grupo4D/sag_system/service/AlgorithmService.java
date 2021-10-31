@@ -211,7 +211,9 @@ public class AlgorithmService {
 
         //ver camiones disponibles
         ArrayList<Camion> camionesDisponibles = new ArrayList<>();
-        camionesDisponibles = camionRepository.findCamionsByEstadoAndActivoTrue("Operativo", tipo); //Cambiar estado de double a string en BD y el resto
+        camionesDisponibles = camionRepository.listarCamionesTipo("Operativo", tipo); //Cambiar estado de double a string en BD y el resto
+
+        if(camionesDisponibles.isEmpty()) return null;
 
         //plantas
         Mapa mapa1 = new Mapa(50, 70);

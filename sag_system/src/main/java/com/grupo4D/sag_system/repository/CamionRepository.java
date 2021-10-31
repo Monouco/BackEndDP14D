@@ -21,7 +21,7 @@ public interface CamionRepository extends CrudRepository<Camion,Integer> {
                     "or (estado_simulacion = ?1 and 2 = ?2) " +
                     "or (estado_colapso = ?1 and 3 = ?2))",
             nativeQuery = true)
-    public ArrayList<Camion> findCamionsByEstadoAndActivoTrue(String estado, int tipo);
+    public ArrayList<Camion> listarCamionesTipo(String estado, int tipo);
 
     @Transactional
     @Modifying
