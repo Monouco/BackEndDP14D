@@ -10,7 +10,7 @@ import java.util.ArrayList;
 @Repository
 public interface RutaRepository extends CrudRepository<Ruta,Integer> {
     @Query(
-            value = "SELECT * FROM RUTA u WHERE u.estado = ?1 " +
+            value = "SELECT * FROM ruta u WHERE u.estado = ?1 " +
                     "and u.activo = 1 " +
                     "and u.tipo = ?2",
             nativeQuery = true)
