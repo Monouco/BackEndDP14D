@@ -52,7 +52,8 @@ public class AlgorithmThread implements Runnable {
 
         System.out.println(multiplier);
         //Considerando 10 min
-        long sleepTime = 600000;
+        //long sleepTime = 600000;
+        long sleepTime = 180000;
         ArrayList<Pedido> orders;
         try{
             //

@@ -397,8 +397,6 @@ public class AlgorithmService {
 
         taskExecutor.execute(algorithm);
 
-
-
         return pedidos;
 
     }
