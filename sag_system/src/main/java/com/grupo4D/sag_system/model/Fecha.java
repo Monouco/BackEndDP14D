@@ -29,6 +29,11 @@ public class Fecha {
         this.velocidad = velocidad;
     }
 
+    public Fecha(double velocidad, int tipo) {
+        this.velocidad = velocidad;
+        this.tipo = tipo;
+    }
+
     public LocalDateTime getFecha() {
         return fecha;
     }
