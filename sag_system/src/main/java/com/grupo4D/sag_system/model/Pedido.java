@@ -31,11 +31,18 @@ public class Pedido {
     @Column(name="fechaEntrega")
     private LocalDateTime fechaEntrega;
 
+    @JsonFormat(pattern = "yyyy-MM-dd@HH:mm:ss")
+    @Column(name="fechaLimite")
+    private LocalDateTime fechaLimite;
+
     @Column(name="estadoPedido")
     private String estadoPedido;
 
     @ManyToOne @JoinColumn(name="idNodo")
     private Nodo nodo;
+
+    @Column(name = "tipo")
+    private int tipo;
 
     @Column(name="activo")
     private boolean activo = true;
@@ -116,4 +123,21 @@ public class Pedido {
     public void setActivo(boolean activo) {
         this.activo = activo;
     }
+
+    public int getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(int tipo) {
+        this.tipo = tipo;
+    }
+
+    public LocalDateTime getFechaLimite() {
+        return fechaLimite;
+    }
+
+    public void setFechaLimite(LocalDateTime fechaLimite) {
+        this.fechaLimite = fechaLimite;
+    }
+
 }

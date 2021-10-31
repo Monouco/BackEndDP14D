@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.grupo4D.sag_system.model.Fecha;
 import com.grupo4D.sag_system.model.ObjObtenerRutasSolucion;
 import com.grupo4D.sag_system.model.Pedido;
+import com.grupo4D.sag_system.model.response.RespuestaObtenerRutaFront;
 import com.grupo4D.sag_system.model.response.RespuestaRutaFront;
 import com.grupo4D.sag_system.model.response.RutaFront;
 import com.grupo4D.sag_system.service.AlgorithmService;
@@ -30,12 +31,12 @@ public class AlgorithmController {
 //        return algoritmoService.asignarPedidos(horaInicio);
 //    }
 
-    @JsonFormat(pattern="yyyy-MM-dd@HH:mm:ss")
+    /*@JsonFormat(pattern="yyyy-MM-dd@HH:mm:ss")
     @DateTimeFormat(iso = DateTimeFormat.ISO.TIME)
     @PostMapping("/generarSolucion")
     public ArrayList<RutaFront> generarSolucion(@RequestBody Fecha horaInicio){
         return algoritmoService.asignarPedidos(horaInicio);
-    }
+    }*/
 
 //    @JsonFormat(pattern="yyyy-MM-dd@HH:mm:ss")
 //    @DateTimeFormat(iso = DateTimeFormat.ISO.TIME)
@@ -45,8 +46,8 @@ public class AlgorithmController {
 //    }
 
     @PostMapping("/obtenerRutas")
-    public ArrayList<RespuestaRutaFront> obtenerRutas(@RequestBody Fecha obj){
-        return algoritmoService.obtenerRutasSolucion(obj, obj.getVelocidad());
+    public RespuestaObtenerRutaFront obtenerRutas(@RequestBody Fecha obj){
+        return algoritmoService.obtenerRutasSolucion(obj, obj.getVelocidad(), obj.getTipo());
     }
 
     @PostMapping("/simulacionTresDias")

@@ -25,6 +25,12 @@ public class Camion {
     @ManyToOne @JoinColumn(name="idTipoCamion")
     private TipoCamion tipoCamion;
 
+    @Column(name="estadoSimulacion")
+    private String estadoSimulacion;
+
+    @Column(name="estadoColapso")
+    private String estadoColapso;
+
     @Column(name="activo")
     private boolean activo = true;
 
@@ -74,5 +80,21 @@ public class Camion {
 
     public void setActivo(boolean activo) {
         this.activo = activo;
+    }
+
+    public String getEstadoSimulacion() {
+        return estadoSimulacion;
+    }
+
+    public void setEstadoSimulacion(String estadoSimulacion) {
+        this.estadoSimulacion = estadoSimulacion;
+    }
+
+    public String getEstadoColapso() {
+        return estadoColapso;
+    }
+
+    public void setEstadoColapso(String estadoColapso) {
+        this.estadoColapso = estadoColapso;
     }
 }

@@ -30,6 +30,12 @@ public class Ruta {
     @Column(name="estadoRuta")
     private String estado;
 
+    @Column(name="tipo")
+    private int tipo;
+
+    @Column(name="desfase")
+    private long desfase;
+
     @Column(name="activo")
     private boolean activo = true;
 
@@ -79,5 +85,21 @@ public class Ruta {
 
     public void setEstado(String estado) {
         this.estado = estado;
+    }
+
+    public int getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(int tipo) {
+        this.tipo = tipo;
+    }
+
+    public long getDesfase() {
+        return desfase;
+    }
+
+    public void setDesfase(long desfase) {
+        this.desfase = desfase;
     }
 }

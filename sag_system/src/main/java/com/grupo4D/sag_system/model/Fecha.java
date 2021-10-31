@@ -11,6 +11,8 @@ public class Fecha {
 
     private double velocidad;
 
+    private int tipo;
+
     public Fecha(LocalDateTime fecha) {
         this.fecha = fecha;
     }
@@ -43,5 +45,11 @@ public class Fecha {
         this.velocidad = velocidad;
     }
 
+    public int getTipo() {
+        return tipo;
+    }
 
+    public void setTipo(int pedido) {
+        this.tipo = pedido;
+    }
 }

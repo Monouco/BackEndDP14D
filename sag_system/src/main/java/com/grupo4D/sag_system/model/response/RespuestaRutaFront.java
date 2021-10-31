@@ -63,4 +63,5 @@ public class RespuestaRutaFront {
     public void setRoute(ArrayList<NodoFront> route) {
         this.route = route;
     }
+
 }

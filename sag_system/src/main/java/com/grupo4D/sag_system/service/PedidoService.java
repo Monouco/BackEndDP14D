@@ -25,6 +25,7 @@ public class PedidoService {
         pedido.setEstadoPedido("Nuevo");
         Nodo nodo = nodoRepository.findIdNodoByCoordenadaXAndCoordenadaYAndActivoTrue(pedido.getNodo().getCoordenadaX(), pedido.getNodo().getCoordenadaY());
         pedido.getNodo().setId(nodo.getId());
+        pedido.setTipo(1); // 1 es simulacion dia a dia
         return pedidoRepository.save(pedido);
     }
 
