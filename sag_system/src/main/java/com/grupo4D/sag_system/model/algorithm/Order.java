@@ -29,6 +29,15 @@ public class Order {
         this.fechaInicio = fechaInicio;
     }
 
+    public Order( int desX, int desY, double glp, double deadLine, LocalDateTime fechaInicio, LocalDateTime fechafin){
+        this.desX = desX;
+        this.desY = desY;
+        this.glp = glp;
+        this.deadLine = deadLine;
+        this.fechaFin = fechafin;
+        this.fechaInicio = fechaInicio;
+    }
+
     public int getDesX() {
         return desX;
     }

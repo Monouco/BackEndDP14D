@@ -259,9 +259,7 @@ public class AlgorithmService {
         //pedidos a ordenes
         ArrayList<Order> ordenes = new ArrayList<>();
         for (int i =0; i< pedidosNuevos.size();i++){
-            Order orden = new Order(pedidosNuevos.get(i).getFechaEntrega().getDayOfMonth(),
-                    pedidosNuevos.get(i).getFechaEntrega().getHour(),
-                    pedidosNuevos.get(i).getFechaEntrega().getMinute(),
+            Order orden = new Order(
                     pedidosNuevos.get(i).getNodo().getCoordenadaX(),
                     pedidosNuevos.get(i).getNodo().getCoordenadaY(),
                     pedidosNuevos.get(i).getCantidadGLP(),
