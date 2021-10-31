@@ -73,7 +73,7 @@ public class AlgorithmThread implements Runnable {
                 } else {
                     System.out.println("No hubieron pedidos para el tipo " + type + " Tiempo de simulacion " + simulationDate);
                 }
-                this.simulationDate.plusSeconds(sleepTime / 1000 * multiplier);
+                this.simulationDate = this.simulationDate.plusSeconds(sleepTime / 1000 * multiplier);
                 Thread.sleep(sleepTime);
             }
         }
