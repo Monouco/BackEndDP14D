@@ -31,8 +31,8 @@ public class Init implements InitializingBean {
     public void afterPropertiesSet() throws Exception {
 
         StaticValues.mult = 1;
-        StaticValues.start = LocalDateTime.now().minusHours(5);
-        StaticValues.virtualDate = LocalDateTime.now().minusHours(5);
+        StaticValues.start = LocalDateTime.now(StaticValues.zoneId);
+        StaticValues.virtualDate = LocalDateTime.now(StaticValues.zoneId);
         StaticValues.simulationType = 1;
         StaticValues.end = null;
         //LOG.info(Arrays.asList(environment.getDefaultProfiles()));

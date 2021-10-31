@@ -54,6 +54,7 @@ public class AlgorithmThread implements Runnable {
         //Considerando 10 min
         //long sleepTime = 600000;
         long sleepTime = 180000;
+        if (endDate != null) this.endDate = this.endDate.plusSeconds(sleepTime/1000*multiplier);
         ArrayList<Pedido> orders;
         try{
             //

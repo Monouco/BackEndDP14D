@@ -1,6 +1,7 @@
 package com.grupo4D.sag_system.model.statics;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 
 public class StaticValues {
     public static int mult;
@@ -12,4 +13,5 @@ public class StaticValues {
     public static boolean endSimulationFlag;
     public static boolean collapseSimulationFlag;
     public static boolean fullCollapseFlag;
+    public static ZoneId zoneId = ZoneId.of("America/Lima");
 }

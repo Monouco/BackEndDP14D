@@ -105,8 +105,8 @@ public class AlgorithmService {
                     if(nodo.getPedido()>=0){
                         RespuestaNodoFront orderRNF = new RespuestaNodoFront();
                         orderRNF.setIndexRoute(j);
-                        long startAttention = (long)((tiempoAtencion/velocidad*atendidos + (j*1000)/velocity)*nanos + desfase);
-                        long endAttention = (long) ((tiempoAtencion/velocidad*(atendidos+1) + (j*1000)/velocity)*nanos + desfase);
+                        long startAttention = (long)((tiempoAtencion/velocidad*atendidos + (j*1000)/velocity)*nanos - desfase);
+                        long endAttention = (long) ((tiempoAtencion/velocidad*(atendidos+1) + (j*1000)/velocity)*nanos - desfase);
                         orderRNF.setDeliveryDate(ruta.getFechaInicio().plusNanos(startAttention));
                         orderRNF.setLeftDate(ruta.getFechaInicio().plusNanos(endAttention));
                         nodoRRF.getOrders().add(orderRNF);
@@ -117,7 +117,7 @@ public class AlgorithmService {
 
                 nodoRRF.setRoute(nodos);
 
-                long wholeRouteTime = (long)((tiempoAtencion/velocidad*atendidos + (j*1000)/velocity)*nanos + desfase);
+                long wholeRouteTime = (long)((tiempoAtencion/velocidad*atendidos + (j*1000)/velocity)*nanos - desfase);
 
                 nodoRRF.setEndDate(nodoRRF.getStartDate().plusNanos(wholeRouteTime));
 
@@ -132,21 +132,25 @@ public class AlgorithmService {
             case 1: {
                 if(StaticValues.collapseFlag){
                     bandera = 2;
+                    StaticValues.collapseFlag = false;
                 }
                 break;
             }
             case 2: {
                 if(StaticValues.endSimulationFlag){
                     bandera = 1;
+                    StaticValues.endSimulationFlag = false;
                 }
                 if(StaticValues.collapseSimulationFlag){
                     bandera = 2;
+                    StaticValues.collapseSimulationFlag = false;
                 }
                 break;
             }
             case 3: {
                 if(StaticValues.fullCollapseFlag){
                     bandera = 2;
+                    StaticValues.fullCollapseFlag = false;
                 }
                 break;
             }
@@ -359,6 +363,8 @@ public class AlgorithmService {
                 }
             }
 
+            camionRepository.save(camionesDisponibles.get(i));
+
         }
         rutaXNodoRepository.saveAll(secuenciaRuta);
         rutaXPedidoRepository.saveAll(secuenciaPedido);
@@ -388,7 +394,7 @@ public class AlgorithmService {
 
         //Creamos un thread para el algoritmo
         StaticValues.mult = 14;
-        StaticValues.start = LocalDateTime.now().minusHours(5);
+        StaticValues.start = LocalDateTime.now(StaticValues.zoneId);
         StaticValues.virtualDate = fechaInicio.plusMinutes(15);
         StaticValues.simulationType = 2;
         StaticValues.end = fechaFin;
