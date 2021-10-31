@@ -77,7 +77,7 @@ public class AlgorithmService {
                 ArrayList<NodoFront> nodos = new ArrayList<>();
                 Ruta ruta = rutasSolucion.get(i);
                 RespuestaRutaFront nodoRRF = new RespuestaRutaFront();
-                nodoRRF.setStartDate(ruta.getFechaInicio());
+                nodoRRF.setStartDate(ruta.getFechaInicio().minusNanos(desfase));
                 nodoRRF.setEndDate(ruta.getFechaFin()); // TODO: corregir el endDate
                 nodoRRF.setAttentionTime((int)(tiempoAtencion/velocidad));
                 nodoRRF.setVelocity(velocity);
