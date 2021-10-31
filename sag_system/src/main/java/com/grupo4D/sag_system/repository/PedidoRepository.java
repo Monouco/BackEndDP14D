@@ -25,4 +25,11 @@ public interface PedidoRepository extends CrudRepository<Pedido,Integer> {
             nativeQuery = true)
     public ArrayList<Pedido> listarPedidosDisponibles(LocalDateTime fechaActual, int tipo);
 
+
+    @Query(
+            value = "SELECT * FROM pedido u WHERE u.activo = 1 " +
+                    "and tipo = 1 ",
+            nativeQuery = true)
+    public ArrayList<Pedido> listarPedidos();
+
 }

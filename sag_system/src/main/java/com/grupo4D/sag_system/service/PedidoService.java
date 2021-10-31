@@ -30,7 +30,7 @@ public class PedidoService {
     }
 
     public ArrayList<Pedido> listarPedidos() {
-        return (ArrayList<Pedido>) pedidoRepository.findAll();
+        return (ArrayList<Pedido>) pedidoRepository.listarPedidos();
     }
 
     public ArrayList<Pedido> listarPedidosSinAsignar() {
