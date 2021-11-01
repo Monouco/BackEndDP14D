@@ -71,9 +71,9 @@ public class AlgorithmService {
         //Obtendremos todas las rutas iniciadas
         ArrayList<Ruta> rutasSolucion = rutaRepository.listarRutasDisponibles("Iniciado", tipo);
         if (!rutasSolucion.isEmpty()){
-            desfase = rutasSolucion.get(0).getDesfase();
             int i,j, atendidos;
             for(i = 0; i < rutasSolucion.size(); i++){
+                desfase = rutasSolucion.get(i).getDesfase();
                 ArrayList<NodoFront> nodos = new ArrayList<>();
                 Ruta ruta = rutasSolucion.get(i);
                 RespuestaRutaFront nodoRRF = new RespuestaRutaFront();
