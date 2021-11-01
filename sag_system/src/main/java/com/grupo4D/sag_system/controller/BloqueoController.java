@@ -6,6 +6,7 @@ import com.grupo4D.sag_system.service.BloqueoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -34,5 +35,9 @@ public class BloqueoController {
     public List<BloqueosFront> listarBloqueos(){
         return bloqueoService.listarBloqueos();
     }
+
+    @PostMapping("/registarBloqueos")
+    public List<BloqueosFront> registrarBloqueos(ArrayList<BloqueosFront> bloqueos){ return bloqueoService.registrarBloqueos(bloqueos);}
+
 }
 

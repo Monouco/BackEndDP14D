@@ -26,6 +26,7 @@ public class BloqueoService{
     @Autowired
     NodoXBloqueoRepository nodoXBloqueoRepository;
 
+
     public Bloqueo guardarBloqueo(Bloqueo bloqueo){
         return camionRepository.save(bloqueo);
     }
@@ -58,6 +59,36 @@ public class BloqueoService{
             response.add(bloqueoFront);
         }
         return response;
+    }
+
+    public ArrayList<BloqueosFront> registrarBloqueos ( ArrayList<BloqueosFront> bloqueosFront){
+        ArrayList<Bloqueo> bloqueos = new ArrayList<>();
+        ArrayList<NodoXBloqueo> nodos =  new ArrayList<>();
+        Nodo temp;
+
+        for (BloqueosFront bloqueoFront:
+             bloqueosFront) {
+            Bloqueo bloqueo = new Bloqueo();
+            bloqueo.setFechaInicio(bloqueoFront.getStartDate());
+            bloqueo.setFechaFin(bloqueoFront.getEndDate());
+            bloqueo.setActivo(true);
+            //camionRepository.save(bloqueo);
+
+            for (NodoFront nodoBloqueo:
+                 bloqueoFront.getPath()) {
+                temp = nodoRepository.findIdNodoByCoordenadaXAndCoordenadaYAndActivoTrue(nodoBloqueo.getX(),nodoBloqueo.getY());
+                NodoXBloqueo nodo = new NodoXBloqueo();
+                nodo.setNodo(temp);
+                nodo.setBloqueo(bloqueo);
+                nodo.setActivo(true);
+                nodos.add(nodo);
+            }
+            bloqueos.add(bloqueo);
+        }
+        camionRepository.saveAll(bloqueos);
+        nodoXBloqueoRepository.saveAll(nodos);
+
+        return bloqueosFront;
     }
 
 }
