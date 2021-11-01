@@ -13,6 +13,11 @@ public class NodoFront {
         this.pedido = pedido;
     }
 
+    public NodoFront(int x, int y) {
+        this.x = x;
+        this.y = y;
+    }
+
     public NodoFront(Nodo nodo){
         this.x = nodo.getCoordenadaX();
         this.y = nodo.getCoordenadaY();
