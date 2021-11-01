@@ -56,6 +56,7 @@ public class AlgorithmThread implements Runnable {
         long sleepTime = 180000;
         if (endDate != null) this.endDate = this.endDate.plusSeconds(sleepTime/1000*multiplier);
         ArrayList<Pedido> orders;
+
         try{
             //
             while (true) {
@@ -76,7 +77,7 @@ public class AlgorithmThread implements Runnable {
                 }
                 this.simulationDate = this.simulationDate.plusSeconds(sleepTime / 1000 * multiplier);
                 this.startDate = this.startDate.plusSeconds(sleepTime/1000);
-                //this.offset = ChronoUnit.NANOS.between(startDate,simulationDate);
+                this.offset = this.offset  - sleepTime * 1000000 * (multiplier-1 );
                 Thread.sleep(sleepTime);
             }
         }
