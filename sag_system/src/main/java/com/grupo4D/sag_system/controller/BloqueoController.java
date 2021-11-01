@@ -37,7 +37,9 @@ public class BloqueoController {
     }
 
     @PostMapping("/registarBloqueos")
-    public List<BloqueosFront> registrarBloqueos(ArrayList<BloqueosFront> bloqueos){ return bloqueoService.registrarBloqueos(bloqueos);}
+    public List<BloqueosFront> registrarBloqueos( @RequestBody ArrayList<BloqueosFront> bloqueos){
+        return bloqueoService.registrarBloqueos(bloqueos);
+    }
 
 }
 

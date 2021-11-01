@@ -72,7 +72,7 @@ public class BloqueoService{
             bloqueo.setFechaInicio(bloqueoFront.getStartDate());
             bloqueo.setFechaFin(bloqueoFront.getEndDate());
             bloqueo.setActivo(true);
-            camionRepository.save(bloqueo);
+            //camionRepository.save(bloqueo);
 
             for (NodoFront nodoBloqueo:
                  bloqueoFront.getPath()) {
@@ -85,7 +85,7 @@ public class BloqueoService{
             }
             bloqueos.add(bloqueo);
         }
-        //camionRepository.saveAll(bloqueos);
+        camionRepository.saveAll(bloqueos);
         nodoXBloqueoRepository.saveAll(nodos);
 
         return bloqueosFront;

@@ -1,5 +1,7 @@
 package com.grupo4D.sag_system.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -15,9 +17,11 @@ public class Bloqueo {
     private int id;
     //Resto de atributos
 
+    @JsonFormat(pattern = "yyyy-MM-dd@HH:mm:ss")
     @Column(name="fechaInicio")
     private LocalDateTime fechaInicio;
 
+    @JsonFormat(pattern = "yyyy-MM-dd@HH:mm:ss")
     @Column(name="fechaFin")
     private LocalDateTime fechaFin;
 
