@@ -76,7 +76,7 @@ public class AlgorithmThread implements Runnable {
                 }
                 this.simulationDate = this.simulationDate.plusSeconds(sleepTime / 1000 * multiplier);
                 this.startDate = this.startDate.plusSeconds(sleepTime/1000);
-                this.offset = ChronoUnit.NANOS.between(startDate,simulationDate);
+                //this.offset = ChronoUnit.NANOS.between(startDate,simulationDate);
                 Thread.sleep(sleepTime);
             }
         }
