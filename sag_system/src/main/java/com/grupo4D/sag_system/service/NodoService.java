@@ -25,12 +25,14 @@ public class NodoService{
     }
 
     public String generarNodos(){
+        ArrayList<Nodo> nodos =  new ArrayList<>();
         for(int i = 0; i < 70; i++){
             for(int j = 0; j < 50; j++){
                 Nodo nodo = new Nodo(i,j);
-                nodoRepository.save(nodo);
+                nodos.add(nodo);
             }
         }
+        nodoRepository.saveAll(nodos);
         return "CREADOS";
     }
 
