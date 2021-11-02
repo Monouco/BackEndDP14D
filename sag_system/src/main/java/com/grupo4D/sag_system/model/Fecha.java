@@ -13,6 +13,8 @@ public class Fecha {
 
     private int tipo;
 
+    private String estado;
+
     public Fecha(LocalDateTime fecha) {
         this.fecha = fecha;
     }
@@ -32,6 +34,10 @@ public class Fecha {
     public Fecha(double velocidad, int tipo) {
         this.velocidad = velocidad;
         this.tipo = tipo;
+    }
+
+    public Fecha(String estado){
+        this.estado = estado;
     }
 
     public LocalDateTime getFecha() {
@@ -56,5 +62,13 @@ public class Fecha {
 
     public void setTipo(int pedido) {
         this.tipo = pedido;
+    }
+
+    public String getEstado() {
+        return estado;
+    }
+
+    public void setEstado(String estado) {
+        this.estado = estado;
     }
 }

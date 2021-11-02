@@ -20,8 +20,8 @@ public class CamionService{
         return camionRepository.save(camion);
     }
 
-    public ArrayList<Camion> listarCamiones() {
-        return (ArrayList<Camion>) camionRepository.findAll();
+    public ArrayList<Camion> listarCamiones(String estado) {
+        return (ArrayList<Camion>) camionRepository.findCamionsByEstadoAndActivoTrue(estado);
     }
 
 }

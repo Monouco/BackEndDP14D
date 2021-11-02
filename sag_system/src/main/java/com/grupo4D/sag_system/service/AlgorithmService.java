@@ -9,6 +9,7 @@ import com.grupo4D.sag_system.model.algorithm.Order;
 import com.grupo4D.sag_system.model.algorithm.pathFinding.ACSAlgorithm;
 import com.grupo4D.sag_system.model.response.*;
 import com.grupo4D.sag_system.model.runnable.AlgorithmThread;
+import com.grupo4D.sag_system.model.runnable.UpdateCurrentValues;
 import com.grupo4D.sag_system.model.statics.StaticValues;
 import com.grupo4D.sag_system.repository.*;
 import org.apache.tomcat.jni.Local;
@@ -398,6 +399,10 @@ public class AlgorithmService {
         StaticValues.virtualDate = fechaInicio.plusMinutes(15);
         StaticValues.simulationType = 2;
         StaticValues.end = fechaFin;
+
+        UpdateCurrentValues updating = applicationContext.getBean(UpdateCurrentValues.class);
+
+        taskExecutor.execute(updating);
 
         AlgorithmThread algorithm = applicationContext.getBean(AlgorithmThread.class);
 

@@ -25,7 +25,9 @@ public interface CamionRepository extends CrudRepository<Camion,Integer> {
 
     @Transactional
     @Modifying
-    @Query(value="call pr_update_values(:cur_date)", nativeQuery = true)
-    void updatingValues(@Param("cur_date") LocalDateTime cur_date);
+    @Query(value="call pr_update_values(:cur_date, :cur_type)", nativeQuery = true)
+    void updatingValues(@Param("cur_date") LocalDateTime cur_date, @Param("cur_type") int cur_type);
+
+    public ArrayList<Camion> findCamionsByEstadoAndActivoTrue(String estado);
 
 }

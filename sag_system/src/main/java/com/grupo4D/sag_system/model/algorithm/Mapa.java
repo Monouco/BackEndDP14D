@@ -237,4 +237,17 @@ public class Mapa {
         }
     }
 
+    public boolean isBlocked(LocalDateTime curTime, int x, int y){
+        String position = x + "," + y;
+        ArrayList<Roadblock> blocks = this.roadBlocks.get(position);
+        if(blocks != null){
+            for (Roadblock block:
+                 blocks) {
+                if(block.getFechaIni().isAfter(curTime) && block.getFechaFin().isBefore(curTime))
+                    return true;
+            }
+        }
+        return false;
+    }
+
 }

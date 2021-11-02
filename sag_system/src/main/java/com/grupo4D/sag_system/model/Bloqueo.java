@@ -28,6 +28,9 @@ public class Bloqueo {
     @ManyToOne @JoinColumn(name="idNodo")
     private Nodo nodo;
 
+    @Column(name = "tipo")
+    private int tipo;
+
     @Column(name="activo")
     private boolean activo = true;
 
@@ -71,4 +74,13 @@ public class Bloqueo {
     public void setActivo(boolean activo) {
         this.activo = activo;
     }
+
+    public int getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(int tipo) {
+        this.tipo = tipo;
+    }
+
 }

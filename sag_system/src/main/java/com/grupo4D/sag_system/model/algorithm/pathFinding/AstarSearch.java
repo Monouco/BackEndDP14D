@@ -2,12 +2,15 @@ package com.grupo4D.sag_system.model.algorithm.pathFinding;
 
 import com.grupo4D.sag_system.model.algorithm.Mapa;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 
 public class AstarSearch {
     private Mapa mapa;
     private int [] destination; //coordenadas x y del destino del pedido
+    private LocalDateTime startDate;
+
 
     public AstarSearch(Mapa map) {
         this.mapa = map;

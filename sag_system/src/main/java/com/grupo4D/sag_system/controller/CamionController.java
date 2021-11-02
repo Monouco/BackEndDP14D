@@ -1,6 +1,7 @@
 package com.grupo4D.sag_system.controller;
 
 import com.grupo4D.sag_system.model.Camion;
+import com.grupo4D.sag_system.model.Fecha;
 import com.grupo4D.sag_system.service.CamionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -25,8 +26,8 @@ public class CamionController {
     }
 
     @GetMapping("/listarCamiones")
-    public List<Camion> listarCamiones(){
-        return camionService.listarCamiones();
+    public List<Camion> listarCamiones(@RequestBody Fecha fecha){
+        return camionService.listarCamiones(fecha.getEstado());
     }
 }
 

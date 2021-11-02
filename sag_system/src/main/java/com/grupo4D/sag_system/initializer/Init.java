@@ -35,14 +35,15 @@ public class Init implements InitializingBean {
         StaticValues.virtualDate = LocalDateTime.now(StaticValues.zoneId);
         StaticValues.simulationType = 1;
         StaticValues.end = null;
-        //LOG.info(Arrays.asList(environment.getDefaultProfiles()));
-        AlgorithmThread algorithm = applicationContext.getBean(AlgorithmThread.class);
-
-        taskExecutor.execute(algorithm);
 
         UpdateCurrentValues updating = applicationContext.getBean(UpdateCurrentValues.class);
 
         taskExecutor.execute(updating);
+
+        //LOG.info(Arrays.asList(environment.getDefaultProfiles()));
+        AlgorithmThread algorithm = applicationContext.getBean(AlgorithmThread.class);
+
+        taskExecutor.execute(algorithm);
 
     }
 
