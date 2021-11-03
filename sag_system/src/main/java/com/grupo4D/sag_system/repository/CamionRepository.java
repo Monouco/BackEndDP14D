@@ -30,4 +30,13 @@ public interface CamionRepository extends CrudRepository<Camion,Integer> {
 
     public ArrayList<Camion> findCamionsByEstadoAndActivoTrue(String estado);
 
+
+    @Query(
+            value = "select concat(t.abreviatura , '-' , c.codigo_camion)"+
+                    "from tipo_camion t inner join"+
+                    "camion c on t.id_tipo_camion = c.id_tipo_camion" ,
+                    nativeQuery = true)
+    public ArrayList<String> listarCodigosCamion();
+
+
 }

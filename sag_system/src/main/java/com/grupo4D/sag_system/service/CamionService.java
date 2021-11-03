@@ -17,6 +17,7 @@ public class CamionService{
     }
 
     public Camion guardarCamionNuevo(Camion camion){
+        camion.setActivo(true);
         return camionRepository.save(camion);
     }
 

@@ -2,6 +2,8 @@ package com.grupo4D.sag_system.controller;
 
 import com.grupo4D.sag_system.model.Camion;
 import com.grupo4D.sag_system.model.Fecha;
+import com.grupo4D.sag_system.model.TipoCamion;
+import com.grupo4D.sag_system.model.request.CamionRegistrarFront;
 import com.grupo4D.sag_system.service.CamionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -21,7 +23,19 @@ public class CamionController {
     }
 
     @PostMapping("/registrarCamionNuevo")
-    public Camion registrarCamionNuevo(@RequestBody Camion camionModel){
+    public Camion registrarCamionNuevo(@RequestBody CamionRegistrarFront camion){
+        Camion camionModel = new Camion();
+        TipoCamion tipoCamion = new TipoCamion();
+        tipoCamion.setId(camion.getTipoCamion());
+
+
+        camionModel.setTipoCamion(tipoCamion);
+        camionModel.setCodigo(String.format("%02d",camion.getCodigoCamion()));
+        camionModel.setEstadoSimulacion("Operativo");
+        camionModel.setEstadoColapso("Operativo");
+        camionModel.setEstado("Operativo");
+        camionModel.setVelocidad(camion.getVelocidadCamion());
+
         return camionService.guardarCamionNuevo(camionModel);
     }
 
