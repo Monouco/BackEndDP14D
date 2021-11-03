@@ -31,6 +31,13 @@ public interface CamionRepository extends CrudRepository<Camion,Integer> {
 
     public ArrayList<Camion> findCamionsByActivoTrue();
 
+    @Transactional
+    @Modifying
+    @Query(
+            value = "UPDATE camion  SET estado = ?1    WHERE id_camion = ?2" ,
+            nativeQuery = true)
+    public void cambiarEstadoCamion(String estado, int id);
+
 
     @Query(
             value = "select concat(t.abreviatura , '-' , c.codigo_camion) "+

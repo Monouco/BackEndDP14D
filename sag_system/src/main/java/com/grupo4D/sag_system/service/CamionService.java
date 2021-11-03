@@ -29,6 +29,10 @@ public class CamionService{
         return (String) camionRepository.listarCodigo1Camion(id);
     }
 
+    public void cambiarEstadoAveria(String estado,int id){
+        camionRepository.cambiarEstadoCamion(estado,id);
+    }
+
 
 
 }
