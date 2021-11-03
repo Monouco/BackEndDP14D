@@ -21,9 +21,15 @@ public class CamionService{
         return camionRepository.save(camion);
     }
 
-    public ArrayList<Camion> listarCamiones(String estado) {
-        return (ArrayList<Camion>) camionRepository.findCamionsByEstadoAndActivoTrue(estado);
+    public ArrayList<Camion> listarCamiones() {
+        return (ArrayList<Camion>) camionRepository.findCamionsByActivoTrue();
     }
+
+    public String  buscarCodigo1Camion(int id) {
+        return (String) camionRepository.listarCodigo1Camion(id);
+    }
+
+
 
 }
 
