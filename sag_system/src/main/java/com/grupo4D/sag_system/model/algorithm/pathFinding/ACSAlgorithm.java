@@ -5,6 +5,8 @@ import com.grupo4D.sag_system.model.algorithm.DepositGLP;
 import com.grupo4D.sag_system.model.algorithm.Mapa;;
 import com.grupo4D.sag_system.model.algorithm.Order;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 public class ACSAlgorithm {
@@ -14,14 +16,16 @@ public class ACSAlgorithm {
     private int hTurno;
     private int highestNum;
     private double bestFitness;
+    private LocalDateTime curTime;
     //private Random rand;
 
-    public ACSAlgorithm(int numAlmacenes, int numOrders, int [] coorAlmacen, int hTurno){
+    public ACSAlgorithm(int numAlmacenes, int numOrders, int [] coorAlmacen, int hTurno, LocalDateTime curTime){
         this.numAlmacenes = numAlmacenes;
         this.coorAlmacen = coorAlmacen;
         //Considerando los almacenes dentro de la feromona
         this.pheromone = new double[numOrders + numAlmacenes][numOrders + numAlmacenes];
         this.hTurno = hTurno;
+        this.curTime = curTime;
         //rand = new Random(seed);
     }
 
@@ -482,66 +486,77 @@ public class ACSAlgorithm {
         int xIni, yIni, xDes, yDes;
         Order curOrden, lastOrden;
         DepositGLP deposito;
+        double nuVelocity = 10/36 * camion.getVelocity();
+        int attentionTime = 600;
+        int attended = 0;
+        long nanos = 1000000000;
+        long spentTime;
+        int tempSize;
+
+        aStar.setVelocity(nuVelocity);
 
         for (int siguienteOrden :
         camion.getBestSolution()) {
 
-                if (siguienteOrden >= 0) {
-                    //Obteniendo la orden
-                    curOrden = ordenes.get(siguienteOrden);
+            if (siguienteOrden >= 0) {
+                //Obteniendo la orden
+                curOrden = ordenes.get(siguienteOrden);
 
-                    xDes = curOrden.getDesX();
-                    yDes = curOrden.getDesY();
+                xDes = curOrden.getDesX();
+                yDes = curOrden.getDesY();
 
-                } else {
-                    //obtenemos los destinos al almacen
-                    deposito = depositos.get(siguienteOrden + numAlmacenes);
-                    xDes = deposito.getxPos();
-                    yDes = deposito.getyPos();
+            } else {
+                //obtenemos los destinos al almacen
+                deposito = depositos.get(siguienteOrden + numAlmacenes);
+                xDes = deposito.getxPos();
+                yDes = deposito.getyPos();
 
+            }
+
+            //Se encuentra en la posicion inicial, no ha salido
+            if (ordenAnterior < 0) {
+                if (ordenAnterior == -1 - numAlmacenes) {
+                    xIni = camion.getxPos();
+                    yIni = camion.getyPos();
+                    coordenate = new int[2];
+                    coordenate[0] = xIni;
+                    coordenate[1] = yIni;
+                    rutaSol.add(coordenate);
+                } else {//esta en un deposito
+                    deposito = depositos.get(ordenAnterior + numAlmacenes);
+                    xIni = deposito.getxPos();
+                    yIni = deposito.getyPos();
                 }
+            } else {
+                lastOrden = ordenes.get(ordenAnterior);
+                xIni = lastOrden.getDesX();
+                yIni = lastOrden.getDesY();
+                attended++;
+            }
+            tempSize = rutaSol.size()-1;
+            spentTime = (long)((tempSize * 1000 / nuVelocity + attentionTime*attended) * nanos);
 
-                //Se encuentra en la posicion inicial, no ha salido
-                if (ordenAnterior < 0) {
-                    if (ordenAnterior == -1 - numAlmacenes) {
-                        xIni = camion.getxPos();
-                        yIni = camion.getyPos();
-                        coordenate = new int[2];
-                        coordenate[0] = xIni;
-                        coordenate[1] = yIni;
-                        rutaSol.add(coordenate);
-                    } else {//esta en un deposito
-                        deposito = depositos.get(ordenAnterior + numAlmacenes);
-                        xIni = deposito.getxPos();
-                        yIni = deposito.getyPos();
-                    }
-                } else {
-                    lastOrden = ordenes.get(ordenAnterior);
-                    xIni = lastOrden.getDesX();
-                    yIni = lastOrden.getDesY();
-                }
+            //Recordar hacer esto con A*
+            ruta = aStar.astar_search(new int[]{xIni, yIni}, new int[]{xDes, yDes}, this.curTime.plusNanos(spentTime));
 
-                //Recordar hacer esto con A*
-                ruta = aStar.astar_search(new int[]{xIni, yIni}, new int[]{xDes, yDes});
+            int location = rutaSol.size()-1;
 
-                int location = rutaSol.size()-1;
+            //Calculamos el costo de petroleo por hacer esta ruta
+            /*coordenate = new int[3];
+            coordenate[0] = ruta.get(0)[0];
+            coordenate[1] = ruta.get(0)[1];
+            coordenate[2] = ordenAnterior;
 
-                //Calculamos el costo de petroleo por hacer esta ruta
-                /*coordenate = new int[3];
-                coordenate[0] = ruta.get(0)[0];
-                coordenate[1] = ruta.get(0)[1];
-                coordenate[2] = ordenAnterior;
+            ruta.set(0, coordenate);*/
 
-                ruta.set(0, coordenate);*/
+            coordenate = new int[3];
+            coordenate[0] = rutaSol.get(location)[0];
+            coordenate[1] = rutaSol.get(location)[1];
+            coordenate[2] = ordenAnterior;
 
-                coordenate = new int[3];
-                coordenate[0] = rutaSol.get(location)[0];
-                coordenate[1] = rutaSol.get(location)[1];
-                coordenate[2] = ordenAnterior;
-
-                rutaSol.set(location, coordenate);
-                rutaSol.addAll(ruta);
-                ordenAnterior = siguienteOrden;
+            rutaSol.set(location, coordenate);
+            rutaSol.addAll(ruta);
+            ordenAnterior = siguienteOrden;
         }
 
         //Para completar agregamos la ruta de vuelta al almacen
@@ -563,10 +578,13 @@ public class ACSAlgorithm {
             coordenate[2] = ordenAnterior;
             rutaSol.set(location, coordenate);
         }
+        tempSize = rutaSol.size()-1;
+        spentTime = (long)((tempSize * 1000 / nuVelocity + attentionTime*attended) * nanos);
+
         //Posiciones del almacen principal
         xDes = depositos.get(0).getxPos();
         yDes = depositos.get(0).getyPos();
-        ruta = aStar.astar_search(new int[]{xIni, yIni}, new int[]{xDes, yDes});
+        ruta = aStar.astar_search(new int[]{xIni, yIni}, new int[]{xDes, yDes}, this.curTime.plusNanos(spentTime));
         rutaSol.addAll(ruta);
 
         return rutaSol;
@@ -577,5 +595,13 @@ public class ACSAlgorithm {
     }
     public double getBestFitness(){
         return this.bestFitness;
+    }
+
+    public LocalDateTime getCurTime() {
+        return curTime;
+    }
+
+    public void setCurTime(LocalDateTime curTime) {
+        this.curTime = curTime;
     }
 }
