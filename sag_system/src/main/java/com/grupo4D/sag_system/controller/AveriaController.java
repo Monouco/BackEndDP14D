@@ -44,14 +44,14 @@ public class AveriaController {
         averiaModel.setCamion(camion);
         averiaModel.setFechaIncidente(date);
 
-        camionService.cambiarEstadoAveria("AVERIADO",averia.getIdCamion());
+        camionService.cambiarEstadoAveria("Averiado",averia.getIdCamion());
 
         Mantenimiento m = new Mantenimiento();
         m.setActivo(true);
         m.setCamion(camion);
         m.setFechaEntrada(date.plusHours(1));
         m.setFechaSalida(date.plusHours(49));
-        m.setTipo("CORRECTIVO");
+        m.setTipo("Correctivo");
 
         Mantenimiento mRespuesta = mantenimientoService.guardarMantenimientoNuevo(m);
         averiaModel.setMantenimiento(mRespuesta);
