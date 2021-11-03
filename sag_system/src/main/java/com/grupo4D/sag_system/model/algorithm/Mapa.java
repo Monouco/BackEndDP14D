@@ -6,6 +6,7 @@ import com.grupo4D.sag_system.model.NodoXBloqueo;
 import com.grupo4D.sag_system.repository.BloqueoRepository;
 import com.grupo4D.sag_system.repository.NodoXBloqueoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -23,18 +24,19 @@ public class Mapa {
     //private ArrayList<Bloqueo> roadBlocks;
     private Map<String, ArrayList<Roadblock>> roadBlocks;
 
-    @Autowired
     private BloqueoRepository bloqueoRepository;
-    @Autowired
+
     private NodoXBloqueoRepository nodoBloqueoRepository;
 
-    public Mapa(int height, int width) {
+    public Mapa(int height, int width, BloqueoRepository bloqueoRepository, NodoXBloqueoRepository nodoBloqueoRepository) {
         this.height = height;
         this.width = width;
         this.map = new char [height][width];
         this.initializeMap();
         this.deposits = new ArrayList<>();
         this.roadBlocks = new HashMap<String, ArrayList<Roadblock>>();
+        this.bloqueoRepository = bloqueoRepository;
+        this.nodoBloqueoRepository = nodoBloqueoRepository;
     }
 
     public Mapa(Mapa mapa) {

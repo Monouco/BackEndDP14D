@@ -49,6 +49,12 @@ public class AlgorithmService {
     @Autowired
     private ApplicationContext applicationContext;
 
+    @Autowired
+    BloqueoRepository bloqueoRepository;
+
+    @Autowired
+    NodoXBloqueoRepository nodoXBloqueoRepository;
+
 
     public RespuestaObtenerRutaFront obtenerRutasSolucion(Fecha fecha, double velocidad, int tipo){
         //parametros varios
@@ -221,7 +227,7 @@ public class AlgorithmService {
         if(camionesDisponibles.isEmpty()) return null;
 
         //plantas
-        Mapa mapa1 = new Mapa(50, 70);
+        Mapa mapa1 = new Mapa(50, 70, bloqueoRepository, nodoXBloqueoRepository);
         DepositGLP principal = new DepositGLP(12, 8, 100);
         DepositGLP almacenNorte = new DepositGLP(42, 42, 160);
         DepositGLP alamacenEste = new DepositGLP(63, 3, 160);
@@ -229,6 +235,7 @@ public class AlgorithmService {
         mapa1.addDeposit(principal);
         mapa1.addDeposit(almacenNorte);
         mapa1.addDeposit(alamacenEste);
+        mapa1.initializeCurrentRoadBlocks(fecha, fecha.plusDays(1));
 
         //Nodos
 //        for(int i = 0; i < 70; i++){
@@ -282,7 +289,7 @@ public class AlgorithmService {
         }
         pedidoRepository.saveAll(pedidosNuevos);
 
-        ACSAlgorithm algoritmoACS  = new ACSAlgorithm(numAlmacenes, numOrdenes,mapa1.getPlantaPrincipal(),hTurno);
+        ACSAlgorithm algoritmoACS  = new ACSAlgorithm(numAlmacenes, numOrdenes,mapa1.getPlantaPrincipal(),hTurno, fecha);
 
         hormigas = algoritmoACS.findSolution(hormigas,ordenes,mapa1,cycles,steps, camionesDisponibles.size(),evaporationRate);
 
@@ -305,7 +312,9 @@ public class AlgorithmService {
             rutaRepository.save(ruta);
 
             ArrayList<NodoFront> path = new ArrayList<>();
-            int k = 0, atendidos = 0;
+            int k = 0, atendidos = 0,  temp = 0;
+            ArrayList<Integer> hBestSolution = hormigas.get(i).getBestSolution();
+            ArrayList<Double> hBestGLP = hormigas.get(i).getBestSolutionGLP();
             for (int[]j:hormigas.get(i).getBestRoute()) {
                 Nodo nodo = nodoRepository.findIdNodoByCoordenadaXAndCoordenadaYAndActivoTrue(j[0],j[1]);
                 RutaXNodo rutaXNodo = new RutaXNodo();
@@ -324,6 +333,19 @@ public class AlgorithmService {
                     if(j[2] >= 0){
                         atendidos++;
                     }
+                    if(j[2] != -4) {
+                        if (hBestSolution.size() > temp && hBestSolution.get(temp) >= 0) {
+                            RutaXPedido rutaXPedido = new RutaXPedido();
+                            rutaXPedido.setPedido(pedidosNuevos.get(hBestSolution.get(temp)));
+                            rutaXPedido.setRuta(ruta);
+                            rutaXPedido.setCantidadGLPEnviado(hBestGLP.get(temp) - hBestGLP.get(temp + 1));
+                            rutaXPedido.setSecuencia(k);
+                            //rutaXPedidoRepository.save(rutaXPedido);
+                            secuenciaPedido.add(rutaXPedido);
+                        }
+
+                        temp++;
+                    }
                 }else{
                     rutaXNodo.setPedido(-1);
                     nodoFront.setPedido(-1);
@@ -337,15 +359,21 @@ public class AlgorithmService {
             rutaRepository.save(ruta);
 
             RutaFront rutaFront = new RutaFront(ruta.getId(), ruta.getFechaInicio(), path);
-            for (int j: hormigas.get(i).getBestSolution()) {
-                if (j>=0){
+            /*int temp ;
+            ArrayList<Integer> hBestSolution = hormigas.get(i).getBestSolution();
+            ArrayList<Double> hBestGLP = hormigas.get(i).getBestSolutionGLP();
+            for ( temp = 0; temp < hBestSolution.size(); temp++
+                    //int j: hormigas.get(i).getBestSolution()
+            ) {
+                if (hBestSolution.get(temp) >= 0){
                     RutaXPedido rutaXPedido = new RutaXPedido();
-                    rutaXPedido.setPedido(pedidosNuevos.get(j));
+                    rutaXPedido.setPedido(pedidosNuevos.get(hBestSolution.get(temp)));
                     rutaXPedido.setRuta(ruta);
+                    rutaXPedido.setCantidadGLPEnviado(hBestGLP.get(temp) - hBestGLP.get(temp + 1));
                     //rutaXPedidoRepository.save(rutaXPedido);
                     secuenciaPedido.add(rutaXPedido);
                 }
-            }
+            }*/
             rutaFront.setPath(path);
             solucion.add(rutaFront);
 
@@ -364,9 +392,10 @@ public class AlgorithmService {
                 }
             }
 
-            camionRepository.save(camionesDisponibles.get(i));
+            //camionRepository.save(camionesDisponibles.get(i));
 
         }
+        camionRepository.saveAll(camionesDisponibles);
         rutaXNodoRepository.saveAll(secuenciaRuta);
         rutaXPedidoRepository.saveAll(secuenciaPedido);
         return solucion;

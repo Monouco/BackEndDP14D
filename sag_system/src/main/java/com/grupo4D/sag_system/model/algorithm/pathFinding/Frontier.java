@@ -31,7 +31,7 @@ public class Frontier {
                 break;
         }
         cola.add(i,n);
-        states.add(i,n.getState());
+        states.add(i,new int [] {n.getState()[0], n.getState()[1], n.getTimeStep()});
     }
 
     public Node popNode(){

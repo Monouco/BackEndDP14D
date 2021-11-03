@@ -40,7 +40,7 @@ public class UpdateCurrentValues implements Runnable{
             //
             while (true) {
 
-                System.out.println(LocalDateTime.now() + " Actualizando valores");
+                System.out.println(LocalDateTime.now() + " Actualizando valores para el tipo " + type);
                 camionRepository.updatingValues(simulationDate, type);
 
                 if(endDate != null && simulationDate.isAfter(endDate)){
@@ -55,6 +55,8 @@ public class UpdateCurrentValues implements Runnable{
         catch (InterruptedException e ){
             System.out.println(e.getMessage());
         }
+
+        System.out.println(LocalDateTime.now(StaticValues.zoneId) + " Terminando el proceso de actualizar para el tipo "+ type);
 
     }
 

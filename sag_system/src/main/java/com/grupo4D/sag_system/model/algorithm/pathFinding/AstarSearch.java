@@ -9,8 +9,7 @@ import java.util.Arrays;
 public class AstarSearch {
     private Mapa mapa;
     private int [] destination; //coordenadas x y del destino del pedido
-    private LocalDateTime startDate;
-
+    private double velocity;
 
     public AstarSearch(Mapa map) {
         this.mapa = map;
@@ -19,13 +18,14 @@ public class AstarSearch {
     public AstarSearch(Mapa map, int [] dest) {
         this.mapa = map;
         destination = dest;
+
     }
 
     public Mapa getMapa() {
         return mapa;
     }
 
-    public ArrayList<int []> astar_search(int[] start, int[]goal){
+    public ArrayList<int []> astar_search(int[] start, int[]goal, LocalDateTime startDate){
         this.destination = goal;
         Frontier frontier = new Frontier(new Node(start[0], start[1], null, 0, 0));
         ArrayList<int []> explored = new ArrayList<>();
@@ -41,12 +41,12 @@ public class AstarSearch {
             if (goalTest(n.getState(), goal))
                 break;
             //El nodo ya fue explorado
-            //explored.add(new int[] {n.getState()[0],n.getState()[1],n.getTimeStep()});
-            explored.add(new int[] {n.getState()[0],n.getState()[1]});
-            children = n.expand(this);
+            explored.add(new int[] {n.getState()[0],n.getState()[1],n.getTimeStep()});
+            //explored.add(new int[] {n.getState()[0],n.getState()[1]});
+            children = n.expand(this, this.velocity, startDate);
             for(Node child: children){
-                //auxChildState =new int[] {child.getState()[0], child.getState()[1],n.getTimeStep()};
-                auxChildState =new int[] {child.getState()[0], child.getState()[1]};
+                auxChildState =new int[] {child.getState()[0], child.getState()[1],n.getTimeStep()};
+                //auxChildState =new int[] {child.getState()[0], child.getState()[1]};
                 if(!isExplored(explored,auxChildState) && !isInFrontier(frontier, auxChildState)){
                     frontier.addNode(child);
                 }
@@ -117,15 +117,17 @@ public class AstarSearch {
         return false;
     }
 
-    public int cost_function(int [] coord, int parent_cost){
+    public int cost_function(int [] coord, int parent_cost, LocalDateTime curTime){
         char[][]m = this.mapa.getMap();
         int total_cost=parent_cost;
         int node_x = coord[0];
         int node_y = coord[1];
         double manhattan_heuristic = Math.abs(coord[0] - this.destination[0]) + Math.abs(coord[1] - this.destination[1]);
+        long nanos = 1000000000;
 
         //Nodo bloqueado
-        if (m[node_y][node_x] == '#')
+        //if (m[node_y][node_x] == '#')
+        if(mapa.isBlocked(curTime, node_x, node_y))
             total_cost+=1000000;
         else
             total_cost+=1; //Consideramos como 1 el costo por defecto, sin bloqueos
@@ -133,5 +135,9 @@ public class AstarSearch {
         total_cost+=manhattan_heuristic;
 
         return total_cost;
+    }
+
+    public void setVelocity(double velocity) {
+        this.velocity = velocity;
     }
 }
