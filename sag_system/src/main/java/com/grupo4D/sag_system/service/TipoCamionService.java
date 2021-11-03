@@ -24,6 +24,8 @@ public class TipoCamionService{
         return (ArrayList<TipoCamion>) tipoCamionRepository.findAll();
     }
 
+    public TipoCamion obtenerDatosTipoCamion (int id){ return (TipoCamion) tipoCamionRepository.obtenerDatosTipoCamion(id);}
+
 
 
 }

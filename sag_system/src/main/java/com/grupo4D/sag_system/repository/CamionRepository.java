@@ -28,15 +28,31 @@ public interface CamionRepository extends CrudRepository<Camion,Integer> {
     @Query(value="call pr_update_values(:cur_date, :cur_type)", nativeQuery = true)
     void updatingValues(@Param("cur_date") LocalDateTime cur_date, @Param("cur_type") int cur_type);
 
-    public ArrayList<Camion> findCamionsByEstadoAndActivoTrue(String estado);
+
+    public ArrayList<Camion> findCamionsByActivoTrue();
+
+    @Transactional
+    @Modifying
+    @Query(
+            value = "UPDATE camion  SET estado = ?1    WHERE id_camion = ?2" ,
+            nativeQuery = true)
+    public void cambiarEstadoCamion(String estado, int id);
 
 
     @Query(
-            value = "select concat(t.abreviatura , '-' , c.codigo_camion)"+
-                    "from tipo_camion t inner join"+
-                    "camion c on t.id_tipo_camion = c.id_tipo_camion" ,
+            value = "select concat(t.abreviatura , '-' , c.codigo_camion) "+
+                    "from tipo_camion t inner join "+
+                    "camion c on t.id_tipo_camion = c.id_tipo_camion " ,
                     nativeQuery = true)
     public ArrayList<String> listarCodigosCamion();
+
+    @Query(
+            value = "select concat(t.abreviatura , '-' , c.codigo_camion) "+
+                    "from tipo_camion t inner join "+
+                    "camion c on t.id_tipo_camion = c.id_tipo_camion "+
+                    "where c.id_camion = ?1 ",
+            nativeQuery = true)
+    public String listarCodigo1Camion(int id);
 
 
 }
