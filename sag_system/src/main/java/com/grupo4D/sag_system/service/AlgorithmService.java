@@ -232,6 +232,7 @@ public class AlgorithmService {
         DepositGLP almacenNorte = new DepositGLP(42, 42, 160);
         DepositGLP alamacenEste = new DepositGLP(63, 3, 160);
 
+
         mapa1.addDeposit(principal);
         mapa1.addDeposit(almacenNorte);
         mapa1.addDeposit(alamacenEste);

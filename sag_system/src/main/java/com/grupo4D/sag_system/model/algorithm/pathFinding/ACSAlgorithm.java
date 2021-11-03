@@ -486,7 +486,7 @@ public class ACSAlgorithm {
         int xIni, yIni, xDes, yDes;
         Order curOrden, lastOrden;
         DepositGLP deposito;
-        double nuVelocity = 10/36 * camion.getVelocity();
+        double nuVelocity = (double)10/36 * camion.getVelocity();
         int attentionTime = 600;
         int attended = 0;
         long nanos = 1000000000;
@@ -537,7 +537,7 @@ public class ACSAlgorithm {
             spentTime = (long)((tempSize * 1000 / nuVelocity + attentionTime*attended) * nanos);
 
             //Recordar hacer esto con A*
-            ruta = aStar.astar_search(new int[]{xIni, yIni}, new int[]{xDes, yDes}, this.curTime.plusNanos(spentTime));
+             ruta = aStar.astar_search(new int[]{xIni, yIni}, new int[]{xDes, yDes}, this.curTime.plusNanos(spentTime));
 
             int location = rutaSol.size()-1;
 

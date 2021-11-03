@@ -243,9 +243,10 @@ public class Mapa {
         String position = x + "," + y;
         ArrayList<Roadblock> blocks = this.roadBlocks.get(position);
         if(blocks != null){
+            System.out.println("Se encuentra en un nodo bloqueado ");
             for (Roadblock block:
                  blocks) {
-                if(block.getFechaIni().isAfter(curTime) && block.getFechaFin().isBefore(curTime))
+                if(block.getFechaIni().isBefore(curTime) && block.getFechaFin().isAfter(curTime))
                     return true;
             }
         }
