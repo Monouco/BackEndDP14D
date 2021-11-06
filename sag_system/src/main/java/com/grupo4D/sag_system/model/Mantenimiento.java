@@ -23,6 +23,9 @@ public class Mantenimiento {
     @Column(name="fechaSalida")
     private LocalDateTime fechaSalida;
 
+    @Column(name="tipoSimulacion")
+    private int tipoSimulacion;
+
     @ManyToOne @JoinColumn(name="idCamion")
     private Camion camion;
 
@@ -75,5 +78,13 @@ public class Mantenimiento {
 
     public void setActivo(boolean activo) {
         this.activo = activo;
+    }
+
+    public int getTipoSimulacion() {
+        return tipoSimulacion;
+    }
+
+    public void setTipoSimulacion(int tipoSimulacion) {
+        this.tipoSimulacion = tipoSimulacion;
     }
 }
