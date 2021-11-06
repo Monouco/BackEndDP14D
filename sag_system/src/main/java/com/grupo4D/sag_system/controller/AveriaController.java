@@ -130,6 +130,9 @@ public class AveriaController {
         Mantenimiento mRespuesta = mantenimientoService.guardarMantenimientoNuevo(m);
         averiaModel.setMantenimiento(mRespuesta);
 
+        //TODO: calcular este campo de algun lado
+        averiaModel.setDesfase(0);
+
         StaticValues.idCamion = averia.getIdCamion();
         //Aca se tiene que recibir el multiplicador y el tipo;
         StaticValues.mult = 1;
