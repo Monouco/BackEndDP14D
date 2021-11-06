@@ -420,6 +420,7 @@ public class AlgorithmService {
             pedidos.get(i).getNodo().setId(nodo.getId());
             pedidos.get(i).setTipo(2);  //2 es simulacion 3 dias
             fechaTemp = pedidos.get(i).getFechaPedido();
+            pedidos.get(i).setFechaLimite(fechaTemp.plusHours(pedidos.get(i).getPlazoEntrega()));
             if(fechaTemp.isBefore(fechaInicio))
                 fechaInicio = fechaTemp;
             if(fechaTemp.isAfter(fechaFin))
