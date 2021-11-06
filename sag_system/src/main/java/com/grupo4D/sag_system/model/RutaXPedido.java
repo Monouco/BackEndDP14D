@@ -92,5 +92,11 @@ public class RutaXPedido {
         this.secuencia = secuencia;
     }
 
+    public LocalDateTime getFechaEntrega() {
+        return fechaEntrega;
+    }
 
+    public void setFechaEntrega(LocalDateTime fechaEntrega) {
+        this.fechaEntrega = fechaEntrega;
+    }
 }

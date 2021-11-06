@@ -299,6 +299,7 @@ public class AlgorithmService {
         //hormigas a camiones
         ArrayList<RutaXNodo> secuenciaRuta = new ArrayList<>();
         ArrayList<RutaXPedido> secuenciaPedido = new ArrayList<>();
+        long spentTime;
         for (int i =0; i< camionesDisponibles.size();i++){
 
             if(hormigas.get(i).getBestRoute().size() <= 2) continue;
@@ -336,6 +337,7 @@ public class AlgorithmService {
                     if(j[2] >= 0){
                         atendidos++;
                     }
+                    spentTime = (long)(( (velocity * hormigas.get(i).getVelocity())/(1000 * k) + atendidos * tiempoAtencion) * nanos);
                     if(j[2] != -4) {
                         if (hBestSolution.size() > temp && hBestSolution.get(temp) >= 0) {
                             RutaXPedido rutaXPedido = new RutaXPedido();
@@ -344,6 +346,8 @@ public class AlgorithmService {
                             rutaXPedido.setCantidadGLPEnviado(hBestGLP.get(temp) - hBestGLP.get(temp + 1));
                             rutaXPedido.setSecuencia(k);
                             //rutaXPedidoRepository.save(rutaXPedido);
+
+                            rutaXPedido.setFechaEntrega(ruta.getFechaInicio().plusNanos(spentTime));
                             secuenciaPedido.add(rutaXPedido);
                         }
 
