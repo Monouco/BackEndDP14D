@@ -1,6 +1,8 @@
 package com.grupo4D.sag_system.model;
 
 import javax.persistence.*;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name="RutaXPedido")
@@ -27,6 +29,9 @@ public class RutaXPedido {
 
     @Column(name = "secuencia")
     private int secuencia;
+
+    @Column(name="fechaEntrega")
+    private LocalDateTime fechaEntrega;
 
     @Column(name="activo")
     private boolean activo = true;
@@ -86,4 +91,6 @@ public class RutaXPedido {
     public void setSecuencia(int secuencia) {
         this.secuencia = secuencia;
     }
+
+
 }
