@@ -33,6 +33,9 @@ public class Averia {
     @OneToOne @JoinColumn(name="fidMantenimiento",nullable = true)
     private Mantenimiento mantenimiento;
 
+    @Column(name="desfase")
+    private long desfase;
+
     @Column(name="activo")
     private boolean activo = true;
 
@@ -99,5 +102,13 @@ public class Averia {
 
     public void setTipo(int tipo) {
         this.tipo = tipo;
+    }
+
+    public long getDesfase() {
+        return desfase;
+    }
+
+    public void setDesfase(long desfase) {
+        this.desfase = desfase;
     }
 }

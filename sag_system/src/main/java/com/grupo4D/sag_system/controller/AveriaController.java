@@ -153,5 +153,9 @@ public class AveriaController {
         return rutaXNodos;
     }
 
+    @PostMapping("/obtenerAverias")
+    public ArrayList<AveriaFront> obtenerAverias(@RequestBody Fecha obj){
+        return averiaService.obtenerAverias(obj.getVelocidad(), obj.getTipo());
+    }
 
 }
