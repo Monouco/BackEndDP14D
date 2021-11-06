@@ -14,4 +14,5 @@ public class StaticValues {
     public static boolean collapseSimulationFlag;
     public static boolean fullCollapseFlag;
     public static ZoneId zoneId = ZoneId.of("America/Lima");
+    public static int idCamion;
 }
