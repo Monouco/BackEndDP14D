@@ -56,6 +56,8 @@ public class AlgorithmService {
     NodoXBloqueoRepository nodoXBloqueoRepository;
 
 
+
+
     public RespuestaObtenerRutaFront obtenerRutasSolucion(Fecha fecha, double velocidad, int tipo){
         //parametros varios
         int tiempoAtencion =  600;
@@ -85,7 +87,7 @@ public class AlgorithmService {
                 Ruta ruta = rutasSolucion.get(i);
                 RespuestaRutaFront nodoRRF = new RespuestaRutaFront();
                 nodoRRF.setStartDate(ruta.getFechaInicio().minusNanos(desfase));
-                nodoRRF.setEndDate(ruta.getFechaFin()); // TODO: corregir el endDate
+                nodoRRF.setEndDate(ruta.getFechaFin());
                 nodoRRF.setAttentionTime((int)(tiempoAtencion/velocidad));
                 nodoRRF.setVelocity(velocity);
 
@@ -170,7 +172,7 @@ public class AlgorithmService {
         for (RutaFront ruta:solucion) {
             RespuestaRutaFront nodoRRF = new RespuestaRutaFront();
             nodoRRF.setStartDate(ruta.getStartDate());
-            nodoRRF.setEndDate(ruta.getStartDate()); // TODO: corregir el endDate
+            nodoRRF.setEndDate(ruta.getStartDate());
             nodoRRF.setTimeAttention((int)(tiempoAtencion/velocidad));
             nodoRRF.setVelocity(velocity);
             //nodoRRF.setRoute(ruta);
