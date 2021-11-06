@@ -60,8 +60,6 @@ public class AlgorithmThread implements Runnable {
         try{
             //
             while (true) {
-                //Colapso logistico va aqui
-
                 //System.out.println(multiplier + 2);
                 if(endDate != null && simulationDate.isAfter(endDate)){
                     StaticValues.endSimulationFlag = true;
@@ -69,7 +67,33 @@ public class AlgorithmThread implements Runnable {
                 }
 
                 orders = pedidoRepository.listarPedidosDisponibles(simulationDate, type);
+
                 if (!orders.isEmpty()) {
+                    //Colapso logistico va aqui
+                    for (Pedido order:
+                         orders) {
+                        if(simulationDate.isAfter(order.getFechaLimite())){
+                            switch (type){
+                                case 1: {
+                                    StaticValues.collapseFlag = true;
+                                    break;
+                                }
+                                case 2: {
+                                    StaticValues.collapseSimulationFlag = true;
+                                    break;
+                                }
+                                case 3: {
+                                    StaticValues.fullCollapseFlag = true;
+                                    break;
+                                }
+                            }
+                        }
+                    }
+
+                    if(StaticValues.collapseFlag && type == 1) break;
+                    if(StaticValues.collapseSimulationFlag && type == 2) break;
+                    if(StaticValues.fullCollapseFlag && type == 3) break;
+
                     algorithmService.asignarPedidos(simulationDate, orders, type, offset);
                     System.out.println(LocalDateTime.now(StaticValues.zoneId) + " Pedidos atendidos para el tipo " + type);
                 } else {
