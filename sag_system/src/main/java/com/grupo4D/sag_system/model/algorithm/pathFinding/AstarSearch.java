@@ -45,7 +45,7 @@ public class AstarSearch {
             //explored.add(new int[] {n.getState()[0],n.getState()[1]});
             children = n.expand(this, this.velocity, startDate);
             for(Node child: children){
-                auxChildState =new int[] {child.getState()[0], child.getState()[1],n.getTimeStep()};
+                auxChildState =new int[] {child.getState()[0], child.getState()[1],child.getTimeStep()};
                 //auxChildState =new int[] {child.getState()[0], child.getState()[1]};
                 if(!isExplored(explored,auxChildState) && !isInFrontier(frontier, auxChildState)){
                     frontier.addNode(child);
@@ -70,7 +70,9 @@ public class AstarSearch {
     private static int findIndex(Frontier frontier, int [] state){
         int i;
         for(i =0; i<frontier.getCola().size(); i++){
-            if(Arrays.equals(frontier.getCola().get(i).getState(),state))
+            int [] temp = frontier.getStates().get(i);
+            //if(Arrays.equals(frontier.getCola().get(i).getState(),state))
+            if(temp[0] == state[0] && temp[1]== state[1] && temp[2]==state[2])
                 return i;
         }
         return -1;
@@ -97,7 +99,10 @@ public class AstarSearch {
     private boolean isInFrontier(Frontier frontier, int [] state){
 
         for(int i=0; i< frontier.getStates().size(); i++){
-            if(Arrays.equals(frontier.getStates().get(i),state))
+            int [] temp = frontier.getStates().get(i);
+            /*if(Arrays.equals(frontier.getStates().get(i),state))
+                return true;*/
+            if(temp[0] == state[0] && temp[1]== state[1] && temp[2]==state[2])
                 return true;
         }
         return false;
@@ -105,7 +110,10 @@ public class AstarSearch {
 
     private boolean isExplored(ArrayList<int []> explored, int [] state){
         for(int i=0; i< explored.size(); i++){
-            if(Arrays.equals(explored.get(i),state))
+            int [] temp = explored.get(i);
+            /*if(Arrays.equals(explored.get(i),state))
+                return true;*/
+            if(temp[0] == state[0] && temp[1]== state[1] && temp[2]==state[2])
                 return true;
         }
         return false;
@@ -132,7 +140,7 @@ public class AstarSearch {
         else
             total_cost+=1; //Consideramos como 1 el costo por defecto, sin bloqueos
         //heuristica
-        total_cost+=manhattan_heuristic;
+        total_cost+= 2 * manhattan_heuristic;
 
         return total_cost;
     }
