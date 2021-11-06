@@ -129,6 +129,7 @@ public class AveriaController {
 
         Mantenimiento mRespuesta = mantenimientoService.guardarMantenimientoNuevo(m);
         averiaModel.setMantenimiento(mRespuesta);
+
         StaticValues.idCamion = averia.getIdCamion();
         //Aca se tiene que recibir el multiplicador y el tipo;
         StaticValues.mult = 1;

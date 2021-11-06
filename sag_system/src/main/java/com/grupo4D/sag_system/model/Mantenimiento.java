@@ -29,6 +29,9 @@ public class Mantenimiento {
     @ManyToOne @JoinColumn(name="idCamion")
     private Camion camion;
 
+    @Column(name="vigente")
+    private boolean vigente;
+
     @Column(name="activo")
     private boolean activo = true;
 
@@ -86,5 +89,13 @@ public class Mantenimiento {
 
     public void setTipoSimulacion(int tipoSimulacion) {
         this.tipoSimulacion = tipoSimulacion;
+    }
+
+    public boolean isVigente() {
+        return vigente;
+    }
+
+    public void setVigente(boolean vigente) {
+        this.vigente = vigente;
     }
 }
