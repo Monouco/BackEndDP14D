@@ -102,10 +102,18 @@ public class AlgorithmThread implements Runnable {
                 this.simulationDate = this.simulationDate.plusSeconds(sleepTime / 1000 * multiplier);
                 this.startDate = this.startDate.plusSeconds(sleepTime/1000);
                 this.offset = this.offset  + sleepTime  * 1000000 * (multiplier-1 );
-                Thread.sleep(sleepTime);
+
+                //Esto es para que se vuelva a correr el algoritmo
+                try {
+                    Thread.sleep(sleepTime);
+                }
+                catch (InterruptedException e){
+                    System.out.println(e.getMessage());
+                }
+
             }
         }
-        catch (InterruptedException e ){
+        catch (Exception e){
             System.out.println(e.getMessage());
         }
 
