@@ -99,4 +99,5 @@ public class RutaXPedido {
     public void setFechaEntrega(LocalDateTime fechaEntrega) {
         this.fechaEntrega = fechaEntrega;
     }
+
 }

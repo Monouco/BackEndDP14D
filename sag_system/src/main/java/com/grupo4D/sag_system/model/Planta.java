@@ -20,8 +20,17 @@ public class Planta {
     @Column(name="glpDisponible")
     private double glpDisponible;
 
+    @Column(name="glpDisponibleSimulacion")
+    private double glpDisponibleSimulacion;
+
+    @Column(name="glpDisponibleColapso")
+    private double glpDisponibleColapso;
+
     @ManyToOne @JoinColumn(name="idNodo")
     private Nodo nodo;
+
+    @Column(name="tipoPlanta")
+    private int tipoPlanta;
 
     @Column(name="activo")
     private boolean activo = true;
@@ -64,5 +73,29 @@ public class Planta {
 
     public void setActivo(boolean activo) {
         this.activo = activo;
+    }
+
+    public double getGlpDisponibleSimulacion() {
+        return glpDisponibleSimulacion;
+    }
+
+    public void setGlpDisponibleSimulacion(double glpDisponibleSimulacion) {
+        this.glpDisponibleSimulacion = glpDisponibleSimulacion;
+    }
+
+    public double getGlpDisponibleColapso() {
+        return glpDisponibleColapso;
+    }
+
+    public void setGlpDisponibleColapso(double glpDisponibleColapso) {
+        this.glpDisponibleColapso = glpDisponibleColapso;
+    }
+
+    public int getTipoPlanta() {
+        return tipoPlanta;
+    }
+
+    public void setTipoPlanta(int tipoPlanta) {
+        this.tipoPlanta = tipoPlanta;
     }
 }
