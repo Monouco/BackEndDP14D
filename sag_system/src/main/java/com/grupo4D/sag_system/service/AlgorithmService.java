@@ -55,42 +55,12 @@ public class AlgorithmService {
     @Autowired
     NodoXBloqueoRepository nodoXBloqueoRepository;
 
-    public ArrayList<CamionHRFront> obtenerHojaDeRuta(){
-        ArrayList<CamionHRFront> hojaDeRuta = new ArrayList<>();
-        //Se busca los camiones en ruta
-        ArrayList<Camion> camionesEnRuta = camionRepository.findCamionsByEstadoAnAndActivoTrue("En Ruta");
+    @Autowired
+    RutaXPlantaRepository rutaXPlantaRepository;
 
-        //Se busca las rutas iniciadas para DIA A DIA (o mandar parametro?)
-        ArrayList<Ruta> rutasIniciadas = rutaRepository.listarRutasDisponibles("Iniciado", 1);
+    @Autowired
+    PlantaRepository plantaRepository;
 
-        for (Camion c: camionesEnRuta) {
-            CamionHRFront camionHR = new CamionHRFront();
-            camionHR.setId(c.getId());
-            camionHR.setCodigoCamion(camionRepository.listarCodigo1Camion(c.getId()));
-            int i = 0;
-            for (i=0;i<rutasIniciadas.size();i++){
-                if (rutasIniciadas.get(i).getCamion().getId() == c.getId()){
-                    String horaSalida = rutasIniciadas.get(i).getFechaInicio().getHour() + ":" +
-                                        rutasIniciadas.get(i).getFechaInicio().getMinute() + ":"+
-                                        rutasIniciadas.get(i).getFechaInicio().getSecond();
-                    String horaLlegada = rutasIniciadas.get(i).getFechaFin().getHour() + ":" +
-                                            rutasIniciadas.get(i).getFechaFin().getMinute() + ":"+
-                                            rutasIniciadas.get(i).getFechaFin().getSecond();
-                    camionHR.setHoraSalida(horaSalida);
-                    camionHR.setHoraLlegada(horaLlegada);
-                    break;
-                };
-            }
-            //TODO: cantidadGLPActual y cantidadPetroleoActual en camionHR
-            //de acuerdo al id_ruta en rutaXPedido bd hay que encontrar todos los pedidos de esa ruta y contarlos
-            //y ponerlos en un array de PedidoHRFront
-            //camionHR.set
-
-
-        }
-
-        return hojaDeRuta;
-    }
 
 
     public RespuestaObtenerRutaFront obtenerRutasSolucion(Fecha fecha, double velocidad, int tipo){
@@ -265,6 +235,30 @@ public class AlgorithmService {
 
         //plantas
         Mapa mapa1 = new Mapa(50, 70, bloqueoRepository, nodoXBloqueoRepository);
+        ArrayList<Planta> plantas = plantaRepository.listarPlantas();
+
+        double glpDeposit = 0;
+
+        for (Planta planta:
+             plantas) {
+            switch (tipo){
+                case 1: {
+                    glpDeposit = planta.getGlpDisponible();
+                    break;
+                }
+                case 2: {
+                    glpDeposit = planta.getGlpDisponibleSimulacion();
+                    break;
+                }
+                case 3: {
+                    glpDeposit = planta.getGlpDisponibleColapso();
+                    break;
+                }
+            }
+            DepositGLP deposit = new DepositGLP(planta.getNodo().getCoordenadaX(), planta.getNodo().getCoordenadaY(), glpDeposit);
+            mapa1.addDeposit(deposit);
+        }
+        /*
         DepositGLP principal = new DepositGLP(12, 8, 100);
         DepositGLP almacenNorte = new DepositGLP(42, 42, 160);
         DepositGLP alamacenEste = new DepositGLP(63, 3, 160);
@@ -272,7 +266,7 @@ public class AlgorithmService {
 
         mapa1.addDeposit(principal);
         mapa1.addDeposit(almacenNorte);
-        mapa1.addDeposit(alamacenEste);
+        mapa1.addDeposit(alamacenEste);*/
         mapa1.initializeCurrentRoadBlocks(fecha, fecha.plusDays(1));
 
         //Nodos
@@ -334,6 +328,8 @@ public class AlgorithmService {
         //hormigas a camiones
         ArrayList<RutaXNodo> secuenciaRuta = new ArrayList<>();
         ArrayList<RutaXPedido> secuenciaPedido = new ArrayList<>();
+        ArrayList<RutaXPlanta> secuenciaPlanta = new ArrayList<>();
+        long spentTime;
         for (int i =0; i< camionesDisponibles.size();i++){
 
             if(hormigas.get(i).getBestRoute().size() <= 2) continue;
@@ -371,6 +367,7 @@ public class AlgorithmService {
                     if(j[2] >= 0){
                         atendidos++;
                     }
+                    spentTime = (long)(( (velocity * hormigas.get(i).getVelocity())/(1000 * k) + atendidos * tiempoAtencion) * nanos);
                     if(j[2] != -4) {
                         if (hBestSolution.size() > temp && hBestSolution.get(temp) >= 0) {
                             RutaXPedido rutaXPedido = new RutaXPedido();
@@ -379,7 +376,39 @@ public class AlgorithmService {
                             rutaXPedido.setCantidadGLPEnviado(hBestGLP.get(temp) - hBestGLP.get(temp + 1));
                             rutaXPedido.setSecuencia(k);
                             //rutaXPedidoRepository.save(rutaXPedido);
+
+                            rutaXPedido.setFechaEntrega(ruta.getFechaInicio().plusNanos(spentTime));
                             secuenciaPedido.add(rutaXPedido);
+                        }
+                        else{
+                            //Guardamos el glp que se consigue
+                            int numPlanta = j[2] + numAlmacenes;
+                            RutaXPlanta rutaXPlanta = new RutaXPlanta();
+                            rutaXPlanta.setRuta(ruta);
+                            rutaXPlanta.setFechaLLegada(ruta.getFechaInicio().plusNanos(spentTime));
+                            rutaXPlanta.setSecuencia(k);
+                            rutaXPlanta.setCantidadGLPRespostado(hBestGLP.get(temp + 1) - hBestGLP.get(temp));
+                            rutaXPlanta.setPlanta(plantas.get(numPlanta));
+
+                            switch (tipo){
+                                case 1: {
+                                    plantas.get(numPlanta).setGlpDisponible(plantas.get(numPlanta).getGlpDisponible()
+                                            - rutaXPlanta.getCantidadGLPRespostado());
+                                    break;
+                                }
+                                case 2: {
+                                    plantas.get(numPlanta).setGlpDisponibleSimulacion(plantas.get(numPlanta).getGlpDisponibleSimulacion()
+                                            - rutaXPlanta.getCantidadGLPRespostado());
+                                    break;
+                                }
+                                case 3: {
+                                    plantas.get(numPlanta).setGlpDisponibleColapso(plantas.get(numPlanta).getGlpDisponibleColapso()
+                                            - rutaXPlanta.getCantidadGLPRespostado());
+                                    break;
+                                }
+                            }
+
+                            secuenciaPlanta.add(rutaXPlanta);
                         }
 
                         temp++;
@@ -434,8 +463,11 @@ public class AlgorithmService {
 
         }
         camionRepository.saveAll(camionesDisponibles);
+        plantaRepository.saveAll(plantas);
         rutaXNodoRepository.saveAll(secuenciaRuta);
         rutaXPedidoRepository.saveAll(secuenciaPedido);
+        rutaXPlantaRepository.saveAll(secuenciaPlanta);
+
         return solucion;
     }
 
@@ -451,6 +483,7 @@ public class AlgorithmService {
             pedidos.get(i).getNodo().setId(nodo.getId());
             pedidos.get(i).setTipo(2);  //2 es simulacion 3 dias
             fechaTemp = pedidos.get(i).getFechaPedido();
+            pedidos.get(i).setFechaLimite(fechaTemp.plusHours(pedidos.get(i).getPlazoEntrega()));
             if(fechaTemp.isBefore(fechaInicio))
                 fechaInicio = fechaTemp;
             if(fechaTemp.isAfter(fechaFin))

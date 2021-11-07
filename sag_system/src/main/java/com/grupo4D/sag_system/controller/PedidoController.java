@@ -33,7 +33,7 @@ public class PedidoController {
         String fecha = pedidoFront.getFechaPedido()+"@"+pedidoFront.getHora();
         LocalDateTime date = LocalDateTime.parse(fecha, formatter);
 
-        pedidoModel.setFechaEntrega(date.plusHours(pedidoFront.getPlazoEntrega()));
+        pedidoModel.setFechaLimite(date.plusHours(pedidoFront.getPlazoEntrega()));
         pedidoModel.setFechaPedido(date);
 
         pedidoModel.setPlazoEntrega(pedidoFront.getPlazoEntrega());

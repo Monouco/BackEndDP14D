@@ -23,8 +23,14 @@ public class Mantenimiento {
     @Column(name="fechaSalida")
     private LocalDateTime fechaSalida;
 
+    @Column(name="tipoSimulacion")
+    private int tipoSimulacion;
+
     @ManyToOne @JoinColumn(name="idCamion")
     private Camion camion;
+
+    @Column(name="vigente")
+    private boolean vigente;
 
     @Column(name="activo")
     private boolean activo = true;
@@ -75,5 +81,21 @@ public class Mantenimiento {
 
     public void setActivo(boolean activo) {
         this.activo = activo;
+    }
+
+    public int getTipoSimulacion() {
+        return tipoSimulacion;
+    }
+
+    public void setTipoSimulacion(int tipoSimulacion) {
+        this.tipoSimulacion = tipoSimulacion;
+    }
+
+    public boolean isVigente() {
+        return vigente;
+    }
+
+    public void setVigente(boolean vigente) {
+        this.vigente = vigente;
     }
 }

@@ -2,6 +2,9 @@ package com.grupo4D.sag_system.controller;
 
 import com.grupo4D.sag_system.model.*;
 import com.grupo4D.sag_system.model.request.AveriaFront;
+import com.grupo4D.sag_system.model.runnable.AveriaThread;
+import com.grupo4D.sag_system.model.runnable.UpdateCurrentValues;
+import com.grupo4D.sag_system.model.statics.StaticValues;
 import com.grupo4D.sag_system.repository.RutaRepository;
 import com.grupo4D.sag_system.repository.RutaXNodoRepository;
 import com.grupo4D.sag_system.service.AveriaService;
@@ -9,6 +12,8 @@ import com.grupo4D.sag_system.service.CamionService;
 import com.grupo4D.sag_system.service.MantenimientoService;
 import org.apache.tomcat.jni.Local;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.core.task.TaskExecutor;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
@@ -35,6 +40,12 @@ public class AveriaController {
 
     @Autowired
     private RutaXNodoRepository rutaXNodoRepository;
+
+    @Autowired
+    private TaskExecutor taskExecutor;
+
+    @Autowired
+    private ApplicationContext applicationContext;
 
     @PostMapping("/guardarAveria")
     public Averia guardarAveria(@RequestBody Averia averiaModel){
@@ -118,6 +129,19 @@ public class AveriaController {
 
         Mantenimiento mRespuesta = mantenimientoService.guardarMantenimientoNuevo(m);
         averiaModel.setMantenimiento(mRespuesta);
+
+        //TODO: calcular este campo de algun lado
+        averiaModel.setDesfase(0);
+
+        StaticValues.idCamion = averia.getIdCamion();
+        //Aca se tiene que recibir el multiplicador y el tipo;
+        StaticValues.mult = 1;
+        StaticValues.simulationType = 1;
+
+        AveriaThread updating = applicationContext.getBean(AveriaThread.class);
+
+        taskExecutor.execute(updating);
+
         return averiaService.guardarAveriaNueva(averiaModel);
     }
 
@@ -132,5 +156,9 @@ public class AveriaController {
         return rutaXNodos;
     }
 
+    @PostMapping("/obtenerAverias")
+    public ArrayList<AveriaFront> obtenerAverias(@RequestBody Fecha obj){
+        return averiaService.obtenerAverias(obj.getVelocidad(), obj.getTipo());
+    }
 
 }

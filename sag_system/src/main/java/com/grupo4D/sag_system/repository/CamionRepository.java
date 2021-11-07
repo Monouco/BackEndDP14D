@@ -56,5 +56,7 @@ public interface CamionRepository extends CrudRepository<Camion,Integer> {
             nativeQuery = true)
     public String listarCodigo1Camion(int id);
 
+    public Camion findCamionById(int id);
+
 
 }

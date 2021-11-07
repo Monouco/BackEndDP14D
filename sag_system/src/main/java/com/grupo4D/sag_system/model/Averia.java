@@ -27,8 +27,14 @@ public class Averia {
     @ManyToOne @JoinColumn(name="idCamion")
     private Camion camion;
 
+    @Column(name="tipo")
+    private int tipo;
+
     @OneToOne @JoinColumn(name="fidMantenimiento",nullable = true)
     private Mantenimiento mantenimiento;
+
+    @Column(name="desfase")
+    private long desfase;
 
     @Column(name="activo")
     private boolean activo = true;
@@ -88,5 +94,21 @@ public class Averia {
 
     public void setActivo(boolean activo) {
         this.activo = activo;
+    }
+
+    public int getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(int tipo) {
+        this.tipo = tipo;
+    }
+
+    public long getDesfase() {
+        return desfase;
+    }
+
+    public void setDesfase(long desfase) {
+        this.desfase = desfase;
     }
 }
