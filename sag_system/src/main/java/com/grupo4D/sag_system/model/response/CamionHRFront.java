@@ -3,6 +3,7 @@ package com.grupo4D.sag_system.model.response;
 import java.util.ArrayList;
 
 public class CamionHRFront {
+    private int id;
     private String codigoCamion;
     private int numPedidos;
     private String horaSalida;
@@ -13,15 +14,23 @@ public class CamionHRFront {
     public CamionHRFront() {
     }
 
-    public CamionHRFront(String codigoCamion, int numPedidos, String horaSalida, String horaLlegada, double cantPetroleoActual, ArrayList<PedidoHRFront> pedidos) {
-        this.setCodigoCamion(codigoCamion);
-        this.setNumPedidos(numPedidos);
-        this.setHoraSalida(horaSalida);
-        this.setHoraLlegada(horaLlegada);
-        this.setCantPetroleoActual(cantPetroleoActual);
-        this.setPedidos(pedidos);
+    public CamionHRFront(int id, String codigoCamion, int numPedidos, String horaSalida, String horaLlegada, double cantPetroleoActual, ArrayList<PedidoHRFront> pedidos) {
+        this.id = id;
+        this.codigoCamion = codigoCamion;
+        this.numPedidos = numPedidos;
+        this.horaSalida = horaSalida;
+        this.horaLlegada = horaLlegada;
+        this.cantPetroleoActual = cantPetroleoActual;
+        this.pedidos = pedidos;
     }
 
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public String getCodigoCamion() {
         return codigoCamion;

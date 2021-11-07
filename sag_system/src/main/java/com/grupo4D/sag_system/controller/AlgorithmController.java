@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.grupo4D.sag_system.model.Fecha;
 import com.grupo4D.sag_system.model.ObjObtenerRutasSolucion;
 import com.grupo4D.sag_system.model.Pedido;
+import com.grupo4D.sag_system.model.response.CamionHRFront;
 import com.grupo4D.sag_system.model.response.RespuestaObtenerRutaFront;
 import com.grupo4D.sag_system.model.response.RespuestaRutaFront;
 import com.grupo4D.sag_system.model.response.RutaFront;
@@ -53,6 +54,11 @@ public class AlgorithmController {
     @PostMapping("/simulacionTresDias")
     public ArrayList<Pedido> simulacionTresDias(@RequestBody ArrayList<Pedido> pedidos){
         return algoritmoService.asignarPedidos3Dias(pedidos);
+    }
+
+    @GetMapping("/obtenerHojaDeRuta")
+    public ArrayList<CamionHRFront> obtenerHojaDeRuta(){
+        return algoritmoService.obtenerHojaDeRuta();
     }
 
 

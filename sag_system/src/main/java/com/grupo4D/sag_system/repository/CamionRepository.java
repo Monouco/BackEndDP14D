@@ -31,6 +31,8 @@ public interface CamionRepository extends CrudRepository<Camion,Integer> {
 
     public ArrayList<Camion> findCamionsByActivoTrue();
 
+    public ArrayList<Camion> findCamionsByEstadoAnAndActivoTrue(String estado);
+
     @Transactional
     @Modifying
     @Query(
