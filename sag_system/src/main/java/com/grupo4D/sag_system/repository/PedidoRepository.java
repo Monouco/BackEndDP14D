@@ -32,4 +32,8 @@ public interface PedidoRepository extends CrudRepository<Pedido,Integer> {
             nativeQuery = true)
     public ArrayList<Pedido> listarPedidos();
 
+
+    //posible cambio por algo mas eficiente que no requiera entrar a BD por cada pedido
+    public ArrayList<Pedido> findPedidoByIdAndActivoTrue(int id);
+
 }

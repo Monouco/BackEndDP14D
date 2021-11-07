@@ -24,6 +24,10 @@ public class RutaXPedidoService{
         return (ArrayList<RutaXPedido>) rutaXPedidoRepository.findAll();
     }
 
+//    public ArrayList<RutaXPedido> listarPedidosDe1Ruta(int id){
+//        return (ArrayList<RutaXPedido>) rutaXPedidoRepository.findRutaXPedidosByIdRuta(id);
+//    }
+
 
 
 }

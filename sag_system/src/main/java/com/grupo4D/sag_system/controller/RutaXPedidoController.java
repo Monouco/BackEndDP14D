@@ -5,6 +5,7 @@ import com.grupo4D.sag_system.service.RutaXPedidoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -28,5 +29,10 @@ public class RutaXPedidoController {
     public List<RutaXPedido> listarRutaXPedido(){
         return rutaXPedidoService.listarRutasXPedido();
     }
+
+//    @PostMapping("/listarPedidos1Ruta")
+//    public ArrayList<RutaXPedido> listarPedidos1Ruta(@RequestBody int id){
+//        return rutaXPedidoService.listarPedidosDe1Ruta(id);
+//    }
 }
 

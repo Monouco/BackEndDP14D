@@ -12,7 +12,7 @@ public interface RutaXPedidoRepository extends CrudRepository<RutaXPedido,Intege
 
 
 
-    public ArrayList<RutaXPedido> findRutaXPedidosByIdRuta(int idRuta);
+//    public ArrayList<RutaXPedido> findRutaXPedidosByIdRuta(Integer idRuta);
 
 }
 

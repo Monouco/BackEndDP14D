@@ -64,7 +64,7 @@ public class AlgorithmService {
     public ArrayList<CamionHRFront> obtenerHojaDeRuta(){
         ArrayList<CamionHRFront> hojaDeRuta = new ArrayList<>();
         //Se busca los camiones en ruta
-        ArrayList<Camion> camionesEnRuta = camionRepository.findCamionsByEstadoAnAndActivoTrue("En Ruta");
+        ArrayList<Camion> camionesEnRuta = camionRepository.findCamionsByEstadoAndActivoTrue("En Ruta");
 
         //Se busca las rutas iniciadas para DIA A DIA (o mandar parametro?)
         ArrayList<Ruta> rutasIniciadas = rutaRepository.listarRutasDisponibles("Iniciado", 1);
@@ -89,7 +89,11 @@ public class AlgorithmService {
             }
 
             if (i!=0){
-                ArrayList<RutaXPedido> pedidosDeRuta = rutaXPedidoRepository.findRutaXPedidosByIdRuta(rutasIniciadas.get(i).getId());
+                //ArrayList<RutaXPedido> pedidosDeRuta = rutaXPedidoRepository.findRutaXPedidosByIdRuta(rutasIniciadas.get(i).getId());
+//                for (RutaXPedido rxp:   pedidosDeRuta ) {
+//                    pedidoRepository.findPedidoByIdAndActivoTrue(rxp.getPedido().getId());
+//
+//                }
             }
             //TODO: cantidadGLPActual y cantidadPetroleoActual en camionHR
             //de acuerdo al id_ruta en rutaXPedido bd hay que encontrar todos los pedidos de esa ruta y contarlos
