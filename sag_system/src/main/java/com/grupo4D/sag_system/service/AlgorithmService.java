@@ -61,6 +61,49 @@ public class AlgorithmService {
     @Autowired
     PlantaRepository plantaRepository;
 
+    public ArrayList<CamionHRFront> obtenerHojaDeRuta(){
+        ArrayList<CamionHRFront> hojaDeRuta = new ArrayList<>();
+        //Se busca los camiones en ruta
+        ArrayList<Camion> camionesEnRuta = camionRepository.findCamionsByEstadoAnAndActivoTrue("En Ruta");
+
+        //Se busca las rutas iniciadas para DIA A DIA (o mandar parametro?)
+        ArrayList<Ruta> rutasIniciadas = rutaRepository.listarRutasDisponibles("Iniciado", 1);
+
+        for (Camion c: camionesEnRuta) {
+            CamionHRFront camionHR = new CamionHRFront();
+            camionHR.setId(c.getId());
+            camionHR.setCodigoCamion(camionRepository.listarCodigo1Camion(c.getId()));
+            int i = 0;
+            for (i=0;i<rutasIniciadas.size();i++){
+                if (rutasIniciadas.get(i).getCamion().getId() == c.getId()){
+                    String horaSalida = rutasIniciadas.get(i).getFechaInicio().getHour() + ":" +
+                            rutasIniciadas.get(i).getFechaInicio().getMinute() + ":"+
+                            rutasIniciadas.get(i).getFechaInicio().getSecond();
+                    String horaLlegada = rutasIniciadas.get(i).getFechaFin().getHour() + ":" +
+                            rutasIniciadas.get(i).getFechaFin().getMinute() + ":"+
+                            rutasIniciadas.get(i).getFechaFin().getSecond();
+                    camionHR.setHoraSalida(horaSalida);
+                    camionHR.setHoraLlegada(horaLlegada);
+                    break;
+                };
+            }
+
+            if (i!=0){
+                ArrayList<RutaXPedido> pedidosDeRuta = rutaXPedidoRepository.findRutaXPedidosByIdRuta(rutasIniciadas.get(i).getId());
+            }
+            //TODO: cantidadGLPActual y cantidadPetroleoActual en camionHR
+            //de acuerdo al id_ruta en rutaXPedido bd hay que encontrar todos los pedidos de esa ruta y contarlos
+            //y ponerlos en un array de PedidoHRFront
+            //camionHR.set
+
+
+
+        }
+
+        return hojaDeRuta;
+    }
+
+
 
 
     public RespuestaObtenerRutaFront obtenerRutasSolucion(Fecha fecha, double velocidad, int tipo){
