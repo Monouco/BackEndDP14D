@@ -4,9 +4,11 @@ import com.grupo4D.sag_system.model.algorithm.Ant;
 import com.grupo4D.sag_system.model.algorithm.DepositGLP;
 import com.grupo4D.sag_system.model.algorithm.Mapa;;
 import com.grupo4D.sag_system.model.algorithm.Order;
+import org.apache.tomcat.jni.Local;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 
 public class ACSAlgorithm {
@@ -325,6 +327,8 @@ public class ACSAlgorithm {
         double tiempoRestante;
         double tiempoVuelta;
         double tiempoEstimado;
+        LocalDateTime tiempoActualDate = this.curTime.plusSeconds((long)(tiempoActual*3600));
+        LocalDateTime tiempoEstimadoDate;
         //No olvidar inicializar localizacion del camion
         if(last <= -1){
             if(last == -1-numAlmacenes)
@@ -346,11 +350,18 @@ public class ACSAlgorithm {
         tiempoEstimado = manhattan/camion.getVelocity() + 1/6;
         tiempoVuelta = manhattanBack/camion.getVelocity();
         //Calculo temporal
-        tiempoRestante = pedido.getDeadLine() - tiempoActual;
+        //tiempoRestante = pedido.getDeadLine() - tiempoActual;
+        tiempoRestante = (double)ChronoUnit.MINUTES.between(pedido.getFechaFin(),tiempoActualDate) / 60;
+
         //Si sale negativo o sale igual o menor al estimado, inviable
         if(tiempoRestante <= 0 || tiempoRestante <= tiempoEstimado){
             return 0;
         }
+
+        //Usando fechas
+        tiempoEstimadoDate = tiempoActualDate.plusSeconds((long)(tiempoEstimado * 3600));
+        if(tiempoActualDate.isAfter(pedido.getFechaFin().plusMinutes(10)) || tiempoEstimadoDate.isAfter(pedido.getFechaFin()))
+            return 0;
 
         //Si se pasa de las 8 horas, no es recomendable
         if(tiempoActual + tiempoEstimado + tiempoVuelta > this.hTurno)
