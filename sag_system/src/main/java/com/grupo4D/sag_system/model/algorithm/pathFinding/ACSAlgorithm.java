@@ -351,7 +351,7 @@ public class ACSAlgorithm {
         tiempoVuelta = manhattanBack/camion.getVelocity();
         //Calculo temporal
         //tiempoRestante = pedido.getDeadLine() - tiempoActual;
-        tiempoRestante = (double)ChronoUnit.MINUTES.between(pedido.getFechaFin(),tiempoActualDate) / 60;
+        tiempoRestante = (double)ChronoUnit.MINUTES.between(tiempoActualDate, pedido.getFechaFin()) / 60;
 
         //Si sale negativo o sale igual o menor al estimado, inviable
         if(tiempoRestante <= 0 || tiempoRestante <= tiempoEstimado){

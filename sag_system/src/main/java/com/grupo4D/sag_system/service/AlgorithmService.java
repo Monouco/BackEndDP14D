@@ -414,7 +414,7 @@ public class AlgorithmService {
                     if(j[2] >= 0){
                         atendidos++;
                     }
-                    spentTime = (long)(( (velocity * hormigas.get(i).getVelocity())/(1000 * k) + atendidos * tiempoAtencion) * nanos);
+                    spentTime = (long)(( (1000 * k)/(velocity * hormigas.get(i).getVelocity()) + atendidos * tiempoAtencion) * nanos);
                     if(j[2] != -4) {
                         if (hBestSolution.size() > temp && hBestSolution.get(temp) >= 0) {
                             RutaXPedido rutaXPedido = new RutaXPedido();
