@@ -34,6 +34,6 @@ public interface PedidoRepository extends CrudRepository<Pedido,Integer> {
 
 
     //posible cambio por algo mas eficiente que no requiera entrar a BD por cada pedido
-    public ArrayList<Pedido> findPedidoByIdAndActivoTrue(int id);
+    public Pedido findPedidoByIdAndActivoTrue(int id);
 
 }

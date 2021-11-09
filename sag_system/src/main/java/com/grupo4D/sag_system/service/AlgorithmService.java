@@ -64,10 +64,15 @@ public class AlgorithmService {
     public ArrayList<CamionHRFront> obtenerHojaDeRuta(){
         ArrayList<CamionHRFront> hojaDeRuta = new ArrayList<>();
         //Se busca los camiones en ruta
-        ArrayList<Camion> camionesEnRuta = camionRepository.findCamionsByEstadoAndActivoTrue("En Ruta");
+        ArrayList<Camion> camionesEnRuta = camionRepository.findCamionsByEstadoAndActivoTrue("En ruta");
+        for (int l=0;l<camionesEnRuta.size();l++){
+            System.out.print(camionesEnRuta.get(l).getId()+"\n");
+        }
+        System.out.print("Camiones arriba"+camionesEnRuta.size()+" \n");
 
         //Se busca las rutas iniciadas para DIA A DIA (o mandar parametro?)
         ArrayList<Ruta> rutasIniciadas = rutaRepository.listarRutasDisponibles("Iniciado", 1);
+        System.out.print("Rutas "+rutasIniciadas.size()+" \n");
 
         for (Camion c: camionesEnRuta) {
             CamionHRFront camionHR = new CamionHRFront();
@@ -90,18 +95,33 @@ public class AlgorithmService {
 
             if (i!=0){
                 //ArrayList<RutaXPedido> pedidosDeRuta = rutaXPedidoRepository.findRutaXPedidosByIdRuta(rutasIniciadas.get(i).getId());
-//                for (RutaXPedido rxp:   pedidosDeRuta ) {
-//                    pedidoRepository.findPedidoByIdAndActivoTrue(rxp.getPedido().getId());
-//
-//                }
+                ArrayList<RutaXPedido> pedidosDeRuta = rutaXPedidoRepository.findRutaXPedidosByRuta(rutasIniciadas.get(i).getId());
+                ArrayList<PedidoHRFront> pedidos = new ArrayList<>();
+                for (RutaXPedido rxp:   pedidosDeRuta ) {
+                    Pedido pedido1ruta = pedidoRepository.findPedidoByIdAndActivoTrue(rxp.getPedido().getId());
+                    System.out.print("pedido de RutaXPedido "+rxp.getPedido().getId()+"\n");
+                    PedidoHRFront pedidoHR = new PedidoHRFront();
+                    pedidoHR.setCantidadGLP(pedido1ruta.getCantidadGLP());
+                    UbicacionHRFront u = new UbicacionHRFront();
+                    u.setX(pedido1ruta.getNodo().getCoordenadaX());
+                    u.setY(pedido1ruta.getNodo().getCoordenadaY());
+                    pedidoHR.setUbicacion(u);
+                    pedidoHR.setHoraLlegada(pedido1ruta.getFechaEntrega().getHour() +":"+
+                            pedido1ruta.getFechaEntrega().getMinute()+ ":"+pedido1ruta.getFechaEntrega().getSecond());
+                    LocalDateTime finAtencion = pedido1ruta.getFechaEntrega().plusMinutes(10);
+                    pedidoHR.setHoraDeFinAtencion(finAtencion.getHour()+":"+ finAtencion.getMinute()+":"+finAtencion.getSecond());
+                    System.out.print("pedido "+pedido1ruta.getId()+"\n");
+                    pedidos.add(pedidoHR);
+                }
+                camionHR.setNumPedidos(pedidos.size());
+                camionHR.setPedidos(pedidos);
+
+
+                //TODO: cantidadGLPActual y cantidadPetroleoActual en camionHR
+                //puede ser en rutaxnodo con dos columnas mas para cada valor
             }
-            //TODO: cantidadGLPActual y cantidadPetroleoActual en camionHR
-            //de acuerdo al id_ruta en rutaXPedido bd hay que encontrar todos los pedidos de esa ruta y contarlos
-            //y ponerlos en un array de PedidoHRFront
-            //camionHR.set
 
-
-
+            hojaDeRuta.add(camionHR);
         }
 
         return hojaDeRuta;

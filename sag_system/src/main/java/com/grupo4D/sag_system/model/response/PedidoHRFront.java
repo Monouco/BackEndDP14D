@@ -4,12 +4,12 @@ public class PedidoHRFront {
     private double cantidadGLP;
     private String horaLlegada;
     private String horaDeFinAtencion;
-    private int[] ubicacion;
+    private UbicacionHRFront ubicacion;
 
     public PedidoHRFront() {
     }
 
-    public PedidoHRFront(double cantidadGLP, String horaLlegada, String horaDeFinAtencion, int[] ubicacion) {
+    public PedidoHRFront(double cantidadGLP, String horaLlegada, String horaDeFinAtencion, UbicacionHRFront ubicacion) {
         this.setCantidadGLP(cantidadGLP);
         this.setHoraLlegada(horaLlegada);
         this.setHoraDeFinAtencion(horaDeFinAtencion);
@@ -40,11 +40,11 @@ public class PedidoHRFront {
         this.horaDeFinAtencion = horaDeFinAtencion;
     }
 
-    public int[] getUbicacion() {
+    public UbicacionHRFront getUbicacion() {
         return ubicacion;
     }
 
-    public void setUbicacion(int[] ubicacion) {
+    public void setUbicacion(UbicacionHRFront ubicacion) {
         this.ubicacion = ubicacion;
     }
 }
