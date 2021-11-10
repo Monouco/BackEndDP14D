@@ -189,6 +189,8 @@ public class AveriaController {
 
         AveriaThread updating = applicationContext.getBean(AveriaThread.class);
 
+        System.out.println("######################################### Generando Averia");
+
         taskExecutor.execute(updating);
 
         ArrayList<Pedido> pedidos = pedidoRepository.listarPedidosDisponibles(date, averia.getType());
