@@ -195,6 +195,8 @@ public class AveriaController {
 
         algorithmService.asignarPedidos(date,pedidos, averia.getType(), desfase);
 
+        System.out.println("Terminado de re programar los pedidos de la averia del camion "+averia.getIdCamion()+" del tipo "+averia.getType());
+
         return averiaService.guardarAveriaNueva(averiaModel);
     }
 
