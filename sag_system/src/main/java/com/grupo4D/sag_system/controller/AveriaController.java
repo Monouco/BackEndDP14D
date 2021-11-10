@@ -151,7 +151,7 @@ public class AveriaController {
             for (i = 0; i < rutaXNodos.size(); i++) {
                 tiempoAproximado += tiempo1Km;
                 //Supongo que aca obtiene el valor, por lo que a partir de este nodo, vamos a volver el activo 0 para que no se tomen en cuenta
-                if (tiempoAproximado > tiempoAveria){
+                if (tiempoAproximado > tiempoAveria && !flag){
                     index = i;
                     flag = true;
                 }
@@ -162,7 +162,7 @@ public class AveriaController {
                     tiempoAproximado += 600 * nanos;
                 }
                 //Esto es que se averia atendiendo a alguien?
-                if (tiempoAproximado > tiempoAveria) {
+                if (tiempoAproximado > tiempoAveria && !flag) {
                     index = i;
                     flag = true;
                 }
@@ -173,7 +173,7 @@ public class AveriaController {
             rutaRepository.save(rutaCamion);
             rutaXNodoRepository.saveAll(rutaXNodos);
             //Ahora tenemos que averiar los nodosXAlmacen y nodosXPedidos a partir del nodo donde se quedo
-            rutaRepository.devolverGLP(index, averia.getType(), averia.getIdCamion());
+            rutaRepository.devolverGLP(index, averia.getType(), rutaCamion.getId());
         }
 
         Mantenimiento mRespuesta = mantenimientoService.guardarMantenimientoNuevo(m);
@@ -194,6 +194,8 @@ public class AveriaController {
         ArrayList<Pedido> pedidos = pedidoRepository.listarPedidosDisponibles(date, averia.getType());
 
         algorithmService.asignarPedidos(date,pedidos, averia.getType(), desfase);
+
+        System.out.println("Terminado de re programar los pedidos de la averia del camion "+averia.getIdCamion()+" del tipo "+averia.getType());
 
         return averiaService.guardarAveriaNueva(averiaModel);
     }
