@@ -23,7 +23,7 @@ public interface PedidoRepository extends CrudRepository<Pedido,Integer> {
                     "or estado_pedido = 'Por Reprogramar') " +
                     "and fecha_pedido <= ?1 " +
                     "and tipo = ?2 " +
-                    "and cantidad_glp <> glp_enviado ",
+                    "and cantidad_glp <> glp_programado ",
             nativeQuery = true)
     public ArrayList<Pedido> listarPedidosDisponibles(LocalDateTime fechaActual, int tipo);
 
