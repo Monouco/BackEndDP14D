@@ -139,8 +139,8 @@ public class AveriaController {
                 }
             }
             //con la velocidad y el tiempo sacar el nodo en el que estaba el camion
-            long tiempoSinEntregas = tiempo - nEntregas * 600 * nanos;
-            double km = (rutaXNodos.size() - 1) * 1000;
+            long tiempoSinEntregas = tiempo - nEntregas * 600 * nanos; //TODO:cambiar el 600 por 600/velocidad esto en simulacion 3 dias
+            double km = (rutaXNodos.size() - 1); //* 1000;
             double velocidad = km / tiempoSinEntregas; //velocidad en km/nanoseg
             double tiempo1Km = (1 / velocidad);
 
