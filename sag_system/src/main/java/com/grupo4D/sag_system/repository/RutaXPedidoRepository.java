@@ -2,6 +2,7 @@ package com.grupo4D.sag_system.repository;
 
 import com.grupo4D.sag_system.model.Ruta;
 import com.grupo4D.sag_system.model.RutaXPedido;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
@@ -12,7 +13,8 @@ public interface RutaXPedidoRepository extends CrudRepository<RutaXPedido,Intege
 
 
 
-    public ArrayList<RutaXPedido> findRutaXPedidosByRuta(Integer idRuta);
+    @Query(value = "select * from rutaxpedido where id_ruta = ?1", nativeQuery = true)
+    public ArrayList<RutaXPedido> findRutaXPedidosByRuta(int idRuta);
 
 }
 

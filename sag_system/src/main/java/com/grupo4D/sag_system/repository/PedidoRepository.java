@@ -18,7 +18,8 @@ public interface PedidoRepository extends CrudRepository<Pedido,Integer> {
 
 
     @Query(
-            value = "SELECT * FROM pedido u WHERE u.activo = 1 " +
+            value = "SELECT * FROM " +
+                    "pedido u WHERE u.activo = 1 " +
                     "and estado_pedido = 'Nuevo' " +
                     "and fecha_pedido <= ?1 " +
                     "and tipo = ?2 ",

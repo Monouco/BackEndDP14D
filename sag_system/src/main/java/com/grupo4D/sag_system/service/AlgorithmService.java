@@ -89,36 +89,41 @@ public class AlgorithmService {
                             rutasIniciadas.get(i).getFechaFin().getSecond();
                     camionHR.setHoraSalida(horaSalida);
                     camionHR.setHoraLlegada(horaLlegada);
+                    i++;
                     break;
                 };
             }
 
             if (i!=0){
                 //ArrayList<RutaXPedido> pedidosDeRuta = rutaXPedidoRepository.findRutaXPedidosByIdRuta(rutasIniciadas.get(i).getId());
-                ArrayList<RutaXPedido> pedidosDeRuta = rutaXPedidoRepository.findRutaXPedidosByRuta(rutasIniciadas.get(i).getId());
-                ArrayList<PedidoHRFront> pedidos = new ArrayList<>();
-                for (RutaXPedido rxp:   pedidosDeRuta ) {
-                    Pedido pedido1ruta = pedidoRepository.findPedidoByIdAndActivoTrue(rxp.getPedido().getId());
-                    System.out.print("pedido de RutaXPedido "+rxp.getPedido().getId()+"\n");
-                    PedidoHRFront pedidoHR = new PedidoHRFront();
-                    pedidoHR.setCantidadGLP(pedido1ruta.getCantidadGLP());
-                    UbicacionHRFront u = new UbicacionHRFront();
-                    u.setX(pedido1ruta.getNodo().getCoordenadaX());
-                    u.setY(pedido1ruta.getNodo().getCoordenadaY());
-                    pedidoHR.setUbicacion(u);
-                    pedidoHR.setHoraLlegada(pedido1ruta.getFechaEntrega().getHour() +":"+
-                            pedido1ruta.getFechaEntrega().getMinute()+ ":"+pedido1ruta.getFechaEntrega().getSecond());
-                    LocalDateTime finAtencion = pedido1ruta.getFechaEntrega().plusMinutes(10);
-                    pedidoHR.setHoraDeFinAtencion(finAtencion.getHour()+":"+ finAtencion.getMinute()+":"+finAtencion.getSecond());
-                    System.out.print("pedido "+pedido1ruta.getId()+"\n");
-                    pedidos.add(pedidoHR);
+                for (int j=0;j<i;j++){
+                    Ruta r = rutasIniciadas.get(j);
+                    ArrayList<RutaXPedido> pedidosDeRuta = rutaXPedidoRepository.findRutaXPedidosByRuta(r.getId());
+                    ArrayList<PedidoHRFront> pedidos = new ArrayList<>();
+                    for (RutaXPedido rxp:   pedidosDeRuta ) {
+                        Pedido pedido1ruta = pedidoRepository.findPedidoByIdAndActivoTrue(rxp.getPedido().getId());
+                        System.out.print("pedido de RutaXPedido "+rxp.getPedido().getId()+"\n");
+                        PedidoHRFront pedidoHR = new PedidoHRFront();
+                        pedidoHR.setCantidadGLP(pedido1ruta.getCantidadGLP());
+                        UbicacionHRFront u = new UbicacionHRFront();
+                        u.setX(pedido1ruta.getNodo().getCoordenadaX());
+                        u.setY(pedido1ruta.getNodo().getCoordenadaY());
+                        pedidoHR.setUbicacion(u);
+                        //pedidoHR.setHoraLlegada(pedido1ruta.getFechaEntrega().getHour() +":"+pedido1ruta.getFechaEntrega().getMinute()+ ":"+pedido1ruta.getFechaEntrega().getSecond());
+                        //LocalDateTime finAtencion = pedido1ruta.getFechaEntrega().plusMinutes(10);
+                        //pedidoHR.setHoraDeFinAtencion(finAtencion.getHour()+":"+ finAtencion.getMinute()+":"+finAtencion.getSecond());
+                        System.out.print("pedido "+pedido1ruta.getId()+"\n");
+                        pedidos.add(pedidoHR);
+                    }
+                    camionHR.setNumPedidos(pedidos.size());
+                    camionHR.setPedidos(pedidos);
+
+
+                    //TODO: cantidadGLPActual y cantidadPetroleoActual en camionHR
+                    //puede ser en rutaxnodo con dos columnas mas para cada valor
+
                 }
-                camionHR.setNumPedidos(pedidos.size());
-                camionHR.setPedidos(pedidos);
 
-
-                //TODO: cantidadGLPActual y cantidadPetroleoActual en camionHR
-                //puede ser en rutaxnodo con dos columnas mas para cada valor
             }
 
             hojaDeRuta.add(camionHR);
