@@ -1,6 +1,7 @@
 package com.grupo4D.sag_system.model.response;
 
 public class PedidoHRFront {
+    private int idPedido;
     private double cantidadGLP;
     private String horaLlegada;
     private String horaDeFinAtencion;
@@ -9,11 +10,21 @@ public class PedidoHRFront {
     public PedidoHRFront() {
     }
 
-    public PedidoHRFront(double cantidadGLP, String horaLlegada, String horaDeFinAtencion, UbicacionHRFront ubicacion) {
-        this.setCantidadGLP(cantidadGLP);
-        this.setHoraLlegada(horaLlegada);
-        this.setHoraDeFinAtencion(horaDeFinAtencion);
-        this.setUbicacion(ubicacion);
+
+    public PedidoHRFront(int idPedido, double cantidadGLP, String horaLlegada, String horaDeFinAtencion, UbicacionHRFront ubicacion) {
+        this.idPedido = idPedido;
+        this.cantidadGLP = cantidadGLP;
+        this.horaLlegada = horaLlegada;
+        this.horaDeFinAtencion = horaDeFinAtencion;
+        this.ubicacion = ubicacion;
+    }
+
+    public int getIdPedido() {
+        return idPedido;
+    }
+
+    public void setIdPedido(int idPedido) {
+        this.idPedido = idPedido;
     }
 
     public double getCantidadGLP() {

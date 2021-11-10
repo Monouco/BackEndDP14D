@@ -106,6 +106,7 @@ public class AlgorithmService {
                         Pedido pedido1ruta = pedidoRepository.findPedidoByIdAndActivoTrue(rxp.getPedido().getId());
                         //System.out.print("pedido de RutaXPedido "+rxp.getPedido().getId()+"\n");
                         PedidoHRFront pedidoHR = new PedidoHRFront();
+                        pedidoHR.setIdPedido(pedido1ruta.getId());
                         pedidoHR.setCantidadGLP(rxp.getCantidadGLPEnviado());
                         UbicacionHRFront u = new UbicacionHRFront();
                         u.setX(pedido1ruta.getNodo().getCoordenadaX());
@@ -125,7 +126,6 @@ public class AlgorithmService {
                     }
                     camionHR.setNumPedidos(pedidos.size());
                     camionHR.setPedidos(pedidos);
-
 
                     //TODO: cantidadGLPActual y cantidadPetroleoActual en camionHR
                     //puede ser en rutaxnodo con dos columnas mas para cada valor
