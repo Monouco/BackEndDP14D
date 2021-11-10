@@ -33,6 +33,10 @@ public class CamionService{
         camionRepository.cambiarEstadoCamion(estado,id);
     }
 
+    public ArrayList<Camion> listarCamionesAveriados(int tipo){
+        return (ArrayList<Camion>) camionRepository.listarCamionesTipo("Averiado", tipo);
+    }
+
 
 
 }

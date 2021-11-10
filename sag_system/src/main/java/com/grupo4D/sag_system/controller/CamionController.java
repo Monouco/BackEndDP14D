@@ -5,6 +5,7 @@ import com.grupo4D.sag_system.model.Fecha;
 import com.grupo4D.sag_system.model.TipoCamion;
 import com.grupo4D.sag_system.model.request.CamionRegistrarFront;
 import com.grupo4D.sag_system.model.response.CamionListarFront;
+import com.grupo4D.sag_system.model.response.TipoSimulacionFront;
 import com.grupo4D.sag_system.repository.CamionRepository;
 import com.grupo4D.sag_system.service.CamionService;
 import com.grupo4D.sag_system.service.TipoCamionService;
@@ -68,6 +69,41 @@ public class CamionController {
         }
         return camiones;
 
+    }
+
+    @PostMapping("/listarCamionesAveriados")
+    public ArrayList<CamionListarFront> listarCamionesAveriados(@RequestBody TipoSimulacionFront t){
+        ArrayList<CamionListarFront> camiones = new ArrayList<>();
+        ArrayList<Camion> lista = camionService.listarCamionesAveriados(t.getTipo());
+
+        for (Camion c:lista) {
+            CamionListarFront camion = new CamionListarFront();
+            camion.setId(c.getId());
+            TipoCamion tipoCamion = new TipoCamion();
+            tipoCamion = tipoCamionService.obtenerDatosTipoCamion(c.getId());
+            camion.setTaraCamion(tipoCamion.getPesoTara());
+            switch (t.getTipo()){
+                case 1:{
+                    camion.setEstadoCamion(c.getEstado());
+                    break;
+                }
+                case 2:{
+                    camion.setEstadoCamion(c.getEstadoSimulacion());
+                    break;
+                }
+                case 3:{
+                    camion.setEstadoCamion(c.getEstadoColapso());
+                    break;
+                }
+            }
+
+            camion.setTipoCamion(camionService.buscarCodigo1Camion(c.getId()));
+            camion.setCapacidadGLP(tipoCamion.getCapacidadGLP());
+            camion.setCapacidadPetroleo(tipoCamion.getCapacidadPetroleo());
+
+            camiones.add(camion);
+        }
+        return camiones;
     }
 }
 
