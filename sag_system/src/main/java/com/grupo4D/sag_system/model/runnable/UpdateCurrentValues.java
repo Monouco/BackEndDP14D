@@ -47,6 +47,21 @@ public class UpdateCurrentValues implements Runnable{
                     break;
                 }
 
+                if(StaticValues.comCollapseFlag && type == 1) {
+                    StaticValues.comCollapseFlag = false;
+                    break;
+                }
+
+                if(StaticValues.comSimCollapseFlag && type == 2) {
+                    StaticValues.comSimCollapseFlag = false;
+                    break;
+                }
+
+                if(StaticValues.comFullCollapseFlag && type == 3) {
+                    StaticValues.comFullCollapseFlag = false;
+                    break;
+                }
+
                 simulationDate = simulationDate.plusSeconds(sleepTime/1000*multiplier);
 
                 Thread.sleep(sleepTime);

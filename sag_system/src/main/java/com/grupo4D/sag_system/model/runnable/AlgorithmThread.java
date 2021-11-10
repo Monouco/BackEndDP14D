@@ -55,6 +55,23 @@ public class AlgorithmThread implements Runnable {
         //long sleepTime = 600000;
         long sleepTime = 180000;
         if (endDate != null) this.endDate = this.endDate.plusSeconds(sleepTime/1000*multiplier);
+        switch (type){
+            case 1: {
+                StaticValues.collapseFlag = false;
+                StaticValues.comCollapseFlag = false;
+                break;
+            }
+            case 2: {
+                StaticValues.collapseSimulationFlag = false;
+                StaticValues.comSimCollapseFlag = false;
+                break;
+            }
+            case 3: {
+                StaticValues.fullCollapseFlag = false;
+                StaticValues.comFullCollapseFlag = false;
+                break;
+            }
+        }
         ArrayList<Pedido> orders;
 
         try{
@@ -76,14 +93,17 @@ public class AlgorithmThread implements Runnable {
                             switch (type){
                                 case 1: {
                                     StaticValues.collapseFlag = true;
+                                    StaticValues.comCollapseFlag = true;
                                     break;
                                 }
                                 case 2: {
                                     StaticValues.collapseSimulationFlag = true;
+                                    StaticValues.comSimCollapseFlag = true;
                                     break;
                                 }
                                 case 3: {
                                     StaticValues.fullCollapseFlag = true;
+                                    StaticValues.comFullCollapseFlag = true;
                                     break;
                                 }
                             }
