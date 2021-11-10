@@ -81,12 +81,14 @@ public class AlgorithmService {
             int i = 0;
             for (i=0;i<rutasIniciadas.size();i++){
                 if (rutasIniciadas.get(i).getCamion().getId() == c.getId()){
-                    String horaSalida = rutasIniciadas.get(i).getFechaInicio().getHour() + ":" +
-                            rutasIniciadas.get(i).getFechaInicio().getMinute() + ":"+
-                            rutasIniciadas.get(i).getFechaInicio().getSecond();
-                    String horaLlegada = rutasIniciadas.get(i).getFechaFin().getHour() + ":" +
-                            rutasIniciadas.get(i).getFechaFin().getMinute() + ":"+
-                            rutasIniciadas.get(i).getFechaFin().getSecond();
+                    String hora = String.format("%02d", rutasIniciadas.get(i).getFechaInicio().getHour());
+                    String minutos = String.format("%02d", rutasIniciadas.get(i).getFechaInicio().getMinute());
+                    String segundos = String.format("%02d", rutasIniciadas.get(i).getFechaInicio().getSecond());
+                    String horaSalida = hora + ":" + minutos + ":"+ segundos;
+                    hora = String.format("%02d", rutasIniciadas.get(i).getFechaFin().getHour());
+                    minutos = String.format("%02d", rutasIniciadas.get(i).getFechaFin().getMinute());
+                    segundos = String.format("%02d",  rutasIniciadas.get(i).getFechaFin().getSecond());
+                    String horaLlegada =  hora+ ":" + minutos + ":"+ segundos;
                     camionHR.setHoraSalida(horaSalida);
                     camionHR.setHoraLlegada(horaLlegada);
                     i++;
@@ -499,7 +501,7 @@ public class AlgorithmService {
                 secuenciaRuta.add(rutaXNodo);
                 k++;
             }
-            long tiempoRuta = (long)(( (velocity * hormigas.get(i).getVelocity())/(1000 * k) + atendidos * tiempoAtencion) * nanos);
+            long tiempoRuta = (long)(( (1000 * k)/(velocity * hormigas.get(i).getVelocity()) + atendidos * tiempoAtencion) * nanos);
             ruta.setFechaFin(ruta.getFechaInicio().plusNanos(tiempoRuta));
             rutaRepository.save(ruta);
 
