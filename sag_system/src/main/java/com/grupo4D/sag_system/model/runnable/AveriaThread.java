@@ -30,6 +30,7 @@ public class AveriaThread implements Runnable{
         //this.startDate = StaticValues.start;
         long sleepTime = (long)((double)3600000 / this.multiplier);
         try{
+            System.out.println("Empezando averia");
             //Esperando el tiempo para generar el mantenimiento correctivo
             Thread.sleep(sleepTime);
             camion = camionRepository.findCamionById(idCamion);
