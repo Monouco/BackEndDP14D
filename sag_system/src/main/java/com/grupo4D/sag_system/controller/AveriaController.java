@@ -5,8 +5,11 @@ import com.grupo4D.sag_system.model.request.AveriaFront;
 import com.grupo4D.sag_system.model.runnable.AveriaThread;
 import com.grupo4D.sag_system.model.runnable.UpdateCurrentValues;
 import com.grupo4D.sag_system.model.statics.StaticValues;
+import com.grupo4D.sag_system.repository.CamionRepository;
+import com.grupo4D.sag_system.repository.PedidoRepository;
 import com.grupo4D.sag_system.repository.RutaRepository;
 import com.grupo4D.sag_system.repository.RutaXNodoRepository;
+import com.grupo4D.sag_system.service.AlgorithmService;
 import com.grupo4D.sag_system.service.AveriaService;
 import com.grupo4D.sag_system.service.CamionService;
 import com.grupo4D.sag_system.service.MantenimientoService;
@@ -33,6 +36,9 @@ public class AveriaController {
     private CamionService camionService;
 
     @Autowired
+    private CamionRepository camionRepository;
+
+    @Autowired
     private MantenimientoService mantenimientoService;
 
     @Autowired
@@ -47,6 +53,12 @@ public class AveriaController {
     @Autowired
     private ApplicationContext applicationContext;
 
+    @Autowired
+    private AlgorithmService algorithmService;
+
+    @Autowired
+    private PedidoRepository pedidoRepository;
+
     @PostMapping("/guardarAveria")
     public Averia guardarAveria(@RequestBody Averia averiaModel){
         return averiaService.guardarAveria(averiaModel);
@@ -55,16 +67,36 @@ public class AveriaController {
     @PostMapping("/registrarAveriaNueva")
     public Averia registrarAveriaNueva(@RequestBody AveriaFront averia){
         long nanos = 1000000000;
-        Camion camion = new Camion();
+        Camion camion = camionRepository.findCamionById(averia.getIdCamion());
         Averia averiaModel = new Averia();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd@HH:mm:ss");
         LocalDateTime date = LocalDateTime.parse(averia.getFecha(), formatter);
         averiaModel.setActivo(true);
-        camion.setId(averia.getIdCamion());
+        //camion.setId(averia.getIdCamion());
         averiaModel.setCamion(camion);
         averiaModel.setFechaIncidente(date);
+        averiaModel.setTipo(averia.getType());
 
-        camionService.cambiarEstadoAveria("Averiado",averia.getIdCamion());
+        //Calculamos el desfase
+        long desfase = ChronoUnit.NANOS.between(LocalDateTime.now(StaticValues.zoneId),date);
+        averiaModel.setDesfase(desfase);
+
+        //camionService.cambiarEstadoAveria("Averiado",averia.getIdCamion());
+        switch(averia.getType()){
+            case 1:{
+                camion.setEstado("Averiado");
+                break;
+            }
+            case 2:{
+                camion.setEstadoSimulacion("Averiado");
+                break;
+            }
+            case 3:{
+                camion.setEstadoColapso("Averiado");
+                break;
+            }
+        }
+        camionRepository.save(camion);
 
         Mantenimiento m = new Mantenimiento();
         m.setActivo(true);
@@ -76,7 +108,7 @@ public class AveriaController {
         //long wholeRouteTime = (long)((tiempoAtencion/velocidad*atendidos + (j*1000)/velocity)*nanos);
 
         //Por ahora para día a día
-        ArrayList<Ruta> rutasSolucion = rutaRepository.listarRutasDisponibles("Iniciado", 1); //sacar todas las rutas con estado iniciado
+        ArrayList<Ruta> rutasSolucion = rutaRepository.listarRutasDisponibles("Iniciado", averia.getType()); //sacar todas las rutas con estado iniciado
         if (!rutasSolucion.isEmpty()) {
             Ruta rutaCamion = new Ruta();
             for (Ruta r : rutasSolucion) {
@@ -85,6 +117,9 @@ public class AveriaController {
                     break;
                 }
             }
+
+            //Cambiamos el valor de la rutaCamion a cancelada o averiada
+            rutaCamion.setEstado("Averiada");
             //restar fecha fin de fecha inicio
             LocalDateTime f1 = rutaCamion.getFechaInicio();
             LocalDateTime f2 = rutaCamion.getFechaFin();
@@ -111,36 +146,54 @@ public class AveriaController {
 
             //buscar el aproximado de la ubicacion por el tiempo
             double tiempoAproximado = 0;
-            int i;
+            int i, index = rutaXNodos.size()-1;
+            boolean flag = false;
             for (i = 0; i < rutaXNodos.size(); i++) {
                 tiempoAproximado += tiempo1Km;
-                if (tiempoAproximado > tiempoAveria)
-                    break;
+                //Supongo que aca obtiene el valor, por lo que a partir de este nodo, vamos a volver el activo 0 para que no se tomen en cuenta
+                if (tiempoAproximado > tiempoAveria){
+                    index = i;
+                    flag = true;
+                }
+                if(flag){
+                    rutaXNodos.get(i).setActivo(false);
+                }
                 if (rutaXNodos.get(i).getPedido() >= 0) {
                     tiempoAproximado += 600 * nanos;
                 }
-                if (tiempoAproximado > tiempoAveria)
-                    break;
+                //Esto es que se averia atendiendo a alguien?
+                if (tiempoAproximado > tiempoAveria) {
+                    index = i;
+                    flag = true;
+                }
             }
-
             //registrar el x y y en averia
-            averiaModel.setUbicacion(rutaXNodos.get(i).getNodo());
+            averiaModel.setUbicacion(rutaXNodos.get(index).getNodo());
+            //Guardamos los valores cambiados de la ruta y nodos de la rutaXNodo
+            rutaRepository.save(rutaCamion);
+            rutaXNodoRepository.saveAll(rutaXNodos);
+            //Ahora tenemos que averiar los nodosXAlmacen y nodosXPedidos a partir del nodo donde se quedo
+            rutaRepository.devolverGLP(index, averia.getType(), averia.getIdCamion());
         }
 
         Mantenimiento mRespuesta = mantenimientoService.guardarMantenimientoNuevo(m);
         averiaModel.setMantenimiento(mRespuesta);
 
-        //TODO: calcular este campo de algun lado
-        averiaModel.setDesfase(0);
+
+        averiaModel.setDesfase(desfase);
 
         StaticValues.idCamion = averia.getIdCamion();
         //Aca se tiene que recibir el multiplicador y el tipo;
-        StaticValues.mult = 1;
-        StaticValues.simulationType = 1;
+        StaticValues.mult = 1; //TODO: este campo hay que obtenerlo
+        StaticValues.simulationType = averia.getType();
 
         AveriaThread updating = applicationContext.getBean(AveriaThread.class);
 
         taskExecutor.execute(updating);
+
+        ArrayList<Pedido> pedidos = pedidoRepository.listarPedidosDisponibles(date, averia.getType());
+
+        algorithmService.asignarPedidos(date,pedidos, averia.getType(), desfase);
 
         return averiaService.guardarAveriaNueva(averiaModel);
     }

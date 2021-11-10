@@ -14,5 +14,6 @@ public interface RutaXPedidoRepository extends CrudRepository<RutaXPedido,Intege
 
     public ArrayList<RutaXPedido> findRutaXPedidosByRuta(Integer idRuta);
 
+    public ArrayList<RutaXPedido> findRutaXPedidosByPedidoAndActivoTrue(Integer idPedido);
 }
 

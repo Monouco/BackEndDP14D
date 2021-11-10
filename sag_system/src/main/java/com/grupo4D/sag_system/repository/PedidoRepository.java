@@ -19,9 +19,11 @@ public interface PedidoRepository extends CrudRepository<Pedido,Integer> {
 
     @Query(
             value = "SELECT * FROM pedido u WHERE u.activo = 1 " +
-                    "and estado_pedido = 'Nuevo' " +
+                    "and (estado_pedido = 'Nuevo' " +
+                    "or estado_pedido = 'Por Reprogramar') " +
                     "and fecha_pedido <= ?1 " +
-                    "and tipo = ?2 ",
+                    "and tipo = ?2 " +
+                    "and cantidad_glp <> glp_enviado ",
             nativeQuery = true)
     public ArrayList<Pedido> listarPedidosDisponibles(LocalDateTime fechaActual, int tipo);
 
@@ -37,3 +39,31 @@ public interface PedidoRepository extends CrudRepository<Pedido,Integer> {
     public Pedido findPedidoByIdAndActivoTrue(int id);
 
 }
+
+/*"SELECT u.id_pedido, " +
+                    "u.activo, " +
+                    "u.cantidad_glp - SUM(nvl(r.cantidad_glp_enviado,0)) cantidad_glp, " +
+                    "u.estado_pedido, " +
+                    "u.fecha_entrega, " +
+                    "u.fecha_limite, " +
+                    "u.fecha_pedido, " +
+                    "u.plazo_entrega, " +
+                    "u.tipo, " +
+                    "u.id_nodo " +
+                    "FROM pedido u " +
+                    "inner join rutaxpedido r on r.id_pedido = u.id_pedido " +
+                    "WHERE u.activo = 1 " +
+                    "and (u.estado_pedido = 'Nuevo' " +
+                    "or u.estado_pedido = 'Por Reprogramar') " +
+                    "and u.fecha_pedido <= ?1 " +
+                    "and u.tipo = ?2 " +
+                    "and r.activo = 1 " +
+                    "group by u.id_pedido, " +
+                    "u.activo, " +
+                    "u.estado_pedido, " +
+                    "u.fecha_entrega, " +
+                    "u.fecha_limite, " +
+                    "u.fecha_pedido, " +
+                    "u.plazo_entrega, " +
+                    "u.tipo, " +
+                    "u.id_nodo"*/

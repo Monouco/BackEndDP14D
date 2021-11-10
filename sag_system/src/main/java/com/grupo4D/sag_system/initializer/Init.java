@@ -14,6 +14,7 @@ import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;
+import java.util.concurrent.FutureTask;
 
 @Component
 public class Init implements InitializingBean {
@@ -44,6 +45,7 @@ public class Init implements InitializingBean {
         AlgorithmThread algorithm = applicationContext.getBean(AlgorithmThread.class);
 
         taskExecutor.execute(algorithm);
+
 
     }
 

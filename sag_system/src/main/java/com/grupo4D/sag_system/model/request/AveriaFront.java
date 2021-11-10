@@ -18,6 +18,8 @@ public class AveriaFront {
 
         private NodoFront node;
 
+        private int type;
+
         public AveriaFront() {
         }
 
@@ -64,5 +66,13 @@ public class AveriaFront {
 
         public void setNode(NodoFront node) {
                 this.node = node;
+        }
+
+        public int getType() {
+                return type;
+        }
+
+        public void setType(int type) {
+                this.type = type;
         }
 }

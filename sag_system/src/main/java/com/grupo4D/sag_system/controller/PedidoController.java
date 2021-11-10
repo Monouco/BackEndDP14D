@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -50,5 +51,10 @@ public class PedidoController {
     @GetMapping("/listarPedidos")
     public List<Pedido> listarPedidos(){
         return pedidoService.listarPedidos();
+    }
+
+    @PostMapping("/tempPedido")
+    public ArrayList<Pedido> listarTempPedido (){
+        return pedidoService.listarPedidosTemp();
     }
 }

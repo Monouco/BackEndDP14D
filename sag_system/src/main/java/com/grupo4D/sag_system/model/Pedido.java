@@ -44,6 +44,9 @@ public class Pedido {
     @Column(name = "tipo")
     private int tipo;
 
+    @Column(name="glpProgramado")
+    private double glpProgramado;
+
     @Column(name="activo")
     private boolean activo = true;
 
