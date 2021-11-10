@@ -6,10 +6,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.grupo4D.sag_system.model.Fecha;
 import com.grupo4D.sag_system.model.ObjObtenerRutasSolucion;
 import com.grupo4D.sag_system.model.Pedido;
-import com.grupo4D.sag_system.model.response.CamionHRFront;
-import com.grupo4D.sag_system.model.response.RespuestaObtenerRutaFront;
-import com.grupo4D.sag_system.model.response.RespuestaRutaFront;
-import com.grupo4D.sag_system.model.response.RutaFront;
+import com.grupo4D.sag_system.model.response.*;
 import com.grupo4D.sag_system.service.AlgorithmService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -56,9 +53,9 @@ public class AlgorithmController {
         return algoritmoService.asignarPedidos3Dias(pedidos);
     }
 
-    @GetMapping("/obtenerHojaDeRuta")
-    public ArrayList<CamionHRFront> obtenerHojaDeRuta(){
-        return algoritmoService.obtenerHojaDeRuta();
+    @PostMapping("/obtenerHojaDeRuta")
+    public ArrayList<CamionHRFront> obtenerHojaDeRuta(@RequestBody TipoSimulacionFront t){
+        return algoritmoService.obtenerHojaDeRuta(t);
     }
 
 

@@ -61,18 +61,18 @@ public class AlgorithmService {
     @Autowired
     PlantaRepository plantaRepository;
 
-    public ArrayList<CamionHRFront> obtenerHojaDeRuta(){
+    public ArrayList<CamionHRFront> obtenerHojaDeRuta(TipoSimulacionFront t){
         ArrayList<CamionHRFront> hojaDeRuta = new ArrayList<>();
         //Se busca los camiones en ruta
         ArrayList<Camion> camionesEnRuta = camionRepository.findCamionsByEstadoAndActivoTrue("En ruta");
-        for (int l=0;l<camionesEnRuta.size();l++){
-            System.out.print(camionesEnRuta.get(l).getId()+"\n");
-        }
-        System.out.print("Camiones arriba"+camionesEnRuta.size()+" \n");
+//        for (int l=0;l<camionesEnRuta.size();l++){
+//            System.out.print(camionesEnRuta.get(l).getId()+"\n");
+//        }
+//        System.out.print("Camiones arriba"+camionesEnRuta.size()+" \n");
 
-        //Se busca las rutas iniciadas para DIA A DIA (o mandar parametro?)
-        ArrayList<Ruta> rutasIniciadas = rutaRepository.listarRutasDisponibles("Iniciado", 1);
-        System.out.print("Rutas "+rutasIniciadas.size()+" \n");
+        //Se busca las rutas iniciadas de acuerdo al parametro
+        ArrayList<Ruta> rutasIniciadas = rutaRepository.listarRutasDisponibles("Iniciado", t.getTipo());
+        //System.out.print("Rutas "+rutasIniciadas.size()+" \n");
 
         for (Camion c: camionesEnRuta) {
             CamionHRFront camionHR = new CamionHRFront();
@@ -102,17 +102,23 @@ public class AlgorithmService {
                     ArrayList<PedidoHRFront> pedidos = new ArrayList<>();
                     for (RutaXPedido rxp:   pedidosDeRuta ) {
                         Pedido pedido1ruta = pedidoRepository.findPedidoByIdAndActivoTrue(rxp.getPedido().getId());
-                        System.out.print("pedido de RutaXPedido "+rxp.getPedido().getId()+"\n");
+                        //System.out.print("pedido de RutaXPedido "+rxp.getPedido().getId()+"\n");
                         PedidoHRFront pedidoHR = new PedidoHRFront();
-                        pedidoHR.setCantidadGLP(pedido1ruta.getCantidadGLP());
+                        pedidoHR.setCantidadGLP(rxp.getCantidadGLPEnviado());
                         UbicacionHRFront u = new UbicacionHRFront();
                         u.setX(pedido1ruta.getNodo().getCoordenadaX());
                         u.setY(pedido1ruta.getNodo().getCoordenadaY());
                         pedidoHR.setUbicacion(u);
-                        //pedidoHR.setHoraLlegada(pedido1ruta.getFechaEntrega().getHour() +":"+pedido1ruta.getFechaEntrega().getMinute()+ ":"+pedido1ruta.getFechaEntrega().getSecond());
-                        //LocalDateTime finAtencion = pedido1ruta.getFechaEntrega().plusMinutes(10);
-                        //pedidoHR.setHoraDeFinAtencion(finAtencion.getHour()+":"+ finAtencion.getMinute()+":"+finAtencion.getSecond());
-                        System.out.print("pedido "+pedido1ruta.getId()+"\n");
+                        String hora = String.format("%02d", rxp.getFechaEntrega().getHour());
+                        String minutos = String.format("%02d", rxp.getFechaEntrega().getMinute());
+                        String segundos = String.format("%02d", rxp.getFechaEntrega().getSecond());
+                        pedidoHR.setHoraLlegada( hora+":"+minutos+ ":"+ segundos);
+                        LocalDateTime finAtencion = rxp.getFechaEntrega().plusMinutes(10);
+                        hora = String.format("%02d", finAtencion.getHour());
+                        minutos = String.format("%02d", finAtencion.getMinute());
+                        segundos = String.format("%02d", finAtencion.getSecond());
+                        pedidoHR.setHoraDeFinAtencion(hora+ ":"+ minutos+":"+ segundos);
+                        //System.out.print("pedido "+pedido1ruta.getId()+"\n");
                         pedidos.add(pedidoHR);
                     }
                     camionHR.setNumPedidos(pedidos.size());
