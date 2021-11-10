@@ -152,4 +152,11 @@ public class Pedido {
         this.fechaLimite = fechaLimite;
     }
 
+    public double getGlpProgramado() {
+        return glpProgramado;
+    }
+
+    public void setGlpProgramado(double glpProgramado) {
+        this.glpProgramado = glpProgramado;
+    }
 }

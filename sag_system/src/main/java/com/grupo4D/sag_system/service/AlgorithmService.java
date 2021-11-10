@@ -399,7 +399,6 @@ public class AlgorithmService {
             pedidosNuevos.get(i).setEstadoPedido("En ruta");
             //pedidoRepository.save(pedidosNuevos.get(i));
         }
-        pedidoRepository.saveAll(pedidosNuevos);
 
         ACSAlgorithm algoritmoACS  = new ACSAlgorithm(numAlmacenes, numOrdenes,mapa1.getPlantaPrincipal(),hTurno, fecha);
 
@@ -459,6 +458,8 @@ public class AlgorithmService {
 
                             rutaXPedido.setFechaEntrega(ruta.getFechaInicio().plusNanos(spentTime));
                             secuenciaPedido.add(rutaXPedido);
+
+                            pedidosNuevos.get(j[2]).setGlpProgramado(pedidosNuevos.get(j[2]).getGlpProgramado() + rutaXPedido.getCantidadGLPEnviado());
                         }
                         else{
                             //Guardamos el glp que se consigue
@@ -542,6 +543,7 @@ public class AlgorithmService {
             //camionRepository.save(camionesDisponibles.get(i));
 
         }
+        pedidoRepository.saveAll(pedidosNuevos);
         camionRepository.saveAll(camionesDisponibles);
         plantaRepository.saveAll(plantas);
         rutaXNodoRepository.saveAll(secuenciaRuta);
