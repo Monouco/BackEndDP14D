@@ -36,6 +36,7 @@ public class AveriaScheduled implements Runnable {
         long sleepTime = ChronoUnit.HOURS.between(simulationDate,startDate) * 3600000 / multiplier;
 
         try{
+            System.out.println("Averia programada para el camion " + idCamion + " a la hora " + startDate);
             Thread.sleep(sleepTime);
             AveriaFront averiaFront = new AveriaFront();
             averiaFront.setType(type);
