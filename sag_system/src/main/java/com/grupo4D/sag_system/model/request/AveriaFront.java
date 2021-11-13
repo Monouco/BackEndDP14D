@@ -20,12 +20,18 @@ public class AveriaFront {
 
         private int type;
 
+        private int multiplier;
+
         public AveriaFront() {
+                this.multiplier = 1;
+                this.type = 1;
         }
 
         public AveriaFront(int idCamion, String fecha) {
                 this.setIdCamion(idCamion);
                 this.setFecha(fecha);
+                this.multiplier = 1;
+                this.type = 1;
         }
 
         public int getIdCamion() {
@@ -74,5 +80,13 @@ public class AveriaFront {
 
         public void setType(int type) {
                 this.type = type;
+        }
+
+        public int getMultiplier() {
+                return multiplier;
+        }
+
+        public void setMultiplier(int multiplier) {
+                this.multiplier = multiplier;
         }
 }

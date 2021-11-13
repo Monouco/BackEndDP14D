@@ -15,6 +15,7 @@ public class BloqueosFront {
     @JsonFormat(pattern = "yyyy-MM-dd@HH:mm:ss")
     private LocalDateTime endDate;
     private ArrayList<NodoFront> path;
+    private int type;
 
     public BloqueosFront() {
         this.path = new ArrayList<>();
@@ -69,5 +70,13 @@ public class BloqueosFront {
 
     public void setPath(ArrayList<NodoFront> path) {
         this.path = path;
+    }
+
+    public int getType() {
+        return type;
+    }
+
+    public void setType(int type) {
+        this.type = type;
     }
 }

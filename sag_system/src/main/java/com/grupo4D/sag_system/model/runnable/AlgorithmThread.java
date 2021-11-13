@@ -53,7 +53,16 @@ public class AlgorithmThread implements Runnable {
         System.out.println(multiplier);
         //Considerando 10 min
         //long sleepTime = 600000;
-        long sleepTime = 180000;
+        //Considerando 3 min para dia a dia y 3 segundos para colapso y simulacion
+        long sleepTime ;
+
+        if(type == 1){
+            sleepTime = 180000;
+        }
+        else{
+            sleepTime = 3000;
+        }
+
         if (endDate != null) this.endDate = this.endDate.plusSeconds(sleepTime/1000*multiplier);
         switch (type){
             case 1: {
@@ -94,16 +103,19 @@ public class AlgorithmThread implements Runnable {
                                 case 1: {
                                     StaticValues.collapseFlag = true;
                                     StaticValues.comCollapseFlag = true;
+                                    System.out.println(LocalDateTime.now(StaticValues.zoneId) + " Colapso Logistico tipo " + type + " a las " + simulationDate);
                                     break;
                                 }
                                 case 2: {
                                     StaticValues.collapseSimulationFlag = true;
                                     StaticValues.comSimCollapseFlag = true;
+                                    System.out.println(LocalDateTime.now(StaticValues.zoneId) + " Colapso Logistico tipo " + type + " a las " + simulationDate);
                                     break;
                                 }
                                 case 3: {
                                     StaticValues.fullCollapseFlag = true;
                                     StaticValues.comFullCollapseFlag = true;
+                                    System.out.println(LocalDateTime.now(StaticValues.zoneId) + " Colapso Logistico tipo " + type + " a las " + simulationDate);
                                     break;
                                 }
                             }
@@ -114,14 +126,14 @@ public class AlgorithmThread implements Runnable {
                     if(StaticValues.collapseSimulationFlag && type == 2) break;
                     if(StaticValues.fullCollapseFlag && type == 3) break;
 
-                    algorithmService.asignarPedidos(simulationDate, orders, type, offset);
+                    algorithmService.asignarPedidos(simulationDate, orders, type, offset, multiplier);
                     System.out.println(LocalDateTime.now(StaticValues.zoneId) + " Pedidos atendidos para el tipo " + type);
                 } else {
                     System.out.println("No hubieron pedidos para el tipo " + type + " Tiempo de simulacion " + simulationDate);
                 }
                 this.simulationDate = this.simulationDate.plusSeconds(sleepTime / 1000 * multiplier);
                 this.startDate = this.startDate.plusSeconds(sleepTime/1000);
-                this.offset = this.offset  + sleepTime  * 1000000 * (multiplier-1 );
+                this.offset = this.offset  + sleepTime  * 1000000 * (multiplier - 1);
 
                 //Esto es para que se vuelva a correr el algoritmo
                 try {

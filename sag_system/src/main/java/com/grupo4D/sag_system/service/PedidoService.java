@@ -61,7 +61,7 @@ public class PedidoService {
                  rutaXPedidos) {
                 glp = glp + rp.getCantidadGLPEnviado();
             }
-            //p.set
+            p.setGlpProgramado(p.getGlpProgramado() - glp);
         }
         return pedidos;
     }

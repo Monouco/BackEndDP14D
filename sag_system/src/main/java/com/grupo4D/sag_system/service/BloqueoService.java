@@ -72,6 +72,7 @@ public class BloqueoService{
             bloqueo.setFechaInicio(bloqueoFront.getStartDate());
             bloqueo.setFechaFin(bloqueoFront.getEndDate());
             bloqueo.setActivo(true);
+            bloqueo.setTipo(bloqueoFront.getType());
             //camionRepository.save(bloqueo);
 
             for (NodoFront nodoBloqueo:

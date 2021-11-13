@@ -9,6 +9,7 @@ import com.grupo4D.sag_system.model.algorithm.Order;
 import com.grupo4D.sag_system.model.algorithm.pathFinding.ACSAlgorithm;
 import com.grupo4D.sag_system.model.response.*;
 import com.grupo4D.sag_system.model.runnable.AlgorithmThread;
+import com.grupo4D.sag_system.model.runnable.AveriaScheduled;
 import com.grupo4D.sag_system.model.runnable.UpdateCurrentValues;
 import com.grupo4D.sag_system.model.statics.StaticValues;
 import com.grupo4D.sag_system.repository.*;
@@ -253,55 +254,17 @@ public class AlgorithmService {
         apiResponse.setFlag(bandera);
         apiResponse.setRoutes(respuesta);
 
-    /*
-        for (RutaFront ruta:solucion) {
-            RespuestaRutaFront nodoRRF = new RespuestaRutaFront();
-            nodoRRF.setStartDate(ruta.getStartDate());
-            nodoRRF.setEndDate(ruta.getStartDate());
-            nodoRRF.setTimeAttention((int)(tiempoAtencion/velocidad));
-            nodoRRF.setVelocity(velocity);
-            //nodoRRF.setRoute(ruta);
-            ArrayList<NodoFront> nodos = ruta.getPath();
-
-            for ( i=0; i< nodos.size();i++){
-                RespuestaNodoFront orderRNF = new RespuestaNodoFront();
-                if(nodos.get(i).getPedido()>=0){
-                    orderRNF.setX(nodos.get(i).getX());
-                    orderRNF.setY(nodos.get(i).getY());
-                    orderRNF.setIndexRoute(i);
-                    orderRNF.setDeliveryDate(ruta.getStartDate());
-                    orderRNF.setLeftDate(ruta.getStartDate().plusSeconds(nodoRRF.getTimeAttention()));
-                    nodoRRF.getOrders().add(orderRNF);
-                }
-            }
-//            if(nodoRRF.getOrders().size()==0){
-//                RespuestaNodoFront orderRNF = new RespuestaNodoFront();
-//                nodoRRF.getOrders().add(orderRNF);
-//            }
-            if(nodoRRF.getOrders().size()>0){
-                respuesta.add(nodoRRF);
-            }
-        }*/
         return apiResponse;
     }
 
 
     //public ArrayList<RutaFront> asignarPedidos(LocalDateTime horaInicio){
     //public ArrayList<RutaFront> asignarPedidos(String fecha){
-    public ArrayList<RutaFront> asignarPedidos(LocalDateTime fecha, ArrayList<Pedido> pedidosNuevos, int tipo, long desfase){
+    public ArrayList<RutaFront> asignarPedidos(LocalDateTime fecha, ArrayList<Pedido> pedidosNuevos, int tipo, long desfase, int multiplier){
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd@HH:mm:ss");
-        //System.out.print("INICIO\n" +fecha+"\nFECHA RECIBIDA\n");
-        //String[] fechas = fecha.split(":");
-        //System.out.print("INICIO\n" +fechas[0]+"\nFECHA RECIBIDA\n");
-        //System.out.print("INICIO\n" +fechas[1]+"\nFECHA RECIBIDA\n");
-        //LocalDateTime horaInicio = LocalDateTime.parse(fecha, formatter);
-        //LocalDateTime horaInicio = fecha.getFecha();
         LocalDateTime horaInicio = fecha;
 
         ArrayList<RutaFront> solucion = new ArrayList<>();
-
-        //ArrayList<Pedido> pedidosNuevos = new ArrayList<>();
-        //pedidosNuevos = pedidoRepository.findPedidosByEstadoPedido("Nuevo");
 
         if (pedidosNuevos.isEmpty()){
             return null;
@@ -349,13 +312,6 @@ public class AlgorithmService {
         mapa1.addDeposit(alamacenEste);*/
         mapa1.initializeCurrentRoadBlocks(fecha, fecha.plusDays(1));
 
-        //Nodos
-//        for(int i = 0; i < 70; i++){
-//            for(int j = 0; j < 50; j++){
-//                Nodo nodo = new Nodo(i,j);
-//                nodoRepository.save(nodo);
-//            }
-//        }
 
         //revisar
         int numAlmacenes = 3;
@@ -422,7 +378,35 @@ public class AlgorithmService {
             ruta.setDesfase(desfase);
             //ruta.setFechaInicio(horaInicio.plusSeconds(20)+);
 
-            rutaRepository.save(ruta);
+            //Dependiendo del camion, generamos la averia si es que es simulacion de 3 dias
+            switch (StaticValues.numCamion){
+                case(2): {
+                    StaticValues.simulationType = tipo;
+                    StaticValues.idCamion = camionesDisponibles.get(i).getId();
+                    StaticValues.virtualDate = fecha;
+                    StaticValues.start = fecha.plusHours(2);
+                    StaticValues.mult = multiplier;
+                    AveriaScheduled averia = applicationContext.getBean(AveriaScheduled.class);
+                    taskExecutor.execute(averia);
+                    break;
+                }
+                case(4): {
+                    StaticValues.simulationType = tipo;
+                    StaticValues.idCamion = camionesDisponibles.get(i).getId();
+                    StaticValues.virtualDate = fecha;
+                    StaticValues.start = fecha.plusHours(3);
+                    StaticValues.mult = multiplier;
+                    AveriaScheduled averia = applicationContext.getBean(AveriaScheduled.class);
+                    taskExecutor.execute(averia);
+                    break;
+                }
+                default: {
+                    break;
+                }
+            }
+            StaticValues.numCamion++;
+
+            //rutaRepository.save(ruta);
 
             ArrayList<NodoFront> path = new ArrayList<>();
             int k = 0, atendidos = 0,  temp = 0;
@@ -554,6 +538,7 @@ public class AlgorithmService {
     }
 
     public ArrayList<Pedido> asignarPedidos3Dias(/*Fecha fecha, */ArrayList<Pedido> pedidos){
+        StaticValues.numCamion = 1;
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd@HH:mm:ss");
         LocalDateTime fechaInicio = pedidos.get(0).getFechaPedido(), fechaTemp;
         LocalDateTime fechaFin = fechaInicio;

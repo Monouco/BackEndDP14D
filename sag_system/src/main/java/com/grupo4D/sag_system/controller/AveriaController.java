@@ -9,10 +9,7 @@ import com.grupo4D.sag_system.repository.CamionRepository;
 import com.grupo4D.sag_system.repository.PedidoRepository;
 import com.grupo4D.sag_system.repository.RutaRepository;
 import com.grupo4D.sag_system.repository.RutaXNodoRepository;
-import com.grupo4D.sag_system.service.AlgorithmService;
-import com.grupo4D.sag_system.service.AveriaService;
-import com.grupo4D.sag_system.service.CamionService;
-import com.grupo4D.sag_system.service.MantenimientoService;
+import com.grupo4D.sag_system.service.*;
 import org.apache.tomcat.jni.Local;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
@@ -58,6 +55,9 @@ public class AveriaController {
 
     @Autowired
     private PedidoRepository pedidoRepository;
+
+    @Autowired
+    private PedidoService pedidoService;
 
     @PostMapping("/guardarAveria")
     public Averia guardarAveria(@RequestBody Averia averiaModel){
@@ -184,7 +184,7 @@ public class AveriaController {
 
         StaticValues.idCamion = averia.getIdCamion();
         //Aca se tiene que recibir el multiplicador y el tipo;
-        StaticValues.mult = 1; //TODO: este campo hay que obtenerlo
+        StaticValues.mult = averia.getMultiplier(); //TODO: este campo hay que obtenerlo
         StaticValues.simulationType = averia.getType();
 
         AveriaThread updating = applicationContext.getBean(AveriaThread.class);
@@ -193,11 +193,11 @@ public class AveriaController {
 
         taskExecutor.execute(updating);
 
-        ArrayList<Pedido> pedidos = pedidoRepository.listarPedidosDisponibles(date, averia.getType());
+        ArrayList<Pedido> pedidos = pedidoService.listarPedidosDisponibles(date, averia.getType());
 
-        algorithmService.asignarPedidos(date,pedidos, averia.getType(), desfase);
+        algorithmService.asignarPedidos(date,pedidos, averia.getType(), desfase, averia.getMultiplier());
 
-        System.out.println("Terminado de re programar los pedidos de la averia del camion "+averia.getIdCamion()+" del tipo "+averia.getType());
+        System.out.println("Terminado de re programar los pedidos de la averia del camion " + averia.getIdCamion()+" del tipo " + averia.getType());
 
         return averiaService.guardarAveriaNueva(averiaModel);
     }
