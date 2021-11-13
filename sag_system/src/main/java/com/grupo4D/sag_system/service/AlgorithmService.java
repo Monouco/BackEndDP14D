@@ -537,7 +537,7 @@ public class AlgorithmService {
         return solucion;
     }
 
-    public ArrayList<Pedido> asignarPedidos3Dias(/*Fecha fecha, */ArrayList<Pedido> pedidos){
+    public ArrayList<Pedido> asignarPedidos3Dias(/*Fecha fecha, */ArrayList<Pedido> pedidos, int multiplier){
         StaticValues.numCamion = 1;
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd@HH:mm:ss");
         LocalDateTime fechaInicio = pedidos.get(0).getFechaPedido(), fechaTemp;
@@ -561,7 +561,7 @@ public class AlgorithmService {
         //ArrayList<Pedido> pedidosActuales = pedidoRepository.listarPedidosDisponibles(fechaInicio, 2);
 
         //Creamos un thread para el algoritmo
-        StaticValues.mult = 14;
+        StaticValues.mult = multiplier;
         StaticValues.start = LocalDateTime.now(StaticValues.zoneId);
         StaticValues.virtualDate = fechaInicio.plusMinutes(15);
         StaticValues.simulationType = 2;
