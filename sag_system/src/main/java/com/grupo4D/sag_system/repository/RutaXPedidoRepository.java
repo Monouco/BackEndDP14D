@@ -16,6 +16,10 @@ public interface RutaXPedidoRepository extends CrudRepository<RutaXPedido,Intege
     @Query(value = "select * from rutaxpedido where id_ruta = ?1", nativeQuery = true)
     public ArrayList<RutaXPedido> findRutaXPedidosByRuta(int idRuta);
 
-    public ArrayList<RutaXPedido> findRutaXPedidosByPedidoAndActivoTrue(Integer idPedido);
+    @Query(value = "select * from rutaxpedido " +
+                   "where id_pedido = ?1 " +
+                   "and activo = 1",
+            nativeQuery = true)
+    public ArrayList<RutaXPedido> listarRutaXPedido(Integer idPedido);
 }
 

@@ -56,7 +56,7 @@ public class PedidoService {
         for(i = 0; i<pedidos.size(); i++){
             Pedido p = pedidos.get(i);
             glp = 0;
-            rutaXPedidos = rutaXPedidoRepository.findRutaXPedidosByPedidoAndActivoTrue(p.getId());
+            rutaXPedidos = rutaXPedidoRepository.listarRutaXPedido(p.getId());
             for (RutaXPedido rp:
                  rutaXPedidos) {
                 glp = glp + rp.getCantidadGLPEnviado();
