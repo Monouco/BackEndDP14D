@@ -2,6 +2,7 @@ package com.grupo4D.sag_system.initializer;
 
 import com.grupo4D.sag_system.SagSystemApplication;
 import com.grupo4D.sag_system.model.runnable.AlgorithmThread;
+import com.grupo4D.sag_system.model.runnable.FillDeposit;
 import com.grupo4D.sag_system.model.runnable.UpdateCurrentValues;
 import com.grupo4D.sag_system.model.statics.StaticValues;
 import org.hibernate.sql.Update;
@@ -40,6 +41,10 @@ public class Init implements InitializingBean {
         UpdateCurrentValues updating = applicationContext.getBean(UpdateCurrentValues.class);
 
         taskExecutor.execute(updating);
+
+        FillDeposit fillDeposit = applicationContext.getBean(FillDeposit.class);
+
+        taskExecutor.execute(fillDeposit);
 
         //LOG.info(Arrays.asList(environment.getDefaultProfiles()));
         AlgorithmThread algorithm = applicationContext.getBean(AlgorithmThread.class);

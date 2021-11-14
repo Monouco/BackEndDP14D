@@ -10,6 +10,7 @@ import com.grupo4D.sag_system.model.algorithm.pathFinding.ACSAlgorithm;
 import com.grupo4D.sag_system.model.response.*;
 import com.grupo4D.sag_system.model.runnable.AlgorithmThread;
 import com.grupo4D.sag_system.model.runnable.AveriaScheduled;
+import com.grupo4D.sag_system.model.runnable.FillDeposit;
 import com.grupo4D.sag_system.model.runnable.UpdateCurrentValues;
 import com.grupo4D.sag_system.model.statics.StaticValues;
 import com.grupo4D.sag_system.repository.*;
@@ -570,6 +571,10 @@ public class AlgorithmService {
         UpdateCurrentValues updating = applicationContext.getBean(UpdateCurrentValues.class);
 
         taskExecutor.execute(updating);
+
+        FillDeposit fillDeposit = applicationContext.getBean(FillDeposit.class);
+
+        taskExecutor.execute(fillDeposit);
 
         AlgorithmThread algorithm = applicationContext.getBean(AlgorithmThread.class);
 

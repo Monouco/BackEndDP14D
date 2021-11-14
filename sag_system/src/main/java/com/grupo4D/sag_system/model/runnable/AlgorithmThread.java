@@ -156,7 +156,8 @@ public class AlgorithmThread implements Runnable {
 
         //Reiniciamos todo lo utilizado por la simulacion, y lo agregado
 
-        pedidoRepository.terminarSimulacion(type);
+        if(type != 1)
+            pedidoRepository.terminarSimulacion(type);
 
     }
 
