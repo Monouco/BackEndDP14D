@@ -25,12 +25,14 @@ public class BloqueosFront {
         this.startDate = startDate;
         this.endDate = endDate;
         this.path = path;
+        this.type = 1;
     }
 
     public BloqueosFront(String startDate, String endDate, ArrayList<NodoFront> path){
         //this.startDate = startDate;
         //this.endDate = endDate;
         this.path = path;
+        this.type = 1;
     }
 
     public BloqueosFront(int id, LocalDateTime startDate, LocalDateTime endDate, ArrayList<NodoFront> path) {
@@ -38,6 +40,15 @@ public class BloqueosFront {
         this.startDate = startDate;
         this.endDate = endDate;
         this.path = path;
+        this.type = 1;
+    }
+
+    public BloqueosFront(int id, LocalDateTime startDate, LocalDateTime endDate, ArrayList<NodoFront> path, int type) {
+        this.id = id;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.path = path;
+        this.type = type;
     }
 
     public int getId() {

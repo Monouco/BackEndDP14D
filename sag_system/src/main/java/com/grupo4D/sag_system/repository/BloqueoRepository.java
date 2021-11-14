@@ -23,8 +23,9 @@ public interface BloqueoRepository extends CrudRepository<Bloqueo,Integer> {
             value = "SELECT * FROM bloqueo u WHERE u.activo = 1 " +
                     "and ((fecha_fin >= ?2 and fecha_inicio <= ?1)" +
                     "or (fecha_fin <= ?2 and fecha_fin >= ?1)" +
-                    "or (fecha_inicio <= ?2 and fecha_inicio >= ?1))",
+                    "or (fecha_inicio <= ?2 and fecha_inicio >= ?1)) " +
+                    "and tipo = ?3",
             nativeQuery = true)
-    public ArrayList<Bloqueo> listarBloqueos24Horas(LocalDateTime fechaInicio, LocalDateTime fechaFin);
+    public ArrayList<Bloqueo> listarBloqueos24Horas(LocalDateTime fechaInicio, LocalDateTime fechaFin, int tipo);
 
 }

@@ -209,8 +209,8 @@ public class Mapa {
         }
     }
 
-    public void initializeCurrentRoadBlocks(LocalDateTime startDate, LocalDateTime endDate){
-        ArrayList<Bloqueo> bloqueos = bloqueoRepository.listarBloqueos24Horas(startDate,endDate);
+    public void initializeCurrentRoadBlocks(LocalDateTime startDate, LocalDateTime endDate, int tipo){
+        ArrayList<Bloqueo> bloqueos = bloqueoRepository.listarBloqueos24Horas(startDate,endDate, tipo);
         Roadblock rb;
         int x, y;
         String key;
