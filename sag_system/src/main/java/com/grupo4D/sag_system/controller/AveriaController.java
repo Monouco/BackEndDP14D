@@ -193,9 +193,11 @@ public class AveriaController {
 
         taskExecutor.execute(updating);
 
-        ArrayList<Pedido> pedidos = pedidoService.listarPedidosDisponibles(date, averia.getType());
-
-        algorithmService.asignarPedidos(date,pedidos, averia.getType(), desfase, averia.getMultiplier());
+        //Ocurrian problemas debido a que el algoritmo en simulacion se ejecuta cada 3 segundos
+        if(averia.getType() == 1){
+            ArrayList<Pedido> pedidos = pedidoService.listarPedidosDisponibles(date, averia.getType());
+            algorithmService.asignarPedidos(date,pedidos, averia.getType(), desfase, averia.getMultiplier());
+        }
 
         System.out.println("Terminado de re programar los pedidos de la averia del camion " + averia.getIdCamion()+" del tipo " + averia.getType());
 

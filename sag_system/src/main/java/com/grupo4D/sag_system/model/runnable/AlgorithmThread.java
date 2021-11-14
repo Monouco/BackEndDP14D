@@ -31,6 +31,9 @@ public class AlgorithmThread implements Runnable {
 
     @Autowired
     PedidoRepository pedidoRepository;
+
+    @Autowired
+    PedidoService pedidoService;
     /*
     public AlgorithmThread(int multiplier, LocalDateTime simulationDate, LocalDateTime startDate, int type){
         this.multiplier = multiplier;
@@ -92,7 +95,7 @@ public class AlgorithmThread implements Runnable {
                     break;
                 }
 
-                orders = pedidoRepository.listarPedidosDisponibles(simulationDate, type);
+                orders = pedidoService.listarPedidosDisponibles(simulationDate, type);
 
                 if (!orders.isEmpty()) {
                     //Colapso logistico va aqui
