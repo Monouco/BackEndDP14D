@@ -4,10 +4,13 @@ package com.grupo4D.sag_system.repository;
 
 import com.grupo4D.sag_system.model.NodoXBloqueo;
 import com.grupo4D.sag_system.model.Pedido;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 
@@ -37,6 +40,13 @@ public interface PedidoRepository extends CrudRepository<Pedido,Integer> {
 
     //posible cambio por algo mas eficiente que no requiera entrar a BD por cada pedido
     public Pedido findPedidoByIdAndActivoTrue(int id);
+
+    @Transactional
+    @Modifying
+    @Query(value="call pr_terminar_simulacion( :cur_type)", nativeQuery = true)
+    void terminarSimulacion( @Param("cur_type") int cur_type);
+
+
 
 }
 

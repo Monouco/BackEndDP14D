@@ -153,6 +153,11 @@ public class AlgorithmThread implements Runnable {
         }
 
         System.out.println(LocalDateTime.now(StaticValues.zoneId) + " Terminando la ejecucion del algoritmo tipo " + type );
+
+        //Reiniciamos todo lo utilizado por la simulacion, y lo agregado
+
+        pedidoRepository.terminarSimulacion(type);
+
     }
 
 }
