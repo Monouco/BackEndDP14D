@@ -372,7 +372,7 @@ public class ACSAlgorithm {
 
         pheromoneCur = pheromone[last + numAlmacenes][ordenPedido + numAlmacenes];
 
-        prob = ((double) 2* 1 / tiempoRestante  + pheromoneCur) *(double) 1 / manhattan;
+        prob = ((double) 2 / tiempoRestante + (double) 1 / manhattan + pheromoneCur) *(double) 1 / manhattan * (double)1 / tiempoRestante;
 
         return prob;
     }
@@ -432,7 +432,7 @@ public class ACSAlgorithm {
         //System.out.println(last + " "+ m);
         pheromoneCur = pheromone[last + numAlmacenes][m];
 
-        prob = (double) 1/ manhattan * pheromoneCur;
+        prob = ((double) 1/ manhattan + pheromoneCur) * (double) 1/ manhattan;
 
         return prob;
     }
