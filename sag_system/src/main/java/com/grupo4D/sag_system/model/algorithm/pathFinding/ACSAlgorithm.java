@@ -549,11 +549,11 @@ public class ACSAlgorithm {
 
             //Recordar hacer esto con A*
             if(aStar.getMapa().getRoadBlocks().isEmpty()){
+                System.out.println("Entrando a Manhattan");
                 ruta = manhattanPath(xIni,yIni,xDes,yDes);
             }
             else {
                 ruta = aStar.astar_search(new int[]{xIni, yIni}, new int[]{xDes, yDes}, this.curTime.plusNanos(spentTime));
-                System.out.println("Estado del arreglo : " + aStar.getMapa().getRoadBlocks().keySet().toArray()[0]);
             }
 
             int location = rutaSol.size()-1;
@@ -601,7 +601,13 @@ public class ACSAlgorithm {
         //Posiciones del almacen principal
         xDes = depositos.get(0).getxPos();
         yDes = depositos.get(0).getyPos();
-        ruta = aStar.astar_search(new int[]{xIni, yIni}, new int[]{xDes, yDes}, this.curTime.plusNanos(spentTime));
+        if(aStar.getMapa().getRoadBlocks().isEmpty()){
+            System.out.println("Entrando a Manhattan");
+            ruta = manhattanPath(xIni,yIni,xDes,yDes);
+        }
+        else {
+            ruta = aStar.astar_search(new int[]{xIni, yIni}, new int[]{xDes, yDes}, this.curTime.plusNanos(spentTime));
+        }
         rutaSol.addAll(ruta);
 
         return rutaSol;
