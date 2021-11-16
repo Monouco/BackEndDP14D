@@ -553,7 +553,7 @@ public class ACSAlgorithm {
             }
             else {
                 ruta = aStar.astar_search(new int[]{xIni, yIni}, new int[]{xDes, yDes}, this.curTime.plusNanos(spentTime));
-                System.out.println(aStar.getMapa().getRoadBlocks().keySet().toArray()[0]);
+                System.out.println("Estado del arreglo : " + aStar.getMapa().getRoadBlocks().keySet().toArray()[0]);
             }
 
             int location = rutaSol.size()-1;
