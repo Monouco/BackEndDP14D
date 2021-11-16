@@ -548,10 +548,13 @@ public class ACSAlgorithm {
             spentTime = (long)((tempSize * 1000 / nuVelocity + attentionTime*attended) * nanos);
 
             //Recordar hacer esto con A*
-            if(aStar.getMapa().getRoadBlocks().isEmpty())
+            if(aStar.getMapa().getRoadBlocks().isEmpty()){
                 ruta = manhattanPath(xIni,yIni,xDes,yDes);
-            else
+            }
+            else {
                 ruta = aStar.astar_search(new int[]{xIni, yIni}, new int[]{xDes, yDes}, this.curTime.plusNanos(spentTime));
+                System.out.println(aStar.getMapa().getRoadBlocks().keySet().toArray()[0]);
+            }
 
             int location = rutaSol.size()-1;
 
