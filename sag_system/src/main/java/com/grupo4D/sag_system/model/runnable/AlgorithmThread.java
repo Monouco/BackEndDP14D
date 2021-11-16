@@ -130,9 +130,43 @@ public class AlgorithmThread implements Runnable {
                     if(StaticValues.collapseSimulationFlag && type == 2) break;
                     if(StaticValues.fullCollapseFlag && type == 3) break;
 
-                    ConcurrentValues.updateVal.acquire();
-                    algorithmService.asignarPedidos(simulationDate, orders, type, offset, multiplier);
-                    ConcurrentValues.updateVal.release();
+                    switch (type){
+                        case 1: {
+                            try {
+                                ConcurrentValues.updateVal.acquire();
+                                algorithmService.asignarPedidos(simulationDate, orders, type, offset, multiplier);
+                                ConcurrentValues.updateVal.release();
+                            }
+                            catch (Exception e){
+                                System.out.println(e.getMessage());
+                                ConcurrentValues.updateVal.release();
+                            }
+                            break;
+                        }
+                        case 2: {
+                            try {
+                                ConcurrentValues.updateValSimulation.acquire();
+                                algorithmService.asignarPedidos(simulationDate, orders, type, offset, multiplier);
+                                ConcurrentValues.updateValSimulation.release();
+                            }catch (Exception e){
+                                System.out.println(e.getMessage());
+                                ConcurrentValues.updateValSimulation.release();
+                            }
+                            break;
+                        }
+                        case 3: {
+                            try {
+                                ConcurrentValues.updateValCollapse.acquire();
+                                algorithmService.asignarPedidos(simulationDate, orders, type, offset, multiplier);
+                                ConcurrentValues.updateValCollapse.release();
+                            }catch (Exception e){
+                                System.out.println(e.getMessage());
+                                ConcurrentValues.updateValCollapse.release();
+                            }
+                            break;
+                        }
+                    }
+
                     System.out.println(LocalDateTime.now(StaticValues.zoneId) + " Pedidos atendidos para el tipo " + type);
                 } else {
                     System.out.println("No hubieron pedidos para el tipo " + type + " Tiempo de simulacion " + simulationDate);

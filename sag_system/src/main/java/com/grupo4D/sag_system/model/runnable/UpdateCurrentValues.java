@@ -69,9 +69,44 @@ public class UpdateCurrentValues implements Runnable{
                     break;
                 }
 
-                ConcurrentValues.updateVal.acquire();
-                simulationDate = simulationDate.plusSeconds(sleepTime/1000*multiplier);
-                ConcurrentValues.updateVal.release();
+
+                switch (type){
+                    case 1: {
+                        try {
+                            ConcurrentValues.updateVal.acquire();
+                            simulationDate = simulationDate.plusSeconds(sleepTime/1000*multiplier);
+                            ConcurrentValues.updateVal.release();
+                        }
+                        catch (Exception e){
+                            System.out.println(e.getMessage());
+                            ConcurrentValues.updateVal.release();
+                        }
+                        break;
+                    }
+                    case 2: {
+                        try {
+                            ConcurrentValues.updateValSimulation.acquire();
+                            simulationDate = simulationDate.plusSeconds(sleepTime/1000*multiplier);
+                            ConcurrentValues.updateValSimulation.release();
+                        }catch (Exception e){
+                            System.out.println(e.getMessage());
+                            ConcurrentValues.updateValSimulation.release();
+                        }
+                        break;
+                    }
+                    case 3: {
+                        try {
+                            ConcurrentValues.updateValCollapse.acquire();
+                            simulationDate = simulationDate.plusSeconds(sleepTime/1000*multiplier);
+                            ConcurrentValues.updateValCollapse.release();
+                        }catch (Exception e){
+                            System.out.println(e.getMessage());
+                            ConcurrentValues.updateValCollapse.release();
+                        }
+                        break;
+                    }
+                }
+
 
                 Thread.sleep(sleepTime);
             }
