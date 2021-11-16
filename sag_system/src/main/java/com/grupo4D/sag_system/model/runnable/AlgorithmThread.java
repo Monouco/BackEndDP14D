@@ -133,7 +133,7 @@ public class AlgorithmThread implements Runnable {
                     switch (type){
                         case 1: {
                             try {
-                                ConcurrentValues.updateVal.acquire();
+                                ConcurrentValues.freeUpdateVal.acquire();
                                 algorithmService.asignarPedidos(simulationDate, orders, type, offset, multiplier);
                                 ConcurrentValues.updateVal.release();
                             }
@@ -145,7 +145,7 @@ public class AlgorithmThread implements Runnable {
                         }
                         case 2: {
                             try {
-                                ConcurrentValues.updateValSimulation.acquire();
+                                ConcurrentValues.freeUpdateValSimulation.acquire();
                                 algorithmService.asignarPedidos(simulationDate, orders, type, offset, multiplier);
                                 ConcurrentValues.updateValSimulation.release();
                             }catch (Exception e){
@@ -156,7 +156,7 @@ public class AlgorithmThread implements Runnable {
                         }
                         case 3: {
                             try {
-                                ConcurrentValues.updateValCollapse.acquire();
+                                ConcurrentValues.freeUpdateValCollapse.acquire();
                                 algorithmService.asignarPedidos(simulationDate, orders, type, offset, multiplier);
                                 ConcurrentValues.updateValCollapse.release();
                             }catch (Exception e){
