@@ -1,6 +1,7 @@
 package com.grupo4D.sag_system.model.runnable;
 
 import com.grupo4D.sag_system.model.Pedido;
+import com.grupo4D.sag_system.model.statics.ConcurrentValues;
 import com.grupo4D.sag_system.model.statics.StaticValues;
 import com.grupo4D.sag_system.repository.CamionRepository;
 import org.apache.tomcat.jni.Local;
@@ -68,7 +69,9 @@ public class UpdateCurrentValues implements Runnable{
                     break;
                 }
 
+                ConcurrentValues.updateVal.acquire();
                 simulationDate = simulationDate.plusSeconds(sleepTime/1000*multiplier);
+                ConcurrentValues.updateVal.release();
 
                 Thread.sleep(sleepTime);
             }

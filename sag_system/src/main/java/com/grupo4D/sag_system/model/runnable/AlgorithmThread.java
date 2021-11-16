@@ -2,6 +2,7 @@ package com.grupo4D.sag_system.model.runnable;
 
 import com.grupo4D.sag_system.SagSystemApplication;
 import com.grupo4D.sag_system.model.Pedido;
+import com.grupo4D.sag_system.model.statics.ConcurrentValues;
 import com.grupo4D.sag_system.model.statics.StaticValues;
 import com.grupo4D.sag_system.repository.PedidoRepository;
 import com.grupo4D.sag_system.service.AlgorithmService;
@@ -129,7 +130,9 @@ public class AlgorithmThread implements Runnable {
                     if(StaticValues.collapseSimulationFlag && type == 2) break;
                     if(StaticValues.fullCollapseFlag && type == 3) break;
 
+                    ConcurrentValues.updateVal.acquire();
                     algorithmService.asignarPedidos(simulationDate, orders, type, offset, multiplier);
+                    ConcurrentValues.updateVal.release();
                     System.out.println(LocalDateTime.now(StaticValues.zoneId) + " Pedidos atendidos para el tipo " + type);
                 } else {
                     System.out.println("No hubieron pedidos para el tipo " + type + " Tiempo de simulacion " + simulationDate);
