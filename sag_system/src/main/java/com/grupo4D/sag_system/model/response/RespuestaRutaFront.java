@@ -11,6 +11,7 @@ public class RespuestaRutaFront {
     private double velocity;
     private ArrayList<RespuestaNodoFront> orders;
     private ArrayList<NodoFront> route;
+    private int active = 1;
 
     public RespuestaRutaFront() {
         orders = new ArrayList<>();
@@ -62,6 +63,14 @@ public class RespuestaRutaFront {
 
     public void setRoute(ArrayList<NodoFront> route) {
         this.route = route;
+    }
+
+    public int getActive() {
+        return active;
+    }
+
+    public void setActive(int active) {
+        this.active = active;
     }
 
 }

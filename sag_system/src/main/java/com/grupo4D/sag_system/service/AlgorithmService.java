@@ -154,7 +154,7 @@ public class AlgorithmService {
         //multiplicador de segundos a nano
         long nanos = 1000000000;
         long desfase;
-        int bandera = 0;
+        int bandera = 0, size = camionRepository.tamanoFlota(), curCount = 0;
         RespuestaObtenerRutaFront apiResponse = new RespuestaObtenerRutaFront();
 
 
@@ -167,6 +167,7 @@ public class AlgorithmService {
         //Obtendremos todas las rutas iniciadas
         ArrayList<Ruta> rutasSolucion = rutaRepository.listarRutasDisponibles("Iniciado", tipo);
         if (!rutasSolucion.isEmpty()){
+            curCount++;
             int i,j, atendidos;
             for(i = 0; i < rutasSolucion.size(); i++){
                 desfase = rutasSolucion.get(i).getDesfase();
@@ -222,6 +223,12 @@ public class AlgorithmService {
                 //}
                 //rutasSolucion.get(i).set
             }
+        }
+
+        for(int i =0; i< size-curCount;i++){
+            RespuestaRutaFront fill = new RespuestaRutaFront();
+            fill.setActive(0);
+            respuesta.add(fill);
         }
 
         switch (tipo){

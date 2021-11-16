@@ -59,5 +59,11 @@ public interface CamionRepository extends CrudRepository<Camion,Integer> {
 
     public Camion findCamionById(int id);
 
+    @Query(
+            value = "select count(*) "+
+                    "from camion  ",
+            nativeQuery = true)
+    public int tamanoFlota();
+
 
 }
