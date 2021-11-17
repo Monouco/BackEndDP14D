@@ -52,11 +52,6 @@ public class PedidoService {
         String path = "ventas"+Integer.toString(anio)+Integer.toString(mes)+".txt";
         File arch = new File(path);
         try{
-
-//            if (mes != mesAnt){
-//                writer.close();
-//                writer = new FileWriter(path);
-//            }
             for (int i=1;i<limit;i++){
                 FileWriter writer = new FileWriter(path, true);
                 double formula = a+b*Math.pow(i,n);
@@ -110,36 +105,9 @@ public class PedidoService {
                 writer.close();
             }
 
-
         }catch (IOException ex){
             System.out.println("Error en el archivo de "+path);
         }
-
-
-
-
-        //int
-//        while (f < limit){
-//            for (int i=0;i<f;i++) {
-//                Pedido p = new Pedido();
-//                cantGLP = new Random().nextInt(30);
-//                x = new Random().nextInt(70);
-//                y = new Random().nextInt(50);
-//                Nodo n = new Nodo(x, y);
-//                plazoEntrega = new Random().nextInt(25);
-//                horas = new Random().nextInt(10);
-//                fechaPedido = fecha.getFecha().plusHours(horas);
-//
-//                p.setCantidadGLP(cantGLP);
-//                p.setNodo(n);
-//                p.setPlazoEntrega(plazoEntrega);
-//                p.setFechaPedido(fechaPedido);
-//
-//                pedidoRepository.save(p);
-//            }
-//            exp = exp++;
-//            f= Math.pow(base,exp);
-//        }
     }
 
     public Pedido guardarPedido(Pedido pedido){
