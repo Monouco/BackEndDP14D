@@ -12,6 +12,7 @@ import com.grupo4D.sag_system.model.runnable.AlgorithmThread;
 import com.grupo4D.sag_system.model.runnable.AveriaScheduled;
 import com.grupo4D.sag_system.model.runnable.FillDeposit;
 import com.grupo4D.sag_system.model.runnable.UpdateCurrentValues;
+import com.grupo4D.sag_system.model.statics.OutputLog;
 import com.grupo4D.sag_system.model.statics.StaticValues;
 import com.grupo4D.sag_system.repository.*;
 import org.apache.tomcat.jni.Local;
@@ -20,6 +21,10 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.core.task.TaskExecutor;
 import org.springframework.stereotype.Service;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.lang.reflect.Array;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -575,6 +580,15 @@ public class AlgorithmService {
         StaticValues.virtualDate = fechaInicio.plusMinutes(15);
         StaticValues.simulationType = 2;
         StaticValues.end = fechaFin;
+
+        File log = new File("../logs/simulation/log"+LocalDateTime.now(StaticValues.zoneId)+".txt");
+        FileWriter fileWriter = null;
+        try {
+            fileWriter = new FileWriter(log, true);
+            OutputLog.logDaily = new BufferedWriter(fileWriter);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         UpdateCurrentValues updating = applicationContext.getBean(UpdateCurrentValues.class);
 

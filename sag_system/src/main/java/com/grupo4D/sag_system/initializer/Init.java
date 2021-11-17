@@ -4,6 +4,7 @@ import com.grupo4D.sag_system.SagSystemApplication;
 import com.grupo4D.sag_system.model.runnable.AlgorithmThread;
 import com.grupo4D.sag_system.model.runnable.FillDeposit;
 import com.grupo4D.sag_system.model.runnable.UpdateCurrentValues;
+import com.grupo4D.sag_system.model.statics.OutputLog;
 import com.grupo4D.sag_system.model.statics.StaticValues;
 import org.hibernate.sql.Update;
 import org.springframework.beans.factory.InitializingBean;
@@ -13,6 +14,9 @@ import org.springframework.core.env.Environment;
 import org.springframework.core.task.TaskExecutor;
 import org.springframework.stereotype.Component;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.concurrent.FutureTask;
@@ -37,6 +41,15 @@ public class Init implements InitializingBean {
         StaticValues.virtualDate = LocalDateTime.now(StaticValues.zoneId);
         StaticValues.simulationType = 1;
         StaticValues.end = null;
+
+        File log = new File("../logs/daily/log.txt");
+        try {
+            FileWriter fileWriter = new FileWriter(log, true);
+            OutputLog.logDaily = new BufferedWriter(fileWriter);
+        }
+        catch (Exception e){
+            System.out.println(e.getMessage());
+        }
 
         UpdateCurrentValues updating = applicationContext.getBean(UpdateCurrentValues.class);
 
