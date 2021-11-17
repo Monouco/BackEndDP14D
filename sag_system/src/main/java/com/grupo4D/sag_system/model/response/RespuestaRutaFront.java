@@ -11,6 +11,7 @@ public class RespuestaRutaFront {
     private double velocity;
     private ArrayList<RespuestaNodoFront> orders;
     private ArrayList<NodoFront> route;
+    private int idCamion;
     private int active = 1;
 
     public RespuestaRutaFront() {
@@ -73,4 +74,11 @@ public class RespuestaRutaFront {
         this.active = active;
     }
 
+    public int getIdCamion() {
+        return idCamion;
+    }
+
+    public void setIdCamion(int idCamion) {
+        this.idCamion = idCamion;
+    }
 }

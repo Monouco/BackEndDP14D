@@ -16,7 +16,8 @@ public interface RutaRepository extends CrudRepository<Ruta,Integer> {
     @Query(
             value = "SELECT * FROM ruta u WHERE u.estado_ruta = ?1 " +
                     "and u.activo = 1 " +
-                    "and u.tipo = ?2",
+                    "and u.tipo = ?2 " +
+                    "order by u.id_camion",
             nativeQuery = true)
     public ArrayList<Ruta> listarRutasDisponibles(String estado, int tipo);
 
