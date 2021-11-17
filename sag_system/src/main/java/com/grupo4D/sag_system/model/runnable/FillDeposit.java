@@ -42,9 +42,11 @@ public class FillDeposit implements Runnable{
                     switch (type){
                         case 2: {
                             ConcurrentValues.newSimulationDay.acquire();
+                            System.out.println("Nuevo dia de simulacion "+ type + " ####");
                         }
                         case 3: {
                             ConcurrentValues.newCollapseDay.acquire();
+                            System.out.println("Nuevo dia de simulacion "+ type + " ####");
                         }
                     }
                 }
