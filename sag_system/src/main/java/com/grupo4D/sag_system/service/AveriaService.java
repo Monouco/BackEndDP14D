@@ -46,9 +46,9 @@ public class AveriaService{
             averia.setIdCamion(averiaActual.getCamion().getId());
             Nodo nodoTempo =  averiaActual.getUbicacion();
             NodoFront nodo = new NodoFront();
-            nodo.setX(nodoTempo.getCoordenadaX());
+            /*nodo.setX(nodoTempo.getCoordenadaX());
             nodo.setY(nodoTempo.getCoordenadaY());
-            averia.setNode(nodo);
+            averia.setNode(nodo);*/
             averias.add(averia);
         }
 
