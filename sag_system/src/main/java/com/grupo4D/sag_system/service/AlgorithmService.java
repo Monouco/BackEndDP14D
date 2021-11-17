@@ -198,7 +198,8 @@ public class AlgorithmService {
                 atendidos = 0;
                 j = 0;
                 for(RutaXNodo nodo: nodoRutas){
-                    Nodo nodoCoor = nodoRepository.findNodoById(nodo.getNodo().getId());
+                    //Nodo nodoCoor = nodoRepository.findNodoById(nodo.getNodo().getId());
+                    Nodo nodoCoor = nodo.getNodo();
                     //nodos.add(new int [] {nodoCoor.getCoordenadaX(),nodoCoor.getCoordenadaY(),nodo.getPedido()});
 
                     nodos.add(new NodoFront(nodoCoor.getCoordenadaX(),nodoCoor.getCoordenadaY(),nodo.getPedido()));
