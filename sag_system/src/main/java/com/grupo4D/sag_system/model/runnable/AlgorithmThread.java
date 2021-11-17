@@ -214,9 +214,11 @@ public class AlgorithmThread implements Runnable {
                     System.out.println("No hubieron pedidos para el tipo " + type + " Tiempo de simulacion " + simulationDate);
                     //log.write("No hubieron pedidos para el tipo " + type + " Tiempo de simulacion " + simulationDate + '\n');
                 }
-                this.simulationDate = this.simulationDate.plusSeconds(sleepTime / 1000 * multiplier);
-                this.startDate = this.startDate.plusSeconds(sleepTime/1000);
-                this.offset = this.offset  + sleepTime  * 1000000 * (multiplier - 1);
+                this.simulationDate = (type ==1) ? LocalDateTime.now(StaticValues.zoneId) : this.simulationDate.plusSeconds(sleepTime / 1000 * multiplier);
+                //this.startDate = this.startDate.plusSeconds(sleepTime/1000);
+                this.startDate = LocalDateTime.now(StaticValues.zoneId);
+                //this.offset = this.offset  + sleepTime  * 1000000 * (multiplier - 1);
+                this.offset = ChronoUnit.NANOS.between(startDate,simulationDate);
 
                 //Esto es para que se vuelva a correr el algoritmo
                 try {
