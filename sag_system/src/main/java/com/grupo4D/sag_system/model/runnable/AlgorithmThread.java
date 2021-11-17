@@ -54,6 +54,8 @@ public class AlgorithmThread implements Runnable {
         this.offset = ChronoUnit.NANOS.between(startDate,simulationDate);
         StaticValues.end = null;
 
+        LocalDateTime nextDay = simulationDate.plusDays(1).truncatedTo(ChronoUnit.DAYS);
+
         System.out.println(multiplier);
         //Considerando 10 min
         //long sleepTime = 600000;
@@ -167,8 +169,41 @@ public class AlgorithmThread implements Runnable {
                         }
                     }
 
-                    System.out.println(LocalDateTime.now(StaticValues.zoneId) + " Pedidos atendidos para el tipo " + type);
+                    System.out.println(LocalDateTime.now(StaticValues.zoneId) + " Pedidos atendidos para el tipo " + type + "Tiempo de simulacion " + simulationDate);
                 } else {
+                    switch (type){
+                        case 1: {
+                            try {
+                                ConcurrentValues.freeUpdateVal.acquire();
+                                ConcurrentValues.updateVal.release();
+                            }
+                            catch (Exception e){
+                                System.out.println(e.getMessage());
+                                ConcurrentValues.updateVal.release();
+                            }
+                            break;
+                        }
+                        case 2: {
+                            try {
+                                ConcurrentValues.freeUpdateValSimulation.acquire();
+                                ConcurrentValues.updateValSimulation.release();
+                            }catch (Exception e){
+                                System.out.println(e.getMessage());
+                                ConcurrentValues.updateValSimulation.release();
+                            }
+                            break;
+                        }
+                        case 3: {
+                            try {
+                                ConcurrentValues.freeUpdateValCollapse.acquire();
+                                ConcurrentValues.updateValCollapse.release();
+                            }catch (Exception e){
+                                System.out.println(e.getMessage());
+                                ConcurrentValues.updateValCollapse.release();
+                            }
+                            break;
+                        }
+                    }
                     System.out.println("No hubieron pedidos para el tipo " + type + " Tiempo de simulacion " + simulationDate);
                 }
                 this.simulationDate = this.simulationDate.plusSeconds(sleepTime / 1000 * multiplier);
@@ -181,6 +216,20 @@ public class AlgorithmThread implements Runnable {
                 }
                 catch (InterruptedException e){
                     System.out.println(e.getMessage());
+                }
+
+                if(type != 1) {
+                    if (simulationDate.isAfter(nextDay)) {
+                        switch (type){
+                            case 2: {
+                                ConcurrentValues.newSimulationDay.release();
+                            }
+                            case 3: {
+                                ConcurrentValues.newCollapseDay.release();
+                            }
+                        }
+                        nextDay = simulationDate.plusDays(1).truncatedTo(ChronoUnit.DAYS);
+                    }
                 }
 
             }

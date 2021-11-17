@@ -1,5 +1,6 @@
 package com.grupo4D.sag_system.model.runnable;
 
+import com.grupo4D.sag_system.model.statics.ConcurrentValues;
 import com.grupo4D.sag_system.model.statics.StaticValues;
 import com.grupo4D.sag_system.repository.PlantaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,6 +37,16 @@ public class FillDeposit implements Runnable{
                 }
                 catch (InterruptedException e){
                     System.out.println(e.getMessage());
+                }
+                if(type != 1){
+                    switch (type){
+                        case 2: {
+                            ConcurrentValues.newSimulationDay.acquire();
+                        }
+                        case 3: {
+                            ConcurrentValues.newCollapseDay.acquire();
+                        }
+                    }
                 }
                 plantaRepository.fillDeposit(type);
                 sleepTime = (long)((double)3600000 * 24 / multiplier);
