@@ -42,14 +42,14 @@ public class Init implements InitializingBean {
         StaticValues.simulationType = 1;
         StaticValues.end = null;
 
-        File log = new File("../logs/daily/log.txt");
+        /*File log = new File("../logs/daily/log.txt");
         try {
             FileWriter fileWriter = new FileWriter(log, true);
             OutputLog.logDaily = new BufferedWriter(fileWriter);
         }
         catch (Exception e){
             System.out.println(e.getMessage());
-        }
+        }*/
 
         UpdateCurrentValues updating = applicationContext.getBean(UpdateCurrentValues.class);
 

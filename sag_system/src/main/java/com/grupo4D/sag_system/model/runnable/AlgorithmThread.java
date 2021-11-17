@@ -56,7 +56,7 @@ public class AlgorithmThread implements Runnable {
         this.endDate = StaticValues.end;
         this.type = StaticValues.simulationType;
         this.offset = ChronoUnit.NANOS.between(startDate,simulationDate);
-        this.log = OutputLog.logDaily;
+        //this.log = OutputLog.logDaily;
         StaticValues.end = null;
 
         LocalDateTime nextDay = simulationDate.plusDays(1).truncatedTo(ChronoUnit.DAYS);
@@ -175,7 +175,7 @@ public class AlgorithmThread implements Runnable {
                     }
 
                     System.out.println(LocalDateTime.now(StaticValues.zoneId) + " Pedidos atendidos para el tipo " + type + "Tiempo de simulacion " + simulationDate);
-                    log.write(LocalDateTime.now(StaticValues.zoneId) + " Pedidos atendidos para el tipo " + type + "Tiempo de simulacion " + simulationDate + '\n');
+                    //log.write(LocalDateTime.now(StaticValues.zoneId) + " Pedidos atendidos para el tipo " + type + "Tiempo de simulacion " + simulationDate + '\n');
 
                 } else {
                     switch (type){
@@ -212,7 +212,7 @@ public class AlgorithmThread implements Runnable {
                         }
                     }
                     System.out.println("No hubieron pedidos para el tipo " + type + " Tiempo de simulacion " + simulationDate);
-                    log.write("No hubieron pedidos para el tipo " + type + " Tiempo de simulacion " + simulationDate + '\n');
+                    //log.write("No hubieron pedidos para el tipo " + type + " Tiempo de simulacion " + simulationDate + '\n');
                 }
                 this.simulationDate = this.simulationDate.plusSeconds(sleepTime / 1000 * multiplier);
                 this.startDate = this.startDate.plusSeconds(sleepTime/1000);
@@ -249,11 +249,11 @@ public class AlgorithmThread implements Runnable {
         }
 
         System.out.println(LocalDateTime.now(StaticValues.zoneId) + " Terminando la ejecucion del algoritmo tipo " + type );
-        try {
+        /*try {
             log.write(LocalDateTime.now(StaticValues.zoneId) + " Terminando la ejecucion del algoritmo tipo " + type +'\n');
         } catch (IOException e) {
             e.printStackTrace();
-        }
+        }*/
 
         //Reiniciamos todo lo utilizado por la simulacion, y lo agregado
 

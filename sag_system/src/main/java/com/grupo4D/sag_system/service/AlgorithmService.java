@@ -581,14 +581,14 @@ public class AlgorithmService {
         StaticValues.simulationType = 2;
         StaticValues.end = fechaFin;
 
-        File log = new File("../logs/simulation/log"+LocalDateTime.now(StaticValues.zoneId)+".txt");
+        /*File log = new File("../logs/simulation/log"+LocalDateTime.now(StaticValues.zoneId)+".txt");
         FileWriter fileWriter = null;
         try {
             fileWriter = new FileWriter(log, true);
             OutputLog.logDaily = new BufferedWriter(fileWriter);
         } catch (IOException e) {
             e.printStackTrace();
-        }
+        }*/
 
         UpdateCurrentValues updating = applicationContext.getBean(UpdateCurrentValues.class);
 
