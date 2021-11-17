@@ -110,6 +110,7 @@ public class AveriaController {
 
         //Por ahora para día a día
         ArrayList<Ruta> rutasSolucion = rutaRepository.listarRutasDisponibles("Iniciado", averia.getType()); //sacar todas las rutas con estado iniciado
+        System.out.println("Acaba de obtener las rutas Iniciadas" );
         if (!rutasSolucion.isEmpty()) {
             Ruta rutaCamion = new Ruta();
             for (Ruta r : rutasSolucion) {
@@ -118,63 +119,69 @@ public class AveriaController {
                     break;
                 }
             }
+            if (rutaCamion.getId()!=0) {
+                System.out.println("Hizo match ruta con id camion" );
 
-            //Cambiamos el valor de la rutaCamion a cancelada o averiada
-            rutaCamion.setEstado("Averiada");
-            //restar fecha fin de fecha inicio
-            LocalDateTime f1 = rutaCamion.getFechaInicio();
-            LocalDateTime f2 = rutaCamion.getFechaFin();
-            long tiempo = ChronoUnit.NANOS.between(rutaCamion.getFechaInicio(), rutaCamion.getFechaFin());
+                //Cambiamos el valor de la rutaCamion a cancelada o averiada
+                rutaCamion.setEstado("Averiada");
+                //restar fecha fin de fecha inicio
+                LocalDateTime f1 = rutaCamion.getFechaInicio();
+                LocalDateTime f2 = rutaCamion.getFechaFin();
+                long tiempo = ChronoUnit.NANOS.between(rutaCamion.getFechaInicio(), rutaCamion.getFechaFin());
 
-            //tiempo hasta la averia en nanos
-            long tiempoAveria = ChronoUnit.NANOS.between(rutaCamion.getFechaInicio(), averiaModel.getFechaIncidente());
+                //tiempo hasta la averia en nanos
+                long tiempoAveria = ChronoUnit.NANOS.between(rutaCamion.getFechaInicio(), averiaModel.getFechaIncidente());
 
-            //sacar toda la ruta de ese camion
-            ArrayList<RutaXNodo> rutaXNodos = rutaXNodoRepository.listarRutaXNodosPorRuta(rutaCamion.getId());
+                //sacar toda la ruta de ese camion
+                ArrayList<RutaXNodo> rutaXNodos = rutaXNodoRepository.listarRutaXNodosPorRuta(rutaCamion.getId());
 
-            //contar la cantidad de entregas en la ruta
-            int nEntregas = 0;
-            for (RutaXNodo rn : rutaXNodos) {
-                if (rn.getPedido() >= 0) {
-                    nEntregas++;
+                //contar la cantidad de entregas en la ruta
+                int nEntregas = 0;
+                for (RutaXNodo rn : rutaXNodos) {
+                    if (rn.getPedido() >= 0) {
+                        nEntregas++;
+                    }
                 }
+                System.out.println("Calculo de tiempo sin entregas" );
+                //con la velocidad y el tiempo sacar el nodo en el que estaba el camion
+                long tiempoSinEntregas = tiempo - nEntregas * 600 * nanos; //TODO:cambiar el 600 por 600/velocidad esto en simulacion 3 dias
+                double km = (rutaXNodos.size() - 1); //* 1000;
+                double velocidad = km / tiempoSinEntregas; //velocidad en km/nanoseg
+                double tiempo1Km = (1 / velocidad);
+
+                //buscar el aproximado de la ubicacion por el tiempo
+                double tiempoAproximado = 0;
+                int i, index = rutaXNodos.size() - 1;
+                boolean flag = false;
+                for (i = 0; i < rutaXNodos.size(); i++) {
+                    tiempoAproximado += tiempo1Km;
+                    //Supongo que aca obtiene el valor, por lo que a partir de este nodo, vamos a volver el activo 0 para que no se tomen en cuenta
+                    if (tiempoAproximado > tiempoAveria && !flag) {
+                        index = i;
+                        flag = true;
+                    }
+                    if (flag) {
+                        rutaXNodos.get(i).setActivo(false);
+                    }
+                    if (rutaXNodos.get(i).getPedido() >= 0) {
+                        tiempoAproximado += 600 * nanos;
+                    }
+                    //Esto es que se averia atendiendo a alguien?
+                    if (tiempoAproximado > tiempoAveria && !flag) {
+                        index = i;
+                        flag = true;
+                    }
+                }
+                //registrar el x y y en averia
+                System.out.println("Va a registrar el nodo en la averia" );
+                averiaModel.setUbicacion(rutaXNodos.get(index).getNodo());
+                System.out.println("Registro el nodo: x: "+ rutaXNodos.get(index).getNodo().getCoordenadaX()+" y: "+rutaXNodos.get(index).getNodo().getCoordenadaY());
+                //Guardamos los valores cambiados de la ruta y nodos de la rutaXNodo
+                rutaRepository.save(rutaCamion);
+                rutaXNodoRepository.saveAll(rutaXNodos);
+                //Ahora tenemos que averiar los nodosXAlmacen y nodosXPedidos a partir del nodo donde se quedo
+                rutaRepository.devolverGLP(index, averia.getType(), rutaCamion.getId());
             }
-            //con la velocidad y el tiempo sacar el nodo en el que estaba el camion
-            long tiempoSinEntregas = tiempo - nEntregas * 600 * nanos; //TODO:cambiar el 600 por 600/velocidad esto en simulacion 3 dias
-            double km = (rutaXNodos.size() - 1); //* 1000;
-            double velocidad = km / tiempoSinEntregas; //velocidad en km/nanoseg
-            double tiempo1Km = (1 / velocidad);
-
-            //buscar el aproximado de la ubicacion por el tiempo
-            double tiempoAproximado = 0;
-            int i, index = rutaXNodos.size()-1;
-            boolean flag = false;
-            for (i = 0; i < rutaXNodos.size(); i++) {
-                tiempoAproximado += tiempo1Km;
-                //Supongo que aca obtiene el valor, por lo que a partir de este nodo, vamos a volver el activo 0 para que no se tomen en cuenta
-                if (tiempoAproximado > tiempoAveria && !flag){
-                    index = i;
-                    flag = true;
-                }
-                if(flag){
-                    rutaXNodos.get(i).setActivo(false);
-                }
-                if (rutaXNodos.get(i).getPedido() >= 0) {
-                    tiempoAproximado += 600 * nanos;
-                }
-                //Esto es que se averia atendiendo a alguien?
-                if (tiempoAproximado > tiempoAveria && !flag) {
-                    index = i;
-                    flag = true;
-                }
-            }
-            //registrar el x y y en averia
-            averiaModel.setUbicacion(rutaXNodos.get(index).getNodo());
-            //Guardamos los valores cambiados de la ruta y nodos de la rutaXNodo
-            rutaRepository.save(rutaCamion);
-            rutaXNodoRepository.saveAll(rutaXNodos);
-            //Ahora tenemos que averiar los nodosXAlmacen y nodosXPedidos a partir del nodo donde se quedo
-            rutaRepository.devolverGLP(index, averia.getType(), rutaCamion.getId());
         }
 
         Mantenimiento mRespuesta = mantenimientoService.guardarMantenimientoNuevo(m);
