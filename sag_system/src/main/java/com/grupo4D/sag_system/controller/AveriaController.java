@@ -104,6 +104,7 @@ public class AveriaController {
         m.setFechaEntrada(date.plusHours(1));
         m.setFechaSalida(date.plusHours(49));
         m.setTipo("Correctivo");
+        m.setTipoSimulacion(averia.getType());
 
         //long wholeRouteTime = (long)((tiempoAtencion/velocidad*atendidos + (j*1000)/velocity)*nanos);
 
