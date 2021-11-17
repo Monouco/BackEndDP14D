@@ -1,8 +1,10 @@
 package com.grupo4D.sag_system.controller;
 
 
+import com.grupo4D.sag_system.model.Fecha;
 import com.grupo4D.sag_system.model.Nodo;
 import com.grupo4D.sag_system.model.Pedido;
+import com.grupo4D.sag_system.model.request.FechaFront;
 import com.grupo4D.sag_system.model.request.PedidoFront;
 import com.grupo4D.sag_system.service.PedidoService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,4 +59,11 @@ public class PedidoController {
     public ArrayList<Pedido> listarTempPedido (){
         return pedidoService.listarPedidosTemp();
     }
+
+    @PostMapping("/generarPedidosColapso")
+    public void generarPedidosColapso (@RequestBody FechaFront fecha){
+        pedidoService.generarPedidosColapso(fecha);
+    }
+
+
 }
