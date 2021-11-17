@@ -553,7 +553,7 @@ public class ACSAlgorithm {
                 ruta = manhattanPath(xIni,yIni,xDes,yDes);
             }
             else {
-                ruta = aStar.astar_search(new int[]{xIni, yIni}, new int[]{xDes, yDes}, this.curTime.plusNanos(spentTime));
+                ruta = aStar.astar_search(new int[]{xIni, yIni}, new int[]{xDes, yDes}, this.curTime.plusNanos(spentTime), 0);
             }
 
             int location = rutaSol.size()-1;
@@ -606,7 +606,7 @@ public class ACSAlgorithm {
             ruta = manhattanPath(xIni,yIni,xDes,yDes);
         }
         else {
-            ruta = aStar.astar_search(new int[]{xIni, yIni}, new int[]{xDes, yDes}, this.curTime.plusNanos(spentTime));
+            ruta = aStar.astar_search(new int[]{xIni, yIni}, new int[]{xDes, yDes}, this.curTime.plusNanos(spentTime), 0);
         }
         rutaSol.addAll(ruta);
 
