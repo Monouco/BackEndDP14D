@@ -3,6 +3,7 @@ package com.grupo4D.sag_system.model.runnable;
 import com.grupo4D.sag_system.SagSystemApplication;
 import com.grupo4D.sag_system.model.Pedido;
 import com.grupo4D.sag_system.model.statics.ConcurrentValues;
+import com.grupo4D.sag_system.model.statics.OutputLog;
 import com.grupo4D.sag_system.model.statics.StaticValues;
 import com.grupo4D.sag_system.repository.PedidoRepository;
 import com.grupo4D.sag_system.service.AlgorithmService;
@@ -12,6 +13,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import java.io.BufferedWriter;
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
@@ -24,6 +27,7 @@ public class AlgorithmThread implements Runnable {
     private LocalDateTime simulationDate;
     private LocalDateTime startDate;
     private LocalDateTime endDate;
+    private BufferedWriter log;
     private int type;
     private long offset;
 
@@ -52,6 +56,7 @@ public class AlgorithmThread implements Runnable {
         this.endDate = StaticValues.end;
         this.type = StaticValues.simulationType;
         this.offset = ChronoUnit.NANOS.between(startDate,simulationDate);
+        this.log = OutputLog.logDaily;
         StaticValues.end = null;
 
         LocalDateTime nextDay = simulationDate.plusDays(1).truncatedTo(ChronoUnit.DAYS);
@@ -170,6 +175,8 @@ public class AlgorithmThread implements Runnable {
                     }
 
                     System.out.println(LocalDateTime.now(StaticValues.zoneId) + " Pedidos atendidos para el tipo " + type + "Tiempo de simulacion " + simulationDate);
+                    log.write(LocalDateTime.now(StaticValues.zoneId) + " Pedidos atendidos para el tipo " + type + "Tiempo de simulacion " + simulationDate + '\n');
+
                 } else {
                     switch (type){
                         case 1: {
@@ -205,6 +212,7 @@ public class AlgorithmThread implements Runnable {
                         }
                     }
                     System.out.println("No hubieron pedidos para el tipo " + type + " Tiempo de simulacion " + simulationDate);
+                    log.write("No hubieron pedidos para el tipo " + type + " Tiempo de simulacion " + simulationDate + '\n');
                 }
                 this.simulationDate = this.simulationDate.plusSeconds(sleepTime / 1000 * multiplier);
                 this.startDate = this.startDate.plusSeconds(sleepTime/1000);
@@ -223,9 +231,11 @@ public class AlgorithmThread implements Runnable {
                         switch (type){
                             case 2: {
                                 ConcurrentValues.newSimulationDay.release();
+                                break;
                             }
                             case 3: {
                                 ConcurrentValues.newCollapseDay.release();
+                                break;
                             }
                         }
                         nextDay = simulationDate.plusDays(1).truncatedTo(ChronoUnit.DAYS);
@@ -239,6 +249,11 @@ public class AlgorithmThread implements Runnable {
         }
 
         System.out.println(LocalDateTime.now(StaticValues.zoneId) + " Terminando la ejecucion del algoritmo tipo " + type );
+        try {
+            log.write(LocalDateTime.now(StaticValues.zoneId) + " Terminando la ejecucion del algoritmo tipo " + type +'\n');
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         //Reiniciamos todo lo utilizado por la simulacion, y lo agregado
 
