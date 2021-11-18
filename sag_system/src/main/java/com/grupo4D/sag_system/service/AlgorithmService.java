@@ -29,6 +29,8 @@ import java.lang.reflect.Array;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 @Service
 public class AlgorithmService {
@@ -161,10 +163,16 @@ public class AlgorithmService {
         long desfase;
         int bandera = 0, size = camionRepository.tamanoFlota(), curCount = 0;
         RespuestaObtenerRutaFront apiResponse = new RespuestaObtenerRutaFront();
-
+        ArrayList<Integer> camiones = camionRepository.obtenerIds();
+        HashMap<Integer,Integer> camionesList = new HashMap<>();
+        for (int val:
+             camiones) {
+            camionesList.put(val, 0);
+        }
 
         //arreglo para pasar a front
         ArrayList<RespuestaRutaFront> respuesta = new ArrayList<>();
+        ArrayList<RespuestaRutaFront> respuestaTemp = new ArrayList<>();
 
         //arreglo con la solucion de toda la flota
         ArrayList<RutaFront> solucion = new ArrayList<>();
@@ -224,17 +232,36 @@ public class AlgorithmService {
                 long wholeRouteTime = (long)((tiempoAtencion/velocidad*atendidos + (j*1000)/velocity)*nanos);
 
                 nodoRRF.setEndDate(nodoRRF.getStartDate().plusNanos(wholeRouteTime));
+                nodoRRF.setIdCamion(rutasSolucion.get(i).getCamion().getId());
+
+                camionesList.put(nodoRRF.getIdCamion(),1);
 
                 //if(nodoRRF.getOrders().size()>0){
-                    respuesta.add(nodoRRF);
+                respuestaTemp.add(nodoRRF);
                 //}
                 //rutasSolucion.get(i).set
             }
         }
 
-        for(int i =0; i< size-curCount;i++){
+        /*for(int i =0; i< size;i++){
             RespuestaRutaFront fill = new RespuestaRutaFront();
             fill.setActive(0);
+            respuesta.add(fill);
+        }*/
+
+        int i = 0;
+        RespuestaRutaFront fill;
+        for (Map.Entry<Integer, Integer> entry : camionesList.entrySet()) {
+            int key = entry.getKey();
+            int val = entry.getValue();
+            if(val == 1){
+                fill = respuestaTemp.get(i);
+                i++;
+            }else{
+                fill = new RespuestaRutaFront();
+                fill.setActive(0);
+                fill.setIdCamion(key);
+            }
             respuesta.add(fill);
         }
 

@@ -36,39 +36,39 @@ public class Node {
         return parent;
     }
 
-    public ArrayList<Node> expand(AstarSearch astar, double nuVelocity, LocalDateTime startDate){
+    public ArrayList<Node> expand(AstarSearch astar, double nuVelocity, LocalDateTime startDate, int inc){
         Mapa mapa = astar.getMapa();
         ArrayList<Node> children = new ArrayList<>();
         int x_pos = state[0];
         int y_pos = state[1];
         long nanos = 1000000000;
         long spentTime;
-        spentTime = (long)(((this.timeStep + 1) * 1000 / nuVelocity) * nanos);
+        spentTime = (long)(((this.timeStep + inc) * 1000 / nuVelocity) * nanos);
         LocalDateTime dateTemp = startDate.plusNanos(spentTime);
         System.out.println("Expandiendo el nodo " + x_pos + "," + y_pos + " en el tiempo " + timeStep + " con costo " + path_cost);
         //Izquierda
         if(x_pos - 1 >= 0){
             children.add(new Node(x_pos-1,y_pos,this,
                     astar.cost_function(new int[]{x_pos-1,y_pos}, path_cost, dateTemp),
-                    this.timeStep+1));
+                    this.timeStep+inc));
         }
         //Derecha
         if(x_pos + 1 < mapa.getWidth()){
             children.add(new Node(x_pos+1,y_pos,this,
                     astar.cost_function(new int[]{x_pos+1,y_pos}, path_cost, dateTemp),
-                    this.timeStep+1));
+                    this.timeStep+inc));
         }
         //Arriba
         if(y_pos - 1 >= 0){
             children.add(new Node(x_pos,y_pos-1,this,
                     astar.cost_function(new int[]{x_pos,y_pos-1}, path_cost, dateTemp),
-                    this.timeStep+1));
+                    this.timeStep+inc));
         }
         //Abajo
         if(y_pos + 1 < mapa.getHeight()){
             children.add(new Node(x_pos,y_pos+1,this,
                     astar.cost_function(new int[]{x_pos,y_pos+1}, path_cost, dateTemp),
-                    this.timeStep+1));
+                    this.timeStep+inc));
         }
 
         return children;

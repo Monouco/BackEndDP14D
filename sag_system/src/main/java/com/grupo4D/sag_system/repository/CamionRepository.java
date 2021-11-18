@@ -65,5 +65,13 @@ public interface CamionRepository extends CrudRepository<Camion,Integer> {
             nativeQuery = true)
     public int tamanoFlota();
 
+    @Query(
+            value = "select id_camion "+
+                    "from camion " +
+                    "where activo = 1 " +
+                    "order by id_camion asc",
+            nativeQuery = true)
+    public ArrayList<Integer> obtenerIds();
+
 
 }

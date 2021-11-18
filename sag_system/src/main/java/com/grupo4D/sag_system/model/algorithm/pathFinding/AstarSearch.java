@@ -25,7 +25,7 @@ public class AstarSearch {
         return mapa;
     }
 
-    public ArrayList<int []> astar_search(int[] start, int[]goal, LocalDateTime startDate){
+    public ArrayList<int []> astar_search(int[] start, int[]goal, LocalDateTime startDate, int inc){
         this.destination = goal;
         Frontier frontier = new Frontier(new Node(start[0], start[1], null, 0, 0));
         ArrayList<int []> explored = new ArrayList<>();
@@ -43,7 +43,7 @@ public class AstarSearch {
             //El nodo ya fue explorado
             explored.add(new int[] {n.getState()[0],n.getState()[1],n.getTimeStep()});
             //explored.add(new int[] {n.getState()[0],n.getState()[1]});
-            children = n.expand(this, this.velocity, startDate);
+            children = n.expand(this, this.velocity, startDate, inc);
             for(Node child: children){
                 auxChildState =new int[] {child.getState()[0], child.getState()[1],child.getTimeStep()};
                 //auxChildState =new int[] {child.getState()[0], child.getState()[1]};
