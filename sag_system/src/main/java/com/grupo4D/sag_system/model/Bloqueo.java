@@ -25,6 +25,9 @@ public class Bloqueo {
     @Column(name="fechaFin")
     private LocalDateTime fechaFin;
 
+    @Column(name="desfase")
+    private long desfase;
+
     @ManyToOne @JoinColumn(name="idNodo")
     private Nodo nodo;
 
@@ -83,4 +86,11 @@ public class Bloqueo {
         this.tipo = tipo;
     }
 
+    public long getDesfase() {
+        return desfase;
+    }
+
+    public void setDesfase(long desfase) {
+        this.desfase = desfase;
+    }
 }
