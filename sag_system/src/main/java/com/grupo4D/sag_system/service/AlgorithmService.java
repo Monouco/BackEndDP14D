@@ -71,7 +71,7 @@ public class AlgorithmService {
     public ArrayList<CamionHRFront> obtenerHojaDeRuta(TipoSimulacionFront t){
         ArrayList<CamionHRFront> hojaDeRuta = new ArrayList<>();
         //Se busca los camiones en ruta
-        ArrayList<Camion> camionesEnRuta = camionRepository.findCamionsByEstadoAndActivoTrue("En ruta");
+        ArrayList<Camion> camionesEnRuta = camionRepository.listarCamionesTipo("En Ruta",t.getTipo());
 //        for (int l=0;l<camionesEnRuta.size();l++){
 //            System.out.print(camionesEnRuta.get(l).getId()+"\n");
 //        }
@@ -433,6 +433,7 @@ public class AlgorithmService {
                 rutaXNodo.setNodo(nodo);
                 rutaXNodo.setRuta(ruta);
                 rutaXNodo.setSecuencia(k);
+
                 //rutaXNodoRepository.save(rutaXNodo);
 
                 //respuesta para el front
