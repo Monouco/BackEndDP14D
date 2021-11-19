@@ -37,7 +37,7 @@ public class BloqueoService{
     }
 
     public ArrayList<BloqueosFront> listarBloqueos(int type, double velocidad) {
-        ArrayList<Bloqueo> bloqueos = camionRepository.listarBloqueosActuales(LocalDateTime.now(StaticValues.zoneId), type);
+        ArrayList<Bloqueo> bloqueos = camionRepository.listarBloqueosActuales(LocalDateTime.now(StaticValues.zoneId), type, velocidad);
         ArrayList<BloqueosFront> response = new ArrayList<>();
         int i;
         for(i = 0; bloqueos.size()> i; i++){
@@ -49,7 +49,8 @@ public class BloqueoService{
             for (NodoXBloqueo nodoBloqueo:
                  nodoBloqueados) {
 
-                nodos.add(new NodoFront(nodoRepository.findNodoById(nodoBloqueo.getNodo().getId())));
+                //nodos.add(new NodoFront(nodoRepository.findNodoById(nodoBloqueo.getNodo().getId())));
+                nodos.add(new NodoFront(nodoBloqueo.getNodo()));
             }
 
             bloqueoFront.setId(bloqueo.getId());

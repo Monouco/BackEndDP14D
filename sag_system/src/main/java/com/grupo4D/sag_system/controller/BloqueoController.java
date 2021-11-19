@@ -33,7 +33,7 @@ public class BloqueoController {
     }
 
     @PostMapping("/listarBloqueos")
-    public List<BloqueosFront> listarBloqueos(Fecha obj){
+    public List<BloqueosFront> listarBloqueos(@RequestBody Fecha obj){
         return bloqueoService.listarBloqueos(obj.getTipo(), obj.getVelocidad());
     }
 
