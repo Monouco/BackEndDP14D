@@ -34,6 +34,9 @@ public class Bloqueo {
     @Column(name = "tipo")
     private int tipo;
 
+    @Column(name="duracion")
+    private long duracion;
+
     @Column(name="activo")
     private boolean activo = true;
 
@@ -93,4 +96,13 @@ public class Bloqueo {
     public void setDesfase(long desfase) {
         this.desfase = desfase;
     }
+
+    public long getDuracion() {
+        return duracion;
+    }
+
+    public void setDuracion(long duracion) {
+        this.duracion = duracion;
+    }
+
 }

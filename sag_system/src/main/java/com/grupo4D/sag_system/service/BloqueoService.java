@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.lang.reflect.Array;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 
 @Service
@@ -55,7 +56,7 @@ public class BloqueoService{
 
             bloqueoFront.setId(bloqueo.getId());
             bloqueoFront.setStartDate(bloqueo.getFechaInicio().minusNanos(bloqueo.getDesfase()));
-            bloqueoFront.setEndDate(bloqueo.getFechaFin().minusNanos(bloqueo.getDesfase()));
+            bloqueoFront.setEndDate(bloqueo.getFechaInicio().minusNanos((long)(bloqueo.getDesfase() + bloqueo.getDuracion()/velocidad)));
             bloqueoFront.setPath(nodos);
 
             response.add(bloqueoFront);
@@ -73,6 +74,7 @@ public class BloqueoService{
             Bloqueo bloqueo = new Bloqueo();
             bloqueo.setFechaInicio(bloqueoFront.getStartDate());
             bloqueo.setFechaFin(bloqueoFront.getEndDate());
+            bloqueo.setDuracion(ChronoUnit.NANOS.between(bloqueoFront.getEndDate(),bloqueoFront.getStartDate()));
             bloqueo.setActivo(true);
             bloqueo.setTipo(bloqueoFront.getType());
             //camionRepository.save(bloqueo);
