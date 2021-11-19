@@ -56,7 +56,7 @@ public class BloqueoService{
 
             bloqueoFront.setId(bloqueo.getId());
             bloqueoFront.setStartDate(bloqueo.getFechaInicio().minusNanos(bloqueo.getDesfase()));
-            bloqueoFront.setEndDate(bloqueo.getFechaInicio().minusNanos(bloqueo.getDesfase()));
+            bloqueoFront.setEndDate(bloqueo.getFechaFin().minusNanos(bloqueo.getDesfase()));
             bloqueoFront.setPath(nodos);
 
             response.add(bloqueoFront);
