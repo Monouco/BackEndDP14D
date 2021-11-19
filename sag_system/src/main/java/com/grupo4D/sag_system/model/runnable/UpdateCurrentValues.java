@@ -75,7 +75,6 @@ public class UpdateCurrentValues implements Runnable{
                         try {
                             ConcurrentValues.freeUpdateVal.release();
                             ConcurrentValues.updateVal.acquire();
-                            simulationDate = simulationDate.plusSeconds(sleepTime/1000*multiplier);
                         }
                         catch (Exception e){
                             System.out.println(e.getMessage());
@@ -86,7 +85,6 @@ public class UpdateCurrentValues implements Runnable{
                         try {
                             ConcurrentValues.freeUpdateValSimulation.release();
                             ConcurrentValues.updateValSimulation.acquire();
-                            simulationDate = simulationDate.plusSeconds(sleepTime/1000*multiplier);
                         }catch (Exception e){
                             System.out.println(e.getMessage());
                         }
@@ -96,13 +94,14 @@ public class UpdateCurrentValues implements Runnable{
                         try {
                             ConcurrentValues.freeUpdateValCollapse.release();
                             ConcurrentValues.updateValCollapse.acquire();
-                            simulationDate = simulationDate.plusSeconds(sleepTime/1000*multiplier);
                         }catch (Exception e){
                             System.out.println(e.getMessage());
                         }
                         break;
                     }
                 }
+
+                simulationDate = simulationDate.plusSeconds(sleepTime/1000*multiplier);
 
 
                 Thread.sleep(sleepTime);
