@@ -5,6 +5,7 @@ import com.grupo4D.sag_system.model.Nodo;
 import com.grupo4D.sag_system.model.NodoXBloqueo;
 import com.grupo4D.sag_system.model.response.BloqueosFront;
 import com.grupo4D.sag_system.model.response.NodoFront;
+import com.grupo4D.sag_system.model.statics.StaticValues;
 import com.grupo4D.sag_system.repository.BloqueoRepository;
 import com.grupo4D.sag_system.repository.NodoRepository;
 import com.grupo4D.sag_system.repository.NodoXBloqueoRepository;
@@ -36,7 +37,7 @@ public class BloqueoService{
     }
 
     public ArrayList<BloqueosFront> listarBloqueos(int type, double velocidad) {
-        ArrayList<Bloqueo> bloqueos = camionRepository.listarBloqueosActuales(LocalDateTime.now());
+        ArrayList<Bloqueo> bloqueos = camionRepository.listarBloqueosActuales(LocalDateTime.now(StaticValues.zoneId), type);
         ArrayList<BloqueosFront> response = new ArrayList<>();
         int i;
         for(i = 0; bloqueos.size()> i; i++){

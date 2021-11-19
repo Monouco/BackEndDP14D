@@ -14,10 +14,11 @@ public interface BloqueoRepository extends CrudRepository<Bloqueo,Integer> {
 
     @Query(
             value = "SELECT * FROM bloqueo u WHERE u.activo = 1 " +
-                    "and fecha_fin >= ?1 " +
-                    "and fecha_inicio <= ?1",
+                    "and DATE_ADD(fecha_fin, INTERVAL -1 * desfase / 1000 MICROSECOND) >= ?1 " +
+                    "and DATE_ADD(fecha_inicio, INTERVAL -1 * desfase / 1000 MICROSECOND) <= ?1 " +
+                    "and tipo = ?2 ",
             nativeQuery = true)
-    public ArrayList<Bloqueo> listarBloqueosActuales(LocalDateTime fecha);
+    public ArrayList<Bloqueo> listarBloqueosActuales(LocalDateTime fecha, int tipo);
 
     @Query(
             value = "SELECT * FROM bloqueo u WHERE u.activo = 1 " +
