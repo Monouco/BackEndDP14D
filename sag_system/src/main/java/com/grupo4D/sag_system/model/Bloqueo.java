@@ -37,6 +37,9 @@ public class Bloqueo {
     @Column(name="duracion")
     private long duracion;
 
+    @Column(name="vigente")
+    private boolean vigente;
+
     @Column(name="activo")
     private boolean activo = true;
 
@@ -103,6 +106,14 @@ public class Bloqueo {
 
     public void setDuracion(long duracion) {
         this.duracion = duracion;
+    }
+
+    public boolean isVigente() {
+        return vigente;
+    }
+
+    public void setVigente(boolean vigente) {
+        this.vigente = vigente;
     }
 
 }

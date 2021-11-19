@@ -76,6 +76,7 @@ public class BloqueoService{
             bloqueo.setFechaFin(bloqueoFront.getEndDate());
             bloqueo.setDuracion(ChronoUnit.NANOS.between(bloqueoFront.getStartDate(),bloqueoFront.getEndDate()));
             bloqueo.setActivo(true);
+            bloqueo.setVigente(true);
             bloqueo.setTipo(bloqueoFront.getType());
             //camionRepository.save(bloqueo);
 
