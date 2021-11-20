@@ -40,6 +40,9 @@ public class Bloqueo {
     @Column(name="vigente")
     private boolean vigente;
 
+    @Column(name="tiempoEspera")
+    private long tiempoEspera;
+
     @Column(name="activo")
     private boolean activo = true;
 
@@ -116,4 +119,11 @@ public class Bloqueo {
         this.vigente = vigente;
     }
 
+    public long getTiempoEspera() {
+        return tiempoEspera;
+    }
+
+    public void setTiempoEspera(long tiempoEspera) {
+        this.tiempoEspera = tiempoEspera;
+    }
 }
