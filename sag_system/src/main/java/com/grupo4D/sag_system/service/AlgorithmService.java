@@ -636,5 +636,58 @@ public class AlgorithmService {
 
     }
 
+    public ArrayList<Pedido> asignarPedidosColapso(/*Fecha fecha, */ArrayList<Pedido> pedidos, int multiplier){
+        LocalDateTime fechaInicio = pedidos.get(0).getFechaPedido(), fechaTemp;
+        LocalDateTime fechaFin = fechaInicio;
+        int i;
+        for(i = 0; i<pedidos.size();i++){
+            pedidos.get(i).setEstadoPedido("Nuevo");
+            Nodo nodo = nodoRepository.findIdNodoByCoordenadaXAndCoordenadaYAndActivoTrue(pedidos.get(i).getNodo().getCoordenadaX(),
+                    pedidos.get(i).getNodo().getCoordenadaY());
+            pedidos.get(i).getNodo().setId(nodo.getId());
+            pedidos.get(i).setTipo(3);  //2 es simulacion 3 dias
+            fechaTemp = pedidos.get(i).getFechaPedido();
+            pedidos.get(i).setFechaLimite(fechaTemp.plusHours(pedidos.get(i).getPlazoEntrega()));
+            if(fechaTemp.isBefore(fechaInicio))
+                fechaInicio = fechaTemp;
+            if(pedidos.get(i).getFechaLimite().isAfter(fechaFin))
+                fechaFin = pedidos.get(i).getFechaLimite();
+        }
+        pedidoRepository.saveAll(pedidos);
+
+        //ArrayList<Pedido> pedidosActuales = pedidoRepository.listarPedidosDisponibles(fechaInicio, 2);
+
+        //Creamos un thread para el algoritmo
+        StaticValues.mult = multiplier;
+        StaticValues.start = LocalDateTime.now(StaticValues.zoneId);
+        StaticValues.virtualDate = fechaInicio.truncatedTo(ChronoUnit.DAYS);
+        StaticValues.simulationType = 3;
+        StaticValues.end = fechaFin;
+
+        /*File log = new File("../logs/simulation/log"+LocalDateTime.now(StaticValues.zoneId)+".txt");
+        FileWriter fileWriter = null;
+        try {
+            fileWriter = new FileWriter(log, true);
+            OutputLog.logDaily = new BufferedWriter(fileWriter);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }*/
+
+        UpdateCurrentValues updating = applicationContext.getBean(UpdateCurrentValues.class);
+
+        taskExecutor.execute(updating);
+
+        FillDeposit fillDeposit = applicationContext.getBean(FillDeposit.class);
+
+        taskExecutor.execute(fillDeposit);
+
+        AlgorithmThread algorithm = applicationContext.getBean(AlgorithmThread.class);
+
+        taskExecutor.execute(algorithm);
+
+        return pedidos;
+
+    }
+
 
 }
