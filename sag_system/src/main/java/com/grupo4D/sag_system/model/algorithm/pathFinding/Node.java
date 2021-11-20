@@ -45,7 +45,7 @@ public class Node {
         long spentTime;
         spentTime = (long)(((this.timeStep + inc) * 1000 / nuVelocity) * nanos);
         LocalDateTime dateTemp = startDate.plusNanos(spentTime);
-        System.out.println("Expandiendo el nodo " + x_pos + "," + y_pos + " en el tiempo " + timeStep + " con costo " + path_cost);
+        //System.out.println("Expandiendo el nodo " + x_pos + "," + y_pos + " en el tiempo " + timeStep + " con costo " + path_cost);
         //Izquierda
         if(x_pos - 1 >= 0){
             children.add(new Node(x_pos-1,y_pos,this,
