@@ -32,24 +32,30 @@ public class FillDeposit implements Runnable{
         long sleepTime = (long)((double)ChronoUnit.MILLIS.between(startDate, startDate.plusDays(1).truncatedTo(ChronoUnit.DAYS))/multiplier);
         try {
             while (true) {
-                try {
-                    Thread.sleep(sleepTime);
-                }
-                catch (InterruptedException e){
-                    System.out.println(e.getMessage());
-                }
                 if(type != 1){
                     switch (type){
                         case 2: {
                             ConcurrentValues.newSimulationDay.acquire();
+                            if(StaticValues.comEndSimFlag)
+                                return;
                             System.out.println("Nuevo dia de simulacion "+ type + " ####");
                             break;
                         }
                         case 3: {
                             ConcurrentValues.newCollapseDay.acquire();
+                            if(StaticValues.comEndCollapseFlag)
+                                return;
                             System.out.println("Nuevo dia de simulacion "+ type + " ####");
                             break;
                         }
+                    }
+                }
+                else{
+                    try {
+                        Thread.sleep(sleepTime);
+                    }
+                    catch (InterruptedException e){
+                        System.out.println(e.getMessage());
                     }
                 }
                 plantaRepository.fillDeposit(type);

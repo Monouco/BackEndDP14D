@@ -28,6 +28,7 @@ import java.io.IOException;
 import java.lang.reflect.Array;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -596,8 +597,8 @@ public class AlgorithmService {
             pedidos.get(i).setFechaLimite(fechaTemp.plusHours(pedidos.get(i).getPlazoEntrega()));
             if(fechaTemp.isBefore(fechaInicio))
                 fechaInicio = fechaTemp;
-            if(fechaTemp.isAfter(fechaFin))
-                fechaFin = fechaTemp;
+            if(pedidos.get(i).getFechaLimite().isAfter(fechaFin))
+                fechaFin = pedidos.get(i).getFechaLimite();
         }
         pedidoRepository.saveAll(pedidos);
 
@@ -606,7 +607,7 @@ public class AlgorithmService {
         //Creamos un thread para el algoritmo
         StaticValues.mult = multiplier;
         StaticValues.start = LocalDateTime.now(StaticValues.zoneId);
-        StaticValues.virtualDate = fechaInicio.plusMinutes(15);
+        StaticValues.virtualDate = fechaInicio.truncatedTo(ChronoUnit.DAYS);
         StaticValues.simulationType = 2;
         StaticValues.end = fechaFin;
 
