@@ -14,8 +14,8 @@ public interface BloqueoRepository extends CrudRepository<Bloqueo,Integer> {
 
     @Query(
             value = "SELECT * FROM bloqueo u WHERE u.activo = 1 " +
-                    "and DATE_ADD(fecha_inicio, INTERVAL (-1 * desfase + tiempo_espera * (1+1/?3))/ 1000 MICROSECOND) <= ?1 " +
-                    "and DATE_ADD(fecha_inicio, INTERVAL (-1 * desfase + tiempo_espera * (1+1/?3) + duracion/?3)/ 1000 MICROSECOND) >= ?1 " +
+                    "and DATE_ADD(fecha_inicio, INTERVAL (-1 * desfase )/ 1000 + tiempo_espera * (1+1/?3)MICROSECOND) <= ?1 " +
+                    "and DATE_ADD(fecha_inicio, INTERVAL (-1 * desfase + duracion/?3)/ 1000 + tiempo_espera * (1+1/?3)  MICROSECOND) >= ?1 " +
                     //"and DATE_ADD(fecha_inicio, INTERVAL (-1 * desfase + duracion/?3)/ 1000 MICROSECOND) >= ?1 " +
                     "and tipo = ?2 " +
                     "and vigente = 1",
