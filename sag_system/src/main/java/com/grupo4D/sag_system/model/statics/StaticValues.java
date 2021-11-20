@@ -18,5 +18,7 @@ public class StaticValues {
     public static boolean comCollapseFlag;
     public static boolean comSimCollapseFlag;
     public static boolean comFullCollapseFlag;
+    public static boolean comEndSimFlag;
+    public static boolean comEndCollapseFlag;
     public static int numCamion;
 }

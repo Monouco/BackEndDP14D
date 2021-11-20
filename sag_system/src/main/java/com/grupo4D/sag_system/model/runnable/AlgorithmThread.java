@@ -250,6 +250,17 @@ public class AlgorithmThread implements Runnable {
             System.out.println(e.getMessage());
         }
 
+        switch (type){
+            case 2: {
+                ConcurrentValues.newSimulationDay.release();
+                break;
+            }
+            case 3: {
+                ConcurrentValues.newCollapseDay.release();
+                break;
+            }
+        }
+
         System.out.println(LocalDateTime.now(StaticValues.zoneId) + " Terminando la ejecucion del algoritmo tipo " + type );
         /*try {
             log.write(LocalDateTime.now(StaticValues.zoneId) + " Terminando la ejecucion del algoritmo tipo " + type +'\n');

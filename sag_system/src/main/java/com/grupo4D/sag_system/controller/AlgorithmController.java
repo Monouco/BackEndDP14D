@@ -59,5 +59,9 @@ public class AlgorithmController {
         return algoritmoService.obtenerHojaDeRuta(t);
     }
 
+    @PostMapping("/simulacionColapso")
+    public ArrayList<Pedido> simulacionColapso(@RequestBody SimulacionFront pedidos){
+        return algoritmoService.asignarPedidosColapso(pedidos.getOrders(), pedidos.getSpeed());
+    }
 
 }

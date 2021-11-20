@@ -5,5 +5,5 @@ import java.time.LocalDateTime;
 public class ColapsoFront {
     LocalDateTime fechaColapso;
     //Hoja de rutas
-
+    //Camiones necesarios
 }
