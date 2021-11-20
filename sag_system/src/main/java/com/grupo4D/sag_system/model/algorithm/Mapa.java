@@ -244,11 +244,12 @@ public class Mapa {
         ArrayList<Roadblock> blocks = this.roadBlocks.get(position);
         if(blocks != null){
             System.out.println("Se encuentra en un nodo bloqueado ");
-            for (Roadblock block:
+            /*for (Roadblock block:
                  blocks) {
                 if(block.getFechaIni().isBefore(curTime) && block.getFechaFin().isAfter(curTime))
                     return true;
-            }
+            }*/
+            return true;
         }
         return false;
     }
