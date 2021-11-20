@@ -5,10 +5,7 @@ import com.grupo4D.sag_system.model.request.AveriaFront;
 import com.grupo4D.sag_system.model.runnable.AveriaThread;
 import com.grupo4D.sag_system.model.runnable.UpdateCurrentValues;
 import com.grupo4D.sag_system.model.statics.StaticValues;
-import com.grupo4D.sag_system.repository.CamionRepository;
-import com.grupo4D.sag_system.repository.PedidoRepository;
-import com.grupo4D.sag_system.repository.RutaRepository;
-import com.grupo4D.sag_system.repository.RutaXNodoRepository;
+import com.grupo4D.sag_system.repository.*;
 import com.grupo4D.sag_system.service.*;
 import org.apache.tomcat.jni.Local;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -175,6 +172,12 @@ public class AveriaController {
                 //registrar el x y y en averia
                 System.out.println("Va a registrar el nodo en la averia" );
                 averiaModel.setUbicacion(rutaXNodos.get(index).getNodo());
+                if (averiaModel.getUbicacion()== null){
+                    //si no se logro encontrar la averia se registra en 0,0
+                    Nodo n0 = new Nodo(0,0);
+                    n0.setId(1);
+                    averiaModel.setUbicacion(n0);
+                }
                 System.out.println("Registro el nodo: x: "+ rutaXNodos.get(index).getNodo().getCoordenadaX()+" y: "+rutaXNodos.get(index).getNodo().getCoordenadaY());
                 //Guardamos los valores cambiados de la ruta y nodos de la rutaXNodo
                 rutaRepository.save(rutaCamion);
