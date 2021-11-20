@@ -55,9 +55,9 @@ public class BloqueoService{
             }
 
             bloqueoFront.setId(bloqueo.getId());
-            bloqueoFront.setStartDate(bloqueo.getFechaInicio().minusNanos((long)(bloqueo.getDesfase() - bloqueo.getTiempoEspera() *(1 + 1/velocidad) )));
+            bloqueoFront.setStartDate(bloqueo.getFechaInicio().minusNanos((long)(bloqueo.getDesfase() - bloqueo.getTiempoEspera() *(1 + 1/velocidad) *1000 )));
             //bloqueoFront.setEndDate(bloqueo.getFechaFin().minusNanos(bloqueo.getDesfase()));
-            bloqueoFront.setEndDate(bloqueo.getFechaFin().minusNanos((long)(bloqueo.getDesfase() - bloqueo.getTiempoEspera() *(1 + 1/velocidad)
+            bloqueoFront.setEndDate(bloqueo.getFechaFin().minusNanos((long)(bloqueo.getDesfase() - bloqueo.getTiempoEspera() *(1 + 1/velocidad) *1000
                     - bloqueo.getDuracion()/velocidad)));
             bloqueoFront.setPath(nodos);
 
