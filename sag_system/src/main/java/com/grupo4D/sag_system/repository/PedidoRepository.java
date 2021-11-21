@@ -46,6 +46,23 @@ public interface PedidoRepository extends CrudRepository<Pedido,Integer> {
     @Query(value="call pr_terminar_simulacion( :cur_type)", nativeQuery = true)
     void terminarSimulacion( @Param("cur_type") int cur_type);
 
+    @Query(
+            value = "SELECT count(*) FROM pedido u WHERE u.activo = 1 " +
+                    "and tipo = ?1 " +
+                    "and estado_pedido = 'Atendido' ",
+            nativeQuery = true)
+    public int pedidosAtendidos(int type);
+
+    @Query(
+            value = "SELECT count(*) FROM pedido u WHERE u.activo = 1 " +
+                    "and tipo = ?1 " +
+                    "and estado_pedido <> 'Atendido' ",
+            nativeQuery = true)
+    public int pedidosPorAtendidos(int type);
+
+
+    //posible cambio por algo mas eficiente que no requiera entrar a BD por cada pedido
+
 
 
 }

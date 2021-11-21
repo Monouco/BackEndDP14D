@@ -1,5 +1,7 @@
 package com.grupo4D.sag_system.model.statics;
 
+import com.grupo4D.sag_system.model.response.ColapsoFront;
+
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 
@@ -21,4 +23,7 @@ public class StaticValues {
     public static boolean comEndSimFlag;
     public static boolean comEndCollapseFlag;
     public static int numCamion;
+    public static ColapsoFront collapseStatus = new ColapsoFront();
+    public static ColapsoFront collapseSimStatus = new ColapsoFront();
+    public static ColapsoFront fullCollapseStatus = new ColapsoFront();
 }

@@ -265,11 +265,13 @@ public class AlgorithmService {
             }
             respuesta.add(fill);
         }
+        apiResponse.setCollapseInfo(null);
 
         switch (tipo){
             case 1: {
                 if(StaticValues.collapseFlag){
                     bandera = 2;
+                    apiResponse.setCollapseInfo(StaticValues.collapseStatus);
                     StaticValues.collapseFlag = false;
                 }
                 break;
@@ -281,6 +283,7 @@ public class AlgorithmService {
                 }
                 if(StaticValues.collapseSimulationFlag){
                     bandera = 2;
+                    apiResponse.setCollapseInfo(StaticValues.collapseSimStatus);
                     StaticValues.collapseSimulationFlag = false;
                 }
                 break;
@@ -288,6 +291,7 @@ public class AlgorithmService {
             case 3: {
                 if(StaticValues.fullCollapseFlag){
                     bandera = 2;
+                    apiResponse.setCollapseInfo(StaticValues.fullCollapseStatus);
                     StaticValues.fullCollapseFlag = false;
                 }
                 break;

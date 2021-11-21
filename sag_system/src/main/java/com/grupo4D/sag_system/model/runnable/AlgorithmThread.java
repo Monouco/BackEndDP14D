@@ -112,18 +112,27 @@ public class AlgorithmThread implements Runnable {
                         if(simulationDate.isAfter(order.getFechaLimite())){
                             switch (type){
                                 case 1: {
+                                    StaticValues.collapseStatus.setFechaColapso(simulationDate);
+                                    StaticValues.collapseStatus.setPedidosAtendidos(pedidoRepository.pedidosAtendidos(type));
+                                    StaticValues.collapseStatus.setPedidosPorAtender(pedidoRepository.pedidosPorAtendidos(type));
                                     StaticValues.collapseFlag = true;
                                     StaticValues.comCollapseFlag = true;
                                     System.out.println(LocalDateTime.now(StaticValues.zoneId) + " Colapso Logistico tipo " + type + " a las " + simulationDate);
                                     break;
                                 }
                                 case 2: {
+                                    StaticValues.collapseSimStatus.setFechaColapso(simulationDate);
+                                    StaticValues.collapseSimStatus.setPedidosAtendidos(pedidoRepository.pedidosAtendidos(type));
+                                    StaticValues.collapseSimStatus.setPedidosPorAtender(pedidoRepository.pedidosPorAtendidos(type));
                                     StaticValues.collapseSimulationFlag = true;
                                     StaticValues.comSimCollapseFlag = true;
                                     System.out.println(LocalDateTime.now(StaticValues.zoneId) + " Colapso Logistico tipo " + type + " a las " + simulationDate);
                                     break;
                                 }
                                 case 3: {
+                                    StaticValues.fullCollapseStatus.setFechaColapso(simulationDate);
+                                    StaticValues.fullCollapseStatus.setPedidosAtendidos(pedidoRepository.pedidosAtendidos(type));
+                                    StaticValues.fullCollapseStatus.setPedidosPorAtender(pedidoRepository.pedidosPorAtendidos(type));
                                     StaticValues.fullCollapseFlag = true;
                                     StaticValues.comFullCollapseFlag = true;
                                     System.out.println(LocalDateTime.now(StaticValues.zoneId) + " Colapso Logistico tipo " + type + " a las " + simulationDate);

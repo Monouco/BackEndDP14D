@@ -5,6 +5,7 @@ import java.util.ArrayList;
 public class RespuestaObtenerRutaFront {
     private ArrayList<RespuestaRutaFront> routes;
     private int flag;
+    private ColapsoFront collapseInfo;
 
     public RespuestaObtenerRutaFront() {
     }
@@ -23,5 +24,13 @@ public class RespuestaObtenerRutaFront {
 
     public void setFlag(int flag) {
         this.flag = flag;
+    }
+
+    public ColapsoFront getCollapseInfo() {
+        return collapseInfo;
+    }
+
+    public void setCollapseInfo(ColapsoFront collapseInfo) {
+        this.collapseInfo = collapseInfo;
     }
 }
