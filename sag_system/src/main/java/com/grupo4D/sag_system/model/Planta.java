@@ -35,6 +35,9 @@ public class Planta {
     @Column(name="activo")
     private boolean activo = true;
 
+    public Planta() {
+    }
+
     public int getId() {
         return id;
     }
