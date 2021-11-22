@@ -11,4 +11,5 @@ public class ConcurrentValues {
     public static Semaphore freeUpdateVal = new Semaphore(0);
     public static Semaphore newSimulationDay = new Semaphore(0);
     public static Semaphore newCollapseDay = new Semaphore(0);
+    public static Semaphore allowFail = new Semaphore(0);
 }
