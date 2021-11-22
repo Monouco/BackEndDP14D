@@ -30,13 +30,14 @@ public class PlantaService{
     }
 
     public Planta registrarPlanta(PlantaFront plantaFront){
+        double capacidad = (plantaFront.getTipo() == 1) ? 99999999 : plantaFront.getCapacidadGLP();
         Planta planta = new Planta();
-        planta.setCapacidadGLP(plantaFront.getCapacidadGLP());
+        planta.setCapacidadGLP(capacidad);
         planta.setTipoPlanta(plantaFront.getTipo());
         planta.setNodo(nodoRepository.findIdNodoByCoordenadaXAndCoordenadaYAndActivoTrue(plantaFront.getX(), plantaFront.getY()));
-        planta.setGlpDisponibleColapso(planta.getCapacidadGLP());
-        planta.setGlpDisponible(planta.getCapacidadGLP());
-        planta.setGlpDisponibleSimulacion(planta.getCapacidadGLP());
+        planta.setGlpDisponibleColapso(capacidad);
+        planta.setGlpDisponible(capacidad);
+        planta.setGlpDisponibleSimulacion(capacidad);
         planta.setActivo(true);
         plantaRepository.save(planta);
         return planta;
