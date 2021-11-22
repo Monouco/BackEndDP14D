@@ -330,6 +330,7 @@ public class AlgorithmService {
 
         double glpDeposit = 0;
 
+
         for (Planta planta:
              plantas) {
             switch (tipo){
@@ -348,6 +349,8 @@ public class AlgorithmService {
             }
             DepositGLP deposit = new DepositGLP(planta.getNodo().getCoordenadaX(), planta.getNodo().getCoordenadaY(), glpDeposit);
             mapa1.addDeposit(deposit);
+            int [] coor = {plantas.get(0).getNodo().getCoordenadaX(),plantas.get(0).getNodo().getCoordenadaY()};
+            mapa1.setPlantaPrincipal(coor);
         }
         /*
         DepositGLP principal = new DepositGLP(12, 8, 100);
