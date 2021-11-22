@@ -21,7 +21,7 @@ public class MantenimientoService{
     }
 
     public ArrayList<Mantenimiento> listarMantenimientos() {
-        return (ArrayList<Mantenimiento>) mantenimientoRepository.findAll();
+        return  mantenimientoRepository.listarMantenimientos();
     }
 
 }
