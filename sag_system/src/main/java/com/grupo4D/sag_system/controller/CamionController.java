@@ -43,6 +43,7 @@ public class CamionController {
         camionModel.setEstadoColapso("Operativo");
         camionModel.setEstado("Operativo");
         camionModel.setVelocidad(camion.getVelocidadCamion());
+        camionModel.setKilometraje(camion.getKilometraje());
 
         return camionService.guardarCamionNuevo(camionModel);
     }
