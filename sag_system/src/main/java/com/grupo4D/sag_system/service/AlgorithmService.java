@@ -361,7 +361,7 @@ public class AlgorithmService {
         mapa1.addDeposit(principal);
         mapa1.addDeposit(almacenNorte);
         mapa1.addDeposit(alamacenEste);*/
-        mapa1.initializeCurrentRoadBlocks(fecha, fecha.plusDays(1), tipo);
+        mapa1.initializeCurrentRoadBlocks(fecha, fecha.plusHours(12), tipo);
 
 
         //revisar
