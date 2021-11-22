@@ -73,5 +73,16 @@ public interface CamionRepository extends CrudRepository<Camion,Integer> {
             nativeQuery = true)
     public ArrayList<Integer> obtenerIds();
 
+    @Query(
+            value = "select c.* "+
+                    "from camion c " +
+                    "inner join tipo_camion t " +
+                    "on c.id_tipo_camion = t.id_tipo_camion " +
+                    "where c.activo = 1 " +
+                    "and t.activo = 1 " +
+                    "and c.codigo_camion = ?2 " +
+                    "and t.abreviatura = ?1" ,
+            nativeQuery = true)
+    public Camion obtenerCamion(String tipo, String codigo);
 
 }
