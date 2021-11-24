@@ -143,8 +143,8 @@ public class AlgorithmService {
                     }
                     camionHR.setNumPedidos(pedidos.size());
                     camionHR.setPedidos(pedidos);
-                    camionHR.setCantGlpActual(cantGLPTransportado);
-                    camionHR.setCantPetroleoActual(1.02);
+                    camionHR.setCantGlpActual(cantGLPTransportado); //cantidad de glp entregado
+
 
 
                     //Se saca los nodos de una ruta en particular
@@ -155,27 +155,33 @@ public class AlgorithmService {
                     double distancia = 0;
                     double [] pesos = new double[nodosDeRuta.size()];
                     int salto=0;
-                    pesos[0] = pedidosDeRuta.get(0).getCantidadGLPEnviado();
+
                     ArrayList<Integer> distancias = new ArrayList<>();
-                   // TipoCamion tCamion = tipoCamionRepository.listarTipoCamion(c.getId());
+                    TipoCamion tCamion = tipoCamionRepository.listarTipoCamion(c.getTipoCamion().getId());
+                    pesos[0] = tCamion.getCapacidadGLP(); //comienza con el tanque lleno
                     //Calculo de peso en el camion
-                    for(int k=0;k<nodosDeRuta.size();k++){
+                    for(int k=0;k<nodosDeRuta.size();k++){ //por cada nodo de la ruta
 
-
-
-                        double peso = 0;
                         //hallar el petroleo aca
                         //0 a mas es entrega de pedido
                         //-4,-3 es planta principal
                         //distancia x peso/150
-//                        if(nodosDeRuta.get(k).getPedido()>=0){
-//                            salto=salto++;
-//                            pesos[j] = pedidosDeRuta.get(salto).getCantidadGLPEnviado();
-//                        }else{
-//
-//                        }
+                        if(nodosDeRuta.get(k).getPedido()>=0){ //si se entrega un pedido
+                            pesos[k] = (pesos[k-1]-pedidosDeRuta.get(salto).getCantidadGLPEnviado())*0.5 +tCamion.getPesoTara();
+                            salto=salto++;
+                        }else if (nodosDeRuta.get(k).getPedido()==-1){ //si es un nodo camino
+                            pesos[k] = pesos[k-1]*0.5+tCamion.getPesoTara();
+                        }else{                                         //si es una planta
+                            pesos[k] = tCamion.getCapacidadGLP()*0.5+tCamion.getPesoTara();      //se rellena el tanque
+                        }
                         System.out.println("Nodos de ruta: "+nodosDeRuta.get(k).getPedido());
                     }
+                    double petroleoConsumido = 0;
+                    for (double d:pesos) {
+                        petroleoConsumido += d/150;
+                    }
+                    camionHR.setCantPetroleoActual(petroleoConsumido);
+
 
 
                     //TODO: cantidadGLPActual y cantidadPetroleoActual en camionHR
