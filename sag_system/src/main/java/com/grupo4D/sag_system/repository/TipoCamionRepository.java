@@ -20,4 +20,9 @@ public interface TipoCamionRepository extends CrudRepository<TipoCamion,Integer>
             nativeQuery = true)
     public TipoCamion obtenerDatosTipoCamion(int id);
 
+    @Query(
+            value = "SELECT * from tipo_camion t where t.activo=1 and id_tipo_camion = ?1;",
+            nativeQuery = true)
+    public TipoCamion listarTipoCamion(int id);
+
 }

@@ -157,7 +157,7 @@ public class AlgorithmService {
                     int salto=0;
                     pesos[0] = pedidosDeRuta.get(0).getCantidadGLPEnviado();
                     ArrayList<Integer> distancias = new ArrayList<>();
-                    TipoCamion tCamion = tipoCamionRepository.listarTipoCamion(c.getId());
+                   // TipoCamion tCamion = tipoCamionRepository.listarTipoCamion(c.getId());
                     //Calculo de peso en el camion
                     for(int k=0;k<nodosDeRuta.size();k++){
 
