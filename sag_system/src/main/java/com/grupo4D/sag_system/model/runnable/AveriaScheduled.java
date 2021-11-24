@@ -2,6 +2,7 @@ package com.grupo4D.sag_system.model.runnable;
 
 import com.grupo4D.sag_system.controller.AveriaController;
 import com.grupo4D.sag_system.model.request.AveriaFront;
+import com.grupo4D.sag_system.model.statics.ConcurrentValues;
 import com.grupo4D.sag_system.model.statics.StaticValues;
 import jdk.dynalink.beans.StaticClass;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,6 +37,7 @@ public class AveriaScheduled implements Runnable {
         long sleepTime = ChronoUnit.HOURS.between(simulationDate,startDate) * 3600000 / multiplier;
 
         try{
+            ConcurrentValues.allowFail.acquire();
             System.out.println("Averia programada para el camion " + idCamion + " a la hora " + startDate);
             Thread.sleep(sleepTime);
             AveriaFront averiaFront = new AveriaFront();

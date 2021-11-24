@@ -17,7 +17,7 @@ public interface PlantaRepository extends CrudRepository<Planta,Integer> {
 
     @Query(
             value = "SELECT * FROM planta u WHERE u.activo = 1 " +
-                    "ORDER BY id_planta asc" ,
+                    "ORDER BY tipo_planta asc" ,
             nativeQuery = true)
     public ArrayList<Planta> listarPlantas();
 

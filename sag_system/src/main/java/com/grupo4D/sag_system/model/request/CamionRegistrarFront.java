@@ -5,6 +5,7 @@ public class CamionRegistrarFront {
     private int codigoCamion;
     private int tipoCamion;
     private double velocidadCamion;
+    private double kilometraje;
 
     public CamionRegistrarFront() {
     }
@@ -13,6 +14,14 @@ public class CamionRegistrarFront {
         this.codigoCamion = codigoCamion;
         this.tipoCamion = tipoCamion;
         this.velocidadCamion = velocidadCamion;
+        this.kilometraje = 0;
+    }
+
+    public CamionRegistrarFront(int codigoCamion, int tipoCamion, double velocidadCamion, double kilometraje) {
+        this.codigoCamion = codigoCamion;
+        this.tipoCamion = tipoCamion;
+        this.velocidadCamion = velocidadCamion;
+        this.kilometraje = kilometraje;
     }
 
     public int getCodigoCamion() {
@@ -37,5 +46,13 @@ public class CamionRegistrarFront {
 
     public void setVelocidadCamion(double velocidadCamion) {
         this.velocidadCamion = velocidadCamion;
+    }
+
+    public double getKilometraje() {
+        return kilometraje;
+    }
+
+    public void setKilometraje(double kilometraje) {
+        this.kilometraje = kilometraje;
     }
 }

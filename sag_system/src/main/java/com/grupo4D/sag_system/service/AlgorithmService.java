@@ -12,6 +12,7 @@ import com.grupo4D.sag_system.model.runnable.AlgorithmThread;
 import com.grupo4D.sag_system.model.runnable.AveriaScheduled;
 import com.grupo4D.sag_system.model.runnable.FillDeposit;
 import com.grupo4D.sag_system.model.runnable.UpdateCurrentValues;
+import com.grupo4D.sag_system.model.statics.ConcurrentValues;
 import com.grupo4D.sag_system.model.statics.OutputLog;
 import com.grupo4D.sag_system.model.statics.StaticValues;
 import com.grupo4D.sag_system.repository.*;
@@ -369,6 +370,7 @@ public class AlgorithmService {
 
         double glpDeposit = 0;
 
+
         for (Planta planta:
              plantas) {
             switch (tipo){
@@ -387,6 +389,8 @@ public class AlgorithmService {
             }
             DepositGLP deposit = new DepositGLP(planta.getNodo().getCoordenadaX(), planta.getNodo().getCoordenadaY(), glpDeposit);
             mapa1.addDeposit(deposit);
+            int [] coor = {plantas.get(0).getNodo().getCoordenadaX(),plantas.get(0).getNodo().getCoordenadaY()};
+            mapa1.setPlantaPrincipal(coor);
         }
         /*
         DepositGLP principal = new DepositGLP(12, 8, 100);
@@ -397,7 +401,7 @@ public class AlgorithmService {
         mapa1.addDeposit(principal);
         mapa1.addDeposit(almacenNorte);
         mapa1.addDeposit(alamacenEste);*/
-        mapa1.initializeCurrentRoadBlocks(fecha, fecha.plusDays(1), tipo);
+        mapa1.initializeCurrentRoadBlocks(fecha, fecha.plusHours(12), tipo);
 
 
         //revisar
@@ -410,6 +414,7 @@ public class AlgorithmService {
         long nanos = 1000000000;
         double velocity = (double)10/36;
         double evaporationRate = 0.3;
+        boolean averiado = false;
         //revisar
 
 
@@ -473,6 +478,7 @@ public class AlgorithmService {
                     StaticValues.virtualDate = fecha;
                     StaticValues.start = fecha.plusHours(2);
                     StaticValues.mult = multiplier;
+                    averiado = true;
                     AveriaScheduled averia = applicationContext.getBean(AveriaScheduled.class);
                     taskExecutor.execute(averia);
                     break;
@@ -483,6 +489,7 @@ public class AlgorithmService {
                     StaticValues.virtualDate = fecha;
                     StaticValues.start = fecha.plusHours(3);
                     StaticValues.mult = multiplier;
+                    averiado = true;
                     AveriaScheduled averia = applicationContext.getBean(AveriaScheduled.class);
                     taskExecutor.execute(averia);
                     break;
@@ -621,6 +628,9 @@ public class AlgorithmService {
         rutaXNodoRepository.saveAll(secuenciaRuta);
         rutaXPedidoRepository.saveAll(secuenciaPedido);
         rutaXPlantaRepository.saveAll(secuenciaPlanta);
+
+        if(averiado)
+            ConcurrentValues.allowFail.release();
 
         return solucion;
     }

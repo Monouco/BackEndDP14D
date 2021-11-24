@@ -31,6 +31,9 @@ public class Camion {
     @Column(name="estadoColapso")
     private String estadoColapso;
 
+    @Column(name="kilometraje")
+    private double kilometraje;
+
     @Column(name="activo")
     private boolean activo = true;
 
@@ -97,4 +100,13 @@ public class Camion {
     public void setEstadoColapso(String estadoColapso) {
         this.estadoColapso = estadoColapso;
     }
+
+    public double getKilometraje() {
+        return kilometraje;
+    }
+
+    public void setKilometraje(double kilometraje) {
+        this.kilometraje = kilometraje;
+    }
+
 }

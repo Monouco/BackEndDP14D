@@ -1,10 +1,12 @@
 package com.grupo4D.sag_system.controller;
 
 import com.grupo4D.sag_system.model.Mantenimiento;
+import com.grupo4D.sag_system.model.request.MantenimientoFront;
 import com.grupo4D.sag_system.service.MantenimientoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -28,4 +30,10 @@ public class MantenimientoController {
     public List<Mantenimiento> listarMantenimientos(){
         return mantenimientoService.listarMantenimientos();
     }
+
+    @PostMapping("/registrarMantenimientoPreventivo")
+    public ArrayList<MantenimientoFront> registrarMantenimientoPreventivo(@RequestBody ArrayList<MantenimientoFront> mantenimientos){
+        return mantenimientoService.registrarMantenimientoPreventivo(mantenimientos);
+    }
+
 }

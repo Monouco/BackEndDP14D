@@ -1,6 +1,7 @@
 package com.grupo4D.sag_system.controller;
 
 import com.grupo4D.sag_system.model.Planta;
+import com.grupo4D.sag_system.model.request.PlantaFront;
 import com.grupo4D.sag_system.service.PlantaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -28,5 +29,11 @@ public class PlantaController {
     public List<Planta> listarPlantas(){
         return plantaService.listarPlantas();
     }
+
+    @PostMapping("/registrarPlanta")
+    public Planta registrarPlanta(@RequestBody PlantaFront plantaModel){
+        return plantaService.registrarPlanta(plantaModel);
+    }
+
 }
 
