@@ -6,20 +6,20 @@ import java.time.LocalDateTime;
 
 public class FechaFront {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    LocalDateTime f;
+    LocalDateTime fecha;
 
     public FechaFront(LocalDateTime f) {
-        this.f = f;
+        this.fecha = f;
     }
 
     public FechaFront() {
     }
 
     public LocalDateTime getF() {
-        return f;
+        return fecha;
     }
 
     public void setF(LocalDateTime f) {
-        this.f = f;
+        this.fecha = f;
     }
 }

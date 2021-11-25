@@ -1,5 +1,6 @@
 package com.grupo4D.sag_system.repository;
 
+import com.grupo4D.sag_system.model.Pedido;
 import com.grupo4D.sag_system.model.Ruta;
 import com.grupo4D.sag_system.model.RutaXPedido;
 import org.springframework.data.jpa.repository.Query;
@@ -21,5 +22,16 @@ public interface RutaXPedidoRepository extends CrudRepository<RutaXPedido,Intege
                    "and activo = 1",
             nativeQuery = true)
     public ArrayList<RutaXPedido> listarRutaXPedido(Integer idPedido);
+
+
+    @Query(
+            value = "select * from rutaxpedido where fecha_entrega like ?1 and activo=1",
+            nativeQuery = true)
+    public ArrayList<RutaXPedido> rutasXFecha(String fecha);
+
+    @Query(
+            value = "select * from rutaxpedido where id_ruta = ?1 and activo=1",
+            nativeQuery = true)
+    public ArrayList<RutaXPedido> rutasXIdRuta(int idRuta);
 }
 

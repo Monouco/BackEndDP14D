@@ -11,6 +11,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import javax.transaction.Transactional;
+import java.lang.reflect.Array;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 
@@ -59,6 +60,13 @@ public interface PedidoRepository extends CrudRepository<Pedido,Integer> {
                     "and estado_pedido <> 'Atendido' ",
             nativeQuery = true)
     public int pedidosPorAtendidos(int type);
+
+
+    @Query(
+            value = "select * from pedido where fecha_entrega like ?1 and estado_pedido = 'Atendido'",
+            nativeQuery = true)
+    public ArrayList<Pedido> pedidosXFecha(String fecha);
+
 
 
     //posible cambio por algo mas eficiente que no requiera entrar a BD por cada pedido

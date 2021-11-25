@@ -1,6 +1,7 @@
 package com.grupo4D.sag_system.repository;
 
 import com.grupo4D.sag_system.model.Ruta;
+import com.grupo4D.sag_system.model.RutaXPedido;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
@@ -25,5 +26,18 @@ public interface RutaRepository extends CrudRepository<Ruta,Integer> {
     @Modifying
     @Query(value="call pr_devolver_glp(:cur_seq, :cur_type, :cur_id_ruta)", nativeQuery = true)
     void devolverGLP(@Param("cur_seq") int cur_seq, @Param("cur_type") int cur_type, @Param("cur_id_ruta") int cur_id_ruta);
+
+
+//    @Query(
+//            value = "",
+//            nativeQuery = true)
+    public Ruta findRutaByIdAndActivoTrue(int id);
+
+    @Query(
+            value = "select * from ruta where fecha_fin like ?1 and activo=1 and tipo= ?2 and estado_ruta='Completado' order by fecha_fin",
+            nativeQuery = true)
+    public ArrayList<Ruta> rutasCompletadasPorFechaYTipo(String fecha, int tipo);
+
+
 
 }
