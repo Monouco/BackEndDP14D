@@ -7,6 +7,8 @@ public class CamionListarFront {
     private double capacidadPetroleo;
     private double capacidadGLP;
     private String estadoCamion;
+    private double kilometraje;
+    private double velocidad;
 
     public CamionListarFront() {
     }
@@ -67,4 +69,21 @@ public class CamionListarFront {
     public void setEstadoCamion(String estadoCamion) {
         this.estadoCamion = estadoCamion;
     }
+
+    public double getKilometraje() {
+        return kilometraje;
+    }
+
+    public void setKilometraje(double kilometraje) {
+        this.kilometraje = kilometraje;
+    }
+
+    public double getVelocidad() {
+        return velocidad;
+    }
+
+    public void setVelocidad(double velocidad) {
+        this.velocidad = velocidad;
+    }
+
 }

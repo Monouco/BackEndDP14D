@@ -48,6 +48,11 @@ public class CamionController {
         return camionService.guardarCamionNuevo(camionModel);
     }
 
+    @PostMapping("/editarCamion")
+    public Camion editarCamion(@RequestBody CamionRegistrarFront camion){
+        return camionService.editarCamion(camion);
+    }
+
     @GetMapping("/listarCamiones")
     public List<CamionListarFront> listarCamiones(){
         ArrayList<CamionListarFront> camiones = new ArrayList<>();
@@ -65,6 +70,9 @@ public class CamionController {
             camion.setTipoCamion(camionService.buscarCodigo1Camion(c.getId()));
             camion.setCapacidadGLP(tipoCamion.getCapacidadGLP());
             camion.setCapacidadPetroleo(tipoCamion.getCapacidadPetroleo());
+            camion.setVelocidad(c.getVelocidad());
+            //Este valor deberia de calcularse?
+            camion.setKilometraje(c.getKilometraje());
 
             camiones.add(camion);
         }
