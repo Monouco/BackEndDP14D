@@ -2,6 +2,7 @@ package com.grupo4D.sag_system.model.runnable;
 
 import com.grupo4D.sag_system.SagSystemApplication;
 import com.grupo4D.sag_system.model.Pedido;
+import com.grupo4D.sag_system.model.response.TipoSimulacionFront;
 import com.grupo4D.sag_system.model.statics.ConcurrentValues;
 import com.grupo4D.sag_system.model.statics.OutputLog;
 import com.grupo4D.sag_system.model.statics.StaticValues;
@@ -115,6 +116,8 @@ public class AlgorithmThread implements Runnable {
                                     StaticValues.collapseStatus.setFechaColapso(simulationDate);
                                     StaticValues.collapseStatus.setPedidosAtendidos(pedidoRepository.pedidosAtendidos(type));
                                     StaticValues.collapseStatus.setPedidosPorAtender(pedidoRepository.pedidosPorAtendidos(type));
+                                    StaticValues.collapseStatus.setHojaRuta(algorithmService.obtenerHojaDeRuta(new TipoSimulacionFront(type,multiplier)));
+                                    StaticValues.collapseStatus.setPedidosEnCola(orders);
                                     StaticValues.collapseFlag = true;
                                     StaticValues.comCollapseFlag = true;
                                     System.out.println(LocalDateTime.now(StaticValues.zoneId) + " Colapso Logistico tipo " + type + " a las " + simulationDate);
@@ -124,6 +127,8 @@ public class AlgorithmThread implements Runnable {
                                     StaticValues.collapseSimStatus.setFechaColapso(simulationDate);
                                     StaticValues.collapseSimStatus.setPedidosAtendidos(pedidoRepository.pedidosAtendidos(type));
                                     StaticValues.collapseSimStatus.setPedidosPorAtender(pedidoRepository.pedidosPorAtendidos(type));
+                                    StaticValues.collapseSimStatus.setHojaRuta(algorithmService.obtenerHojaDeRuta(new TipoSimulacionFront(type,multiplier)));
+                                    StaticValues.collapseSimStatus.setPedidosEnCola(orders);
                                     StaticValues.collapseSimulationFlag = true;
                                     StaticValues.comSimCollapseFlag = true;
                                     System.out.println(LocalDateTime.now(StaticValues.zoneId) + " Colapso Logistico tipo " + type + " a las " + simulationDate);
@@ -133,6 +138,8 @@ public class AlgorithmThread implements Runnable {
                                     StaticValues.fullCollapseStatus.setFechaColapso(simulationDate);
                                     StaticValues.fullCollapseStatus.setPedidosAtendidos(pedidoRepository.pedidosAtendidos(type));
                                     StaticValues.fullCollapseStatus.setPedidosPorAtender(pedidoRepository.pedidosPorAtendidos(type));
+                                    StaticValues.fullCollapseStatus.setHojaRuta(algorithmService.obtenerHojaDeRuta(new TipoSimulacionFront(type,multiplier)));
+                                    StaticValues.fullCollapseStatus.setPedidosEnCola(orders);
                                     StaticValues.fullCollapseFlag = true;
                                     StaticValues.comFullCollapseFlag = true;
                                     System.out.println(LocalDateTime.now(StaticValues.zoneId) + " Colapso Logistico tipo " + type + " a las " + simulationDate);
@@ -142,9 +149,18 @@ public class AlgorithmThread implements Runnable {
                         }
                     }
 
-                    if(StaticValues.collapseFlag && type == 1) break;
-                    if(StaticValues.collapseSimulationFlag && type == 2) break;
-                    if(StaticValues.fullCollapseFlag && type == 3) break;
+                    if(StaticValues.collapseFlag && type == 1){
+                        System.out.println(LocalDateTime.now(StaticValues.zoneId) + " Terminando simulacion " + type + " por colapso a las " + simulationDate);
+                        break;
+                    }
+                    if(StaticValues.collapseSimulationFlag && type == 2){
+                        System.out.println(LocalDateTime.now(StaticValues.zoneId) + " Terminando simulacion " + type + " por colapso a las " + simulationDate);
+                        break;
+                    }
+                    if(StaticValues.fullCollapseFlag && type == 3){
+                        System.out.println(LocalDateTime.now(StaticValues.zoneId) + " Terminando simulacion " + type + " por colapso a las " + simulationDate);
+                        break;
+                    }
 
                     switch (type){
                         case 1: {
