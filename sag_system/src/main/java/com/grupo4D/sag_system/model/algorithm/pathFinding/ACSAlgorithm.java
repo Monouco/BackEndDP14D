@@ -549,7 +549,7 @@ public class ACSAlgorithm {
 
             //Recordar hacer esto con A*
             if(aStar.getMapa().getRoadBlocks().isEmpty()){
-                System.out.println("Entrando a Manhattan");
+                //System.out.println("Entrando a Manhattan");
                 ruta = manhattanPath(xIni,yIni,xDes,yDes);
             }
             else {
@@ -602,7 +602,7 @@ public class ACSAlgorithm {
         xDes = depositos.get(0).getxPos();
         yDes = depositos.get(0).getyPos();
         if(aStar.getMapa().getRoadBlocks().isEmpty()){
-            System.out.println("Entrando a Manhattan");
+            //System.out.println("Entrando a Manhattan");
             ruta = manhattanPath(xIni,yIni,xDes,yDes);
         }
         else {
