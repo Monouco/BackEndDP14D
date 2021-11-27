@@ -398,15 +398,7 @@ public class AlgorithmService {
             int [] coor = {plantas.get(0).getNodo().getCoordenadaX(),plantas.get(0).getNodo().getCoordenadaY()};
             mapa1.setPlantaPrincipal(coor);
         }
-        /*
-        DepositGLP principal = new DepositGLP(12, 8, 100);
-        DepositGLP almacenNorte = new DepositGLP(42, 42, 160);
-        DepositGLP alamacenEste = new DepositGLP(63, 3, 160);
 
-
-        mapa1.addDeposit(principal);
-        mapa1.addDeposit(almacenNorte);
-        mapa1.addDeposit(alamacenEste);*/
         mapa1.initializeCurrentRoadBlocks(fecha, fecha.plusHours(12), tipo);
 
 
@@ -512,6 +504,7 @@ public class AlgorithmService {
             int k = 0, atendidos = 0,  temp = 0;
             ArrayList<Integer> hBestSolution = hormigas.get(i).getBestSolution();
             ArrayList<Double> hBestGLP = hormigas.get(i).getBestSolutionGLP();
+            ArrayList<Double> hBestFuel = hormigas.get(i).getBestSolutionFuel();
             for (int[]j:hormigas.get(i).getBestRoute()) {
                 Nodo nodo = nodoRepository.findIdNodoByCoordenadaXAndCoordenadaYAndActivoTrue(j[0],j[1]);
                 RutaXNodo rutaXNodo = new RutaXNodo();
@@ -542,6 +535,7 @@ public class AlgorithmService {
                             //rutaXPedidoRepository.save(rutaXPedido);
 
                             rutaXPedido.setFechaEntrega(ruta.getFechaInicio().plusNanos(spentTime));
+                            rutaXPedido.setCostoOperacion(hBestFuel.get(temp));
                             secuenciaPedido.add(rutaXPedido);
 
                             pedidosNuevos.get(j[2]).setGlpProgramado(pedidosNuevos.get(j[2]).getGlpProgramado() + rutaXPedido.getCantidadGLPEnviado());
@@ -575,6 +569,9 @@ public class AlgorithmService {
                             }
 
                             secuenciaPlanta.add(rutaXPlanta);
+
+                            //Verificar si esto no causa errores, esto es para que el pedido tenga todo el costo de lo que le costo llegar hasta ahi (incluyendo recarga)
+                            hBestFuel.set(temp + 1, hBestFuel.get(temp) + hBestFuel.get(temp+1));
                         }
 
                         temp++;

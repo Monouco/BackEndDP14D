@@ -34,10 +34,10 @@ public class UpdateCurrentValues implements Runnable{
         this.endDate = StaticValues.end;
         this.type = StaticValues.simulationType;
 
-        //Considerando 5 min
+        //Considerando 3 min
         long sleepTime ;
         if(type == 1){
-            sleepTime = 180000;
+            sleepTime = 600000;
         }
         else{
             sleepTime = 3000;

@@ -7,9 +7,11 @@ public class Ant {
 
     private ArrayList<Integer> solution;
     private ArrayList<Double> solutionGLP;
+    private ArrayList<Double> solutionFuel;
     private ArrayList<int[]> route;
     private ArrayList<Integer> bestSolution;
     private ArrayList<Double> bestSolutionGLP;
+    private ArrayList<Double> bestSolutionFuel;
     private ArrayList<int[]> bestRoute;
     private double capacity;
     private double usedCapacity;
@@ -44,6 +46,8 @@ public class Ant {
         this.antWeight = antWeight;
         this.glpWeight = glpWeight;
         this.fuelPrev = 0;
+        this.solutionFuel = new ArrayList<>();
+        this.bestSolutionFuel = new ArrayList<>();
     }
 
     public ArrayList<Integer> getSolution() {
@@ -184,14 +188,36 @@ public class Ant {
         this.glpWeight = glpWeight;
     }
 
+    public ArrayList<Double> getSolutionFuel() {
+        return solutionFuel;
+    }
+
+    public void setSolutionFuel(ArrayList<Double> solutionFuel) {
+        this.solutionFuel = solutionFuel;
+    }
+
+    public ArrayList<Double> getBestSolutionFuel() {
+        return bestSolutionFuel;
+    }
+
+    public void setBestSolutionFuel(ArrayList<Double> bestSolutionFuel) {
+        this.bestSolutionFuel = bestSolutionFuel;
+    }
+
+    public void addSolutionFuel(double fuel){
+        this.solutionFuel.add(fuel);
+    }
+
     public void changeSolution(){
         bestRoute = route;
         bestSolution = solution;
         bestSolutionGLP = solutionGLP;
+        bestSolutionFuel = solutionFuel;
         //Limpiando el actual
         route = new ArrayList<>();
         solution = new ArrayList<>();
         solutionGLP = new ArrayList<>();
+        solutionFuel = new ArrayList<>();
 
     }
 
@@ -224,6 +250,7 @@ public class Ant {
         this.solution = new ArrayList<>();
         this.route = new ArrayList<>();
         this.solutionGLP = new ArrayList<>();
+        this.solutionFuel = new ArrayList<>();
     }
 
     public void printSolution(Mapa mapa, char car){
@@ -258,6 +285,7 @@ public class Ant {
 
         this.fuel -= consumption;
         this.fuelConsumption += consumption;
+        this.solutionFuel.add(consumption);
 
     }
 
@@ -306,6 +334,7 @@ public class Ant {
             return 0;
         //quitamos la ultima solucion
         lastOrd = solution.remove(size-1);
+        solutionFuel.remove(size-1);
         //Tenemos con cuanto fuimos
         glp = solutionGLP.remove(size-1);
         //volvemos a asignar el glp al de antes
@@ -321,6 +350,7 @@ public class Ant {
         }
 
         consumption = calcFuelConsumption(dist);
+
         fuelConsumption -= consumption;
 
         return this.capacity - glp;
