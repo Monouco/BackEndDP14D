@@ -686,8 +686,10 @@ public class AlgorithmService {
             pedidos.get(i).setFechaLimite(fechaTemp.plusHours(pedidos.get(i).getPlazoEntrega()));
             if(fechaTemp.isBefore(fechaInicio))
                 fechaInicio = fechaTemp;
-            if(pedidos.get(i).getFechaLimite().isAfter(fechaFin))
-                fechaFin = pedidos.get(i).getFechaLimite();
+            /*if(pedidos.get(i).getFechaLimite().isAfter(fechaFin))
+                fechaFin = pedidos.get(i).getFechaLimite();*/
+            if(pedidos.get(i).getFechaPedido().isAfter(fechaFin))
+                fechaFin = pedidos.get(i).getFechaPedido();
         }
         pedidoRepository.saveAll(pedidos);
 
@@ -698,7 +700,7 @@ public class AlgorithmService {
         StaticValues.start = LocalDateTime.now(StaticValues.zoneId);
         StaticValues.virtualDate = fechaInicio.truncatedTo(ChronoUnit.DAYS);
         StaticValues.simulationType = 2;
-        StaticValues.end = fechaFin;
+        StaticValues.end = fechaFin.plusHours(2);
 
         /*File log = new File("../logs/simulation/log"+LocalDateTime.now(StaticValues.zoneId)+".txt");
         FileWriter fileWriter = null;
@@ -739,8 +741,10 @@ public class AlgorithmService {
             pedidos.get(i).setFechaLimite(fechaTemp.plusHours(pedidos.get(i).getPlazoEntrega()));
             if(fechaTemp.isBefore(fechaInicio))
                 fechaInicio = fechaTemp;
-            if(pedidos.get(i).getFechaLimite().isAfter(fechaFin))
-                fechaFin = pedidos.get(i).getFechaLimite();
+            /*if(pedidos.get(i).getFechaLimite().isAfter(fechaFin))
+                fechaFin = pedidos.get(i).getFechaLimite();*/
+            if(pedidos.get(i).getFechaPedido().isAfter(fechaFin))
+                fechaFin = pedidos.get(i).getFechaPedido();
         }
         pedidoRepository.saveAll(pedidos);
 
@@ -751,7 +755,7 @@ public class AlgorithmService {
         StaticValues.start = LocalDateTime.now(StaticValues.zoneId);
         StaticValues.virtualDate = fechaInicio.truncatedTo(ChronoUnit.DAYS);
         StaticValues.simulationType = 3;
-        StaticValues.end = fechaFin;
+        StaticValues.end = fechaFin.plusHours(2);
 
         /*File log = new File("../logs/simulation/log"+LocalDateTime.now(StaticValues.zoneId)+".txt");
         FileWriter fileWriter = null;

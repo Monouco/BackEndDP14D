@@ -151,20 +151,20 @@ public class AlgorithmThread implements Runnable {
 
                     if(StaticValues.collapseFlag && type == 1){
                         System.out.println(LocalDateTime.now(StaticValues.zoneId) + " Terminando simulacion " + type + " por colapso a las " + simulationDate);
-                        ConcurrentValues.freeUpdateVal.acquire();
-                        ConcurrentValues.updateVal.release();
+                        /*ConcurrentValues.freeUpdateVal.acquire();
+                        ConcurrentValues.updateVal.release();*/
                         break;
                     }
                     if(StaticValues.collapseSimulationFlag && type == 2){
                         System.out.println(LocalDateTime.now(StaticValues.zoneId) + " Terminando simulacion " + type + " por colapso a las " + simulationDate);
-                        ConcurrentValues.freeUpdateValSimulation.acquire();
-                        ConcurrentValues.updateValSimulation.release();
+                        /*ConcurrentValues.freeUpdateValSimulation.acquire();
+                        ConcurrentValues.updateValSimulation.release();*/
                         break;
                     }
                     if(StaticValues.fullCollapseFlag && type == 3){
                         System.out.println(LocalDateTime.now(StaticValues.zoneId) + " Terminando simulacion " + type + " por colapso a las " + simulationDate);
-                        ConcurrentValues.freeUpdateValCollapse.acquire();
-                        ConcurrentValues.updateValCollapse.release();
+                        /*ConcurrentValues.freeUpdateValCollapse.acquire();
+                        ConcurrentValues.updateValCollapse.release();*/
                         break;
                     }
 
