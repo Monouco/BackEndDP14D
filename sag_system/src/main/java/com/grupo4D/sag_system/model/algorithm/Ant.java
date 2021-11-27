@@ -305,6 +305,22 @@ public class Ant {
         return consumption;
     }
 
+    public double calcFuelConsumption(int size, double glpSent){
+        int solSize = bestSolutionGLP.size();
+        double consumption;
+        if(solSize > 0){
+            consumption = size * //distancia recorrida
+                    (antWeight + (glpWeight/capacity) //peso actual del camion
+                            * glpSent)/150;
+        }
+        else{
+            consumption = size * //distancia recorrida
+                    (antWeight + (glpWeight/capacity) //peso actual del camion
+                            * capacity)/150; //tomaremos como que el camion sale con el tanque lleno
+        }
+        return consumption;
+    }
+
     private int numClients(){
         int numCl = 0;
         for (int c:

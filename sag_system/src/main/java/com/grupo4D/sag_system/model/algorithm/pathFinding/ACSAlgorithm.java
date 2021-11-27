@@ -493,6 +493,7 @@ public class ACSAlgorithm {
         int ordenAnterior = -1-this.numAlmacenes;
         ArrayList<int[]> ruta = new ArrayList<>();
         ArrayList<int[]> rutaSol = new ArrayList<>();
+        ArrayList<Double> fuel = new ArrayList<>();
         int [] coordenate;
         int xIni, yIni, xDes, yDes;
         Order curOrden, lastOrden;
@@ -503,6 +504,7 @@ public class ACSAlgorithm {
         long nanos = 1000000000;
         long spentTime;
         int tempSize;
+        int a=0;
 
         aStar.setVelocity(nuVelocity);
 
@@ -573,6 +575,8 @@ public class ACSAlgorithm {
 
             rutaSol.set(location, coordenate);
             rutaSol.addAll(ruta);
+            fuel.add(camion.calcFuelConsumption(ruta.size(),camion.getBestSolutionGLP().get(a)));
+            a+=1;
             ordenAnterior = siguienteOrden;
         }
 
@@ -609,7 +613,9 @@ public class ACSAlgorithm {
             ruta = aStar.astar_search(new int[]{xIni, yIni}, new int[]{xDes, yDes}, this.curTime.plusNanos(spentTime), 0);
         }
         rutaSol.addAll(ruta);
+        fuel.add(camion.calcFuelConsumption(ruta.size(), camion.getBestSolutionGLP().get(camion.getBestSolutionGLP().size()-1)));
 
+        camion.setBestSolutionFuel(fuel);
         return rutaSol;
     }
 
