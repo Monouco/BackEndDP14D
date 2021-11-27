@@ -249,7 +249,7 @@ public class ACSAlgorithm {
                 //Cambiando a mejor solucion
                 if (fitnessTemp >= globalFitness) {
                     globalFitness = fitnessTemp;
-                    highestNum = numOrders;
+                    highestNum = numAtendidos;
                     camiones.get(l).changeSolution();
                 }
                 camiones.get(l).clearSolution();
