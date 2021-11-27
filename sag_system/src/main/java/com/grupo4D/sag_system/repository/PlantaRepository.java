@@ -25,5 +25,11 @@ public interface PlantaRepository extends CrudRepository<Planta,Integer> {
     @Modifying
     @Query(value="call pr_fill_deposit( :cur_type)", nativeQuery = true)
     void fillDeposit( @Param("cur_type") int cur_type);
+
+
+    @Query(
+            value = "SELECT * FROM planta u WHERE u.activo = 1 and id_planta=?1 " ,
+            nativeQuery = true)
+    public Planta listarGLPRestanteXPlanta(int planta);
 }
 

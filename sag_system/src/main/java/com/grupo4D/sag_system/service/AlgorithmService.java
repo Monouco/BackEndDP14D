@@ -359,6 +359,26 @@ public class AlgorithmService {
 
         apiResponse.setFlag(bandera);
         apiResponse.setRoutes(respuesta);
+        Planta planta2 = plantaRepository.listarGLPRestanteXPlanta(2);
+        Planta planta3 = plantaRepository.listarGLPRestanteXPlanta(3);
+        switch (tipo){
+            case 1:{
+                apiResponse.setGlpRestantePlanta2(planta2.getGlpDisponible());
+                apiResponse.setGlpRestantePlanta3(planta3.getGlpDisponible());
+                break;
+            }
+            case 2:{
+                apiResponse.setGlpRestantePlanta2(planta2.getGlpDisponibleSimulacion());
+                apiResponse.setGlpRestantePlanta3(planta3.getGlpDisponibleSimulacion());
+                break;
+            }
+            case 3:{
+                apiResponse.setGlpRestantePlanta2(planta2.getGlpDisponibleColapso());
+                apiResponse.setGlpRestantePlanta3(planta3.getGlpDisponibleColapso());
+                break;
+            }
+        }
+
 
         return apiResponse;
     }
