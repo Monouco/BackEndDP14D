@@ -111,6 +111,7 @@ public class AlgorithmService {
             }
 
             double cantGLPTransportado=0;
+            double cantPetroleo = 0;
 
             if (i!=0){
                 //ArrayList<RutaXPedido> pedidosDeRuta = rutaXPedidoRepository.findRutaXPedidosByIdRuta(rutasIniciadas.get(i).getId());
@@ -140,15 +141,16 @@ public class AlgorithmService {
                         //System.out.print("pedido "+pedido1ruta.getId()+"\n");
                         pedidos.add(pedidoHR);
                         cantGLPTransportado += rxp.getCantidadGLPEnviado();
+                        cantPetroleo += rxp.getCostoOperacion();
                     }
                     camionHR.setNumPedidos(pedidos.size());
                     camionHR.setPedidos(pedidos);
                     camionHR.setCantGlpActual(cantGLPTransportado); //cantidad de glp entregado
-
+                    camionHR.setCantPetroleoActual(cantPetroleo);
 
 
                     //Se saca los nodos de una ruta en particular
-                    ArrayList<RutaXNodo> nodosDeRuta = rutaXNodoRepository.listarRutaXNodosPorRuta(r.getId());
+                    /*ArrayList<RutaXNodo> nodosDeRuta = rutaXNodoRepository.listarRutaXNodosPorRuta(r.getId());
 
                     double glp=0;
                     double petroleo =0;
@@ -180,7 +182,7 @@ public class AlgorithmService {
                     for (double d:pesos) {
                         petroleoConsumido += d/150;
                     }
-                    camionHR.setCantPetroleoActual(petroleoConsumido);
+                    camionHR.setCantPetroleoActual(petroleoConsumido);*/
 
 
 
