@@ -31,6 +31,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -162,7 +163,7 @@ public class AlgorithmService {
                     cantPetroleoTanque[0] = tCamion.getCapacidadPetroleo();
                     pesos[0] = tCamion.getCapacidadGLP(); //comienza con el tanque lleno
                     //Calculo de peso en el camion
-                    System.out.println("Cantidad nodos de ruta: "+nodosDeRuta.size());
+                    //System.out.println("Cantidad nodos de ruta: "+nodosDeRuta.size());
                     for(int k=0;k<nodosDeRuta.size();k++){ //por cada nodo de la ruta
                         //hallar el petroleo aca
                         //0 a mas es entrega de pedido
@@ -177,7 +178,7 @@ public class AlgorithmService {
                             pesos[k] = tCamion.getCapacidadGLP()*0.5+tCamion.getPesoTara();      //se rellena el tanque
                             cantPetroleoTanque[k] = tCamion.getCapacidadPetroleo();
                         }
-                        System.out.println("Nodos de ruta: "+nodosDeRuta.get(k).getPedido());
+                       // System.out.println("Nodos de ruta: "+nodosDeRuta.get(k).getPedido());
                     }
                     double petroleoConsumido = 0;
                     double consumoTramoFinal = 0;
@@ -196,7 +197,6 @@ public class AlgorithmService {
 //
 //                    }
                     camionHR.setCantPetroleoActual(petroleoConsumido);
-                    //TODO: cantidadGLPActual y cantidadPetroleoActual en camionHR
                     //puede ser en rutaxnodo con dos columnas mas para cada valor
 
                 }
