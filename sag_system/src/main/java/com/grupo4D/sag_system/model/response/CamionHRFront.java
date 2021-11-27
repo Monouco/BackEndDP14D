@@ -9,6 +9,7 @@ public class CamionHRFront {
     private String horaSalida;
     private String horaLlegada;
     private double cantPetroleoActual;
+    private double cantPetroleoFinalRuta;
     private double cantGlpActual;
     private ArrayList<PedidoHRFront> pedidos;
 
@@ -24,6 +25,27 @@ public class CamionHRFront {
         this.cantPetroleoActual = cantPetroleoActual;
         this.cantGlpActual = cantGlpActual;
         this.pedidos = pedidos;
+    }
+
+
+    public CamionHRFront(int id, String codigoCamion, int numPedidos, String horaSalida, String horaLlegada, double cantPetroleoActual, double cantPetroleoFinalRuta, double cantGlpActual, ArrayList<PedidoHRFront> pedidos) {
+        this.id = id;
+        this.codigoCamion = codigoCamion;
+        this.numPedidos = numPedidos;
+        this.horaSalida = horaSalida;
+        this.horaLlegada = horaLlegada;
+        this.cantPetroleoActual = cantPetroleoActual;
+        this.cantPetroleoFinalRuta = cantPetroleoFinalRuta;
+        this.cantGlpActual = cantGlpActual;
+        this.pedidos = pedidos;
+    }
+
+    public double getCantPetroleoFinalRuta() {
+        return cantPetroleoFinalRuta;
+    }
+
+    public void setCantPetroleoFinalRuta(double cantPetroleoFinalRuta) {
+        this.cantPetroleoFinalRuta = cantPetroleoFinalRuta;
     }
 
     public double getCantGlpActual() {

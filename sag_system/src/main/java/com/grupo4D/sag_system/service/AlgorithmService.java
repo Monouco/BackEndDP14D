@@ -111,7 +111,6 @@ public class AlgorithmService {
             }
 
             double cantGLPTransportado=0;
-            double cantPetroleo = 0;
 
             if (i!=0){
                 //ArrayList<RutaXPedido> pedidosDeRuta = rutaXPedidoRepository.findRutaXPedidosByIdRuta(rutasIniciadas.get(i).getId());
@@ -141,29 +140,30 @@ public class AlgorithmService {
                         //System.out.print("pedido "+pedido1ruta.getId()+"\n");
                         pedidos.add(pedidoHR);
                         cantGLPTransportado += rxp.getCantidadGLPEnviado();
-                        cantPetroleo += rxp.getCostoOperacion();
                     }
                     camionHR.setNumPedidos(pedidos.size());
                     camionHR.setPedidos(pedidos);
                     camionHR.setCantGlpActual(cantGLPTransportado); //cantidad de glp entregado
-                    camionHR.setCantPetroleoActual(cantPetroleo);
+
 
 
                     //Se saca los nodos de una ruta en particular
-                    /*ArrayList<RutaXNodo> nodosDeRuta = rutaXNodoRepository.listarRutaXNodosPorRuta(r.getId());
+                    ArrayList<RutaXNodo> nodosDeRuta = rutaXNodoRepository.listarRutaXNodosPorRuta(r.getId());
 
                     double glp=0;
                     double petroleo =0;
                     double distancia = 0;
                     double [] pesos = new double[nodosDeRuta.size()];
+                    double [] cantPetroleoTanque = new double[nodosDeRuta.size()];
                     int salto=0;
 
                     ArrayList<Integer> distancias = new ArrayList<>();
                     TipoCamion tCamion = tipoCamionRepository.listarTipoCamion(c.getTipoCamion().getId());
+                    cantPetroleoTanque[0] = tCamion.getCapacidadPetroleo();
                     pesos[0] = tCamion.getCapacidadGLP(); //comienza con el tanque lleno
                     //Calculo de peso en el camion
+                    System.out.println("Cantidad nodos de ruta: "+nodosDeRuta.size());
                     for(int k=0;k<nodosDeRuta.size();k++){ //por cada nodo de la ruta
-
                         //hallar el petroleo aca
                         //0 a mas es entrega de pedido
                         //-4,-3 es planta principal
@@ -175,17 +175,27 @@ public class AlgorithmService {
                             pesos[k] = pesos[k-1]*0.5+tCamion.getPesoTara();
                         }else{                                         //si es una planta
                             pesos[k] = tCamion.getCapacidadGLP()*0.5+tCamion.getPesoTara();      //se rellena el tanque
+                            cantPetroleoTanque[k] = tCamion.getCapacidadPetroleo();
                         }
                         System.out.println("Nodos de ruta: "+nodosDeRuta.get(k).getPedido());
                     }
                     double petroleoConsumido = 0;
-                    for (double d:pesos) {
-                        petroleoConsumido += d/150;
+                    double consumoTramoFinal = 0;
+                    double cantPetroleoFinalRuta = 0;
+                    int ind = Arrays.asList(petroleoConsumido).lastIndexOf(tCamion.getCapacidadPetroleo());
+                    for (int y=0;y<pesos.length;y++){
+                        petroleoConsumido += pesos[y]/150;
+                        if (y>=ind){
+                            consumoTramoFinal += pesos[y]/150;
+                        }
                     }
-                    camionHR.setCantPetroleoActual(petroleoConsumido);*/
-
-
-
+                    cantPetroleoFinalRuta = tCamion.getCapacidadPetroleo() - consumoTramoFinal;
+                    camionHR.setCantPetroleoFinalRuta(cantPetroleoFinalRuta);
+//                    for (double d:pesos) {
+//                        petroleoConsumido += d/150;
+//
+//                    }
+                    camionHR.setCantPetroleoActual(petroleoConsumido);
                     //TODO: cantidadGLPActual y cantidadPetroleoActual en camionHR
                     //puede ser en rutaxnodo con dos columnas mas para cada valor
 
