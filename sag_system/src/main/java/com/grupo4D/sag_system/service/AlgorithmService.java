@@ -484,6 +484,8 @@ public class AlgorithmService {
 
         if (algoritmoACS.getHighestNum() != pedidosNuevos.size())
             System.out.println("No se atendieron todos los pedidos para " + tipo);
+
+        System.out.println("Se tienen " + camionesDisponibles.size() + " camiones disponibles para tipo " + tipo);
         //hormigas a camiones
         ArrayList<RutaXNodo> secuenciaRuta = new ArrayList<>();
         ArrayList<RutaXPedido> secuenciaPedido = new ArrayList<>();
