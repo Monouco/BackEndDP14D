@@ -7,7 +7,6 @@ import java.util.ArrayList;
 
 public class ColapsoFront {
     private LocalDateTime fechaColapso;
-
     private int pedidosAtendidos;
     private int pedidosPorAtender;
     private ArrayList<CamionHRFront> hojaRuta;

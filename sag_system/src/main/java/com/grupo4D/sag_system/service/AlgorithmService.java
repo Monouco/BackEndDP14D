@@ -482,6 +482,8 @@ public class AlgorithmService {
 
         hormigas = algoritmoACS.findSolution(hormigas,ordenes,mapa1,cycles,steps, camionesDisponibles.size(),evaporationRate);
 
+        if (algoritmoACS.getHighestNum() != pedidosNuevos.size())
+            System.out.println("No se atendieron todos los pedidos para " + tipo);
         //hormigas a camiones
         ArrayList<RutaXNodo> secuenciaRuta = new ArrayList<>();
         ArrayList<RutaXPedido> secuenciaPedido = new ArrayList<>();
@@ -543,8 +545,6 @@ public class AlgorithmService {
                 rutaXNodo.setNodo(nodo);
                 rutaXNodo.setRuta(ruta);
                 rutaXNodo.setSecuencia(k);
-
-                //rutaXNodoRepository.save(rutaXNodo);
 
                 //respuesta para el front
                 NodoFront nodoFront = new NodoFront();
