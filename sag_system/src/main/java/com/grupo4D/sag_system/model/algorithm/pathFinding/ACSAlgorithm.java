@@ -18,6 +18,7 @@ public class ACSAlgorithm {
     private int hTurno;
     private int highestNum;
     private double bestFitness;
+    private ArrayList<Double> fullOpCost = new ArrayList<>();
     private LocalDateTime curTime;
     //private Random rand;
 
@@ -505,6 +506,7 @@ public class ACSAlgorithm {
         long spentTime;
         int tempSize;
         int a=0;
+        double opCost = 0;
 
         aStar.setVelocity(nuVelocity);
 
@@ -577,6 +579,7 @@ public class ACSAlgorithm {
             rutaSol.addAll(ruta);
             fuel.add(camion.calcFuelConsumption(ruta.size(),camion.getBestSolutionGLP().get(a)));
             a+=1;
+            opCost += fuel.get(fuel.size()-1);
             ordenAnterior = siguienteOrden;
         }
 
@@ -614,7 +617,9 @@ public class ACSAlgorithm {
         }
         rutaSol.addAll(ruta);
         fuel.add(camion.calcFuelConsumption(ruta.size(), camion.getBestSolutionGLP().get(camion.getBestSolutionGLP().size()-1)));
+        opCost += fuel.get(fuel.size()-1);
 
+        fullOpCost.add(opCost);
         camion.setBestSolutionFuel(fuel);
         return rutaSol;
     }
@@ -632,5 +637,13 @@ public class ACSAlgorithm {
 
     public void setCurTime(LocalDateTime curTime) {
         this.curTime = curTime;
+    }
+
+    public ArrayList<Double> getFullOpCost() {
+        return fullOpCost;
+    }
+
+    public void setFullOpCost(ArrayList<Double> fullOpCost) {
+        this.fullOpCost = fullOpCost;
     }
 }

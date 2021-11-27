@@ -36,6 +36,9 @@ public class Ruta {
     @Column(name="desfase")
     private long desfase;
 
+    @Column(name="costoOperacion")
+    private double costoOperacion;
+
     @Column(name="activo")
     private boolean activo = true;
 
@@ -102,4 +105,13 @@ public class Ruta {
     public void setDesfase(long desfase) {
         this.desfase = desfase;
     }
+
+    public double getCostoOperacion() {
+        return costoOperacion;
+    }
+
+    public void setCostoOperacion(double costoOperacion) {
+        this.costoOperacion = costoOperacion;
+    }
+
 }

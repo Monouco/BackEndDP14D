@@ -500,6 +500,7 @@ public class AlgorithmService {
             ruta.setEstado("Iniciado");
             ruta.setTipo(tipo);
             ruta.setDesfase(desfase);
+            ruta.setCostoOperacion(algoritmoACS.getFullOpCost().get(i));
             //ruta.setFechaInicio(horaInicio.plusSeconds(20)+);
 
             //Dependiendo del camion, generamos la averia si es que es simulacion de 3 dias
@@ -545,6 +546,7 @@ public class AlgorithmService {
                 rutaXNodo.setNodo(nodo);
                 rutaXNodo.setRuta(ruta);
                 rutaXNodo.setSecuencia(k);
+
 
                 //respuesta para el front
                 NodoFront nodoFront = new NodoFront();
