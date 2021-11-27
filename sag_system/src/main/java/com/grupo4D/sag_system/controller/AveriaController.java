@@ -212,6 +212,13 @@ public class AveriaController {
 
         System.out.println("Terminado de re programar los pedidos de la averia del camion " + averia.getIdCamion()+" del tipo " + averia.getType());
 
+        if (averiaModel.getUbicacion()== null){
+            //si no se logro encontrar la averia se registra en 0,0
+            Nodo n0 = new Nodo(0,0);
+            n0.setId(1);
+            averiaModel.setUbicacion(n0);
+        }
+
         return averiaService.guardarAveriaNueva(averiaModel);
     }
 
