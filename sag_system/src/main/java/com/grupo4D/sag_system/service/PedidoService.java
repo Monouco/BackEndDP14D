@@ -11,7 +11,21 @@ import com.grupo4D.sag_system.repository.PedidoRepository;
 import com.grupo4D.sag_system.repository.NodoRepository;
 import com.grupo4D.sag_system.repository.RutaXPedidoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -31,9 +45,10 @@ public class PedidoService {
     @Autowired
     RutaXPedidoRepository rutaXPedidoRepository;
 
-    public void generarPedidosColapso(FechaFront fecha){//
+    @RequestMapping(value = "/zip", produces="application/zip")
+    public ResponseEntity<ByteArrayResource> generarPedidosColapso(FechaFront fecha){//
         //funcion exponencial para registrar pedidos
-        int limit =180;//6 meses aprox
+        int limit =1200;//40 meses aprox
         double base = 5;
         double k = 5;
         int a=10;
@@ -49,7 +64,9 @@ public class PedidoService {
         int mes=fecha.getF().getMonthValue();
         int anio=fecha.getF().getYear();
         int mesAnt =fecha.getF().getMonthValue();
-        String path = "ventas"+Integer.toString(anio)+Integer.toString(mes)+".txt";
+        ArrayList<String> nombresArchivos = new ArrayList<>();
+        String path = "ventas"+Integer.toString(anio)+String.format("%02d",mes)+".txt";
+        nombresArchivos.add(path);
         File arch = new File(path);
         try{
             for (int i=1;i<limit;i++){
@@ -95,22 +112,107 @@ public class PedidoService {
                         anio = anio+1;
                     }
                     writer.close();
-                    path = "ventas"+Integer.toString(anio)+Integer.toString(mes)+".txt";
+
+                    path = "ventas"+Integer.toString(anio)+String.format("%02d",mes)+".txt";
+                    nombresArchivos.add(path);
                 }else if (anio < fechaPedido.getYear()){
                     anio = anio+1;
                     mes = 1;
                     writer.close();
-                    path = "ventas"+Integer.toString(anio)+Integer.toString(mes)+".txt";
+                    path = "ventas"+Integer.toString(anio)+String.format("%02d",mes)+".txt";
+                    nombresArchivos.add(path);
                 }
                 writer.close();
             }
 
+            try
+            {
+                //Source files
+
+                //Zipped file
+                String zipFilename = "Archivos.zip";
+                File zipFile = new File(zipFilename);
+                FileOutputStream fos  = new FileOutputStream(zipFile);
+                ZipOutputStream zos = new ZipOutputStream(fos);
+                for(String s:nombresArchivos) {
+                    zipFile(s,zos);
+                }
+
+
+                zos.close();
+            }
+            catch (IOException e)
+            {
+                e.printStackTrace();
+                System.out.println("Error en compresión de archivos");
+            }
+            byte[] data = Files.readAllBytes(Path.of("Archivos.zip"));
+            ByteArrayResource resource = new ByteArrayResource(data);
+
+            try{
+                for (String s: nombresArchivos){
+                    Files.deleteIfExists(Path.of(s));
+                }
+
+            }catch (IOException ex){
+                ex.printStackTrace();
+                System.out.println("Error en el borrado de archivos");
+            }
+
+            return ResponseEntity.ok()
+                    // Content-Disposition
+                    .header(HttpHeaders.CONTENT_DISPOSITION, "attachment;filename=" + "Archivos.zip")
+                    // Content-Type
+//                    .contentType(mediaType) //
+                    // Content-Lengh
+                    .contentLength(data.length) //
+                    .body(resource);
+
         }catch (IOException ex){
             System.out.println("Error en el archivo de "+path);
         }
+        return null;
     }
 
-    public Pedido guardarPedido(Pedido pedido){
+
+
+    private static void zipFile(String fileName, ZipOutputStream zos) throws IOException
+    {
+        final int BUFFER = 1024;
+        BufferedInputStream bis = null;
+        try
+        {
+            File file = new File(fileName);
+            FileInputStream fis = new FileInputStream(file);
+            bis = new BufferedInputStream(fis, BUFFER);
+
+            // ZipEntry --- Here file name can be created using the source file
+            ZipEntry zipEntry = new ZipEntry(file.getName());
+            zos.putNextEntry(zipEntry);
+            byte data[] = new byte[BUFFER];
+            int count;
+            while((count = bis.read(data, 0, BUFFER)) != -1)
+            {
+                zos.write(data, 0, count);
+            }
+            // close entry every time
+            zos.closeEntry();
+        }
+        finally
+        {
+            try
+            {
+                bis.close();
+            }
+            catch (IOException e)
+            {
+                e.printStackTrace();
+            }
+        }
+    }
+
+
+public Pedido guardarPedido(Pedido pedido){
         return pedidoRepository.save(pedido);
     }
 
