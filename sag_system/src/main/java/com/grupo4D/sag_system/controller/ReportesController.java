@@ -1,9 +1,12 @@
 package com.grupo4D.sag_system.controller;
 
 import com.grupo4D.sag_system.model.Nodo;
-import com.grupo4D.sag_system.model.reports.ReporteCamionConsumoMensual;
+import com.grupo4D.sag_system.model.request.Fecha1TipoFront;
+import com.grupo4D.sag_system.model.request.Fecha2TipoFront;
 import com.grupo4D.sag_system.model.request.FechaFront;
+import com.grupo4D.sag_system.model.response.ConsumoPetroleoFront;
 import com.grupo4D.sag_system.model.response.RepGLPEntregadoXCamionFront;
+import com.grupo4D.sag_system.model.reports.ReporteCamionConsumoMensual;
 
 import com.grupo4D.sag_system.service.ReportesService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,8 +30,13 @@ public class ReportesController {
     private ReportesService reportesService;
 
     @PostMapping("/GLPEntregadoXCamion")
-    public ArrayList<RepGLPEntregadoXCamionFront> reporteGLPporDia(@RequestBody FechaFront fecha){
-        return reportesService.glpXCamionXFecha(fecha);
+    public ArrayList<RepGLPEntregadoXCamionFront> reporteGLPporDia(@RequestBody Fecha1TipoFront req){
+        return reportesService.glpXCamionXFecha(req);
+    }
+
+    @PostMapping("/consumoPetroleoXFechas")
+    public ConsumoPetroleoFront reporteConsumoPetroleoXFechas(@RequestBody Fecha2TipoFront req){
+        return reportesService.consumoPetroleoDiario(req);
     }
 
     @PostMapping("/ConsumoMensual")
