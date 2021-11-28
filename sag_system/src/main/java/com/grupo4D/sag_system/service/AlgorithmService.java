@@ -181,7 +181,12 @@ public class AlgorithmService {
 //                                cantPetroleoTanque[k] = tCamion.getCapacidadPetroleo();
 //                            }
                             } else { //si es un nodo camino o una planta
-                                pesos[k] = pesos[k - 1] * 0.5 + tCamion.getPesoTara(); //si es un nodo camino
+                                if (k!=0) {
+                                    pesos[k] = pesos[k - 1] * 0.5 + tCamion.getPesoTara(); //si es un nodo camino
+                                }else{
+                                    pesos[k] = tCamion.getCapacidadGLP() * 0.5 + tCamion.getPesoTara();      //se rellena el tanque
+                                    cantPetroleoTanque[k] = tCamion.getCapacidadPetroleo();
+                                }
                                 if (sec<nodosPorPlanta.size() && nodosDeRuta.get(k).getSecuencia() == nodosPorPlanta.get(sec).getSecuencia()) { //esta en una planta
                                     pesos[k] = tCamion.getCapacidadGLP() * 0.5 + tCamion.getPesoTara();      //se rellena el tanque
                                     cantPetroleoTanque[k] = tCamion.getCapacidadPetroleo();   //se rellena el tanque
