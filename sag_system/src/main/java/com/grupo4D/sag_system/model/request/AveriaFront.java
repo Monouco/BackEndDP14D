@@ -22,6 +22,16 @@ public class AveriaFront {
 
         private int multiplier;
 
+        private String codigoCamion;
+
+        public String getCodigoCamion() {
+                return codigoCamion;
+        }
+
+        public void setCodigoCamion(String codigoCamion) {
+                this.codigoCamion = codigoCamion;
+        }
+
         public AveriaFront() {
                 this.multiplier = 1;
                 this.type = 1;

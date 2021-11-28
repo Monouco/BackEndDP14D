@@ -5,6 +5,7 @@ import com.grupo4D.sag_system.model.Nodo;
 import com.grupo4D.sag_system.model.request.AveriaFront;
 import com.grupo4D.sag_system.model.response.NodoFront;
 import com.grupo4D.sag_system.repository.AveriaRepository;
+import com.grupo4D.sag_system.repository.CamionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,6 +15,9 @@ import java.util.ArrayList;
 public class AveriaService{
     @Autowired
     AveriaRepository averiaRepository;
+
+    @Autowired
+    CamionRepository camionRepository;
 
     public Averia guardarAveria(Averia averia){
         return averiaRepository.save(averia);
@@ -44,6 +48,7 @@ public class AveriaService{
             tiempo = (long)(hora/velocidad * nanos);
             averia.setEndDate(averia.getStartDate().plusNanos(tiempo));
             averia.setIdCamion(averiaActual.getCamion().getId());
+            averia.setCodigoCamion(camionRepository.listarCodigo1Camion(averia.getIdCamion()));
             Nodo nodoTempo =  averiaActual.getUbicacion();
             NodoFront nodo = new NodoFront();
             nodo.setX(nodoTempo.getCoordenadaX());
