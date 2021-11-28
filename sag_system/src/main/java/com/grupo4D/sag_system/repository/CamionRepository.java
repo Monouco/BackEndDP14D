@@ -1,6 +1,7 @@
 package com.grupo4D.sag_system.repository;
 
 import com.grupo4D.sag_system.model.Camion;
+import com.grupo4D.sag_system.model.reports.ReporteCamionConsumoMensual;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
@@ -85,4 +86,34 @@ public interface CamionRepository extends CrudRepository<Camion,Integer> {
             nativeQuery = true)
     public Camion obtenerCamion(String tipo, String codigo);
 
+    @Query(
+            value = "select  " +
+                    "c.id_camion, " +
+                    "concat(t.abreviatura , '-' , c.codigo_camion) codigo, " +
+                    "sum(r.costo_operacion) petroleoConsumido, " +
+                    "sum(ifnull(( " +
+                    " select count(rn.secuencia) " +
+                    "    from rutaxnodo rn " +
+                    "    where rn.id_ruta = r.id_ruta " +
+                    "    and rn.activo = 1 " +
+                    "),0))  distanciaRecorrida, " +
+                    "monthname(r.fecha_inicio) mes " +
+                    "from " +
+                    "camion c  " +
+                    "inner join ruta r  " +
+                    "on r.id_camion = c.id_camion " +
+                    "inner join tipo_camion t " +
+                    "on t.id_tipo_camion = c.id_tipo_camion " +
+                    "where c.activo = 1 " +
+                    "and r.activo = 1 " +
+                    "and t.activo = 1 " +
+                    "and r.tipo = 1 " +
+                    "and (r.fecha_inicio between ?1 and ?2 " +
+                    "or r.fecha_fin between ?1 and ?2) " +
+                    "group by c.id_camion, " +
+                    "concat(t.abreviatura , '-' , c.codigo_camion) , " +
+                    "monthname(r.fecha_inicio)" ,
+            nativeQuery = true
+    )
+    public ArrayList<ReporteCamionConsumoMensual> generarReporteConsumoMensual(LocalDateTime inicio, LocalDateTime fin);
 }
