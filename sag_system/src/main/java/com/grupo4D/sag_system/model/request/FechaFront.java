@@ -8,9 +8,9 @@ public class FechaFront {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     LocalDateTime fecha;
 
-    @JsonFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     LocalDateTime fechaIni;
-    @JsonFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     LocalDateTime fechaFin;
 
     public FechaFront(LocalDateTime f) {
