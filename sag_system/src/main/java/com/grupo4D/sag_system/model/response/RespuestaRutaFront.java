@@ -12,6 +12,7 @@ public class RespuestaRutaFront {
     private ArrayList<RespuestaNodoFront> orders;
     private ArrayList<NodoFront> route;
     private int idCamion;
+    private String code;
     private int active = 1;
 
     public RespuestaRutaFront() {
@@ -80,5 +81,13 @@ public class RespuestaRutaFront {
 
     public void setIdCamion(int idCamion) {
         this.idCamion = idCamion;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
     }
 }

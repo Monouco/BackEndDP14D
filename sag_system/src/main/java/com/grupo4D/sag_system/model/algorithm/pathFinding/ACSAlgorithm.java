@@ -18,6 +18,7 @@ public class ACSAlgorithm {
     private int hTurno;
     private int highestNum;
     private double bestFitness;
+    private ArrayList<Double> fullOpCost = new ArrayList<>();
     private LocalDateTime curTime;
     //private Random rand;
 
@@ -248,7 +249,7 @@ public class ACSAlgorithm {
                 //Cambiando a mejor solucion
                 if (fitnessTemp >= globalFitness) {
                     globalFitness = fitnessTemp;
-                    highestNum = numOrders;
+                    highestNum = numAtendidos;
                     camiones.get(l).changeSolution();
                 }
                 camiones.get(l).clearSolution();
@@ -493,6 +494,7 @@ public class ACSAlgorithm {
         int ordenAnterior = -1-this.numAlmacenes;
         ArrayList<int[]> ruta = new ArrayList<>();
         ArrayList<int[]> rutaSol = new ArrayList<>();
+        ArrayList<Double> fuel = new ArrayList<>();
         int [] coordenate;
         int xIni, yIni, xDes, yDes;
         Order curOrden, lastOrden;
@@ -503,6 +505,8 @@ public class ACSAlgorithm {
         long nanos = 1000000000;
         long spentTime;
         int tempSize;
+        int a=0;
+        double opCost = 0;
 
         aStar.setVelocity(nuVelocity);
 
@@ -573,6 +577,9 @@ public class ACSAlgorithm {
 
             rutaSol.set(location, coordenate);
             rutaSol.addAll(ruta);
+            fuel.add(camion.calcFuelConsumption(ruta.size(),camion.getBestSolutionGLP().get(a)));
+            a+=1;
+            opCost += fuel.get(fuel.size()-1);
             ordenAnterior = siguienteOrden;
         }
 
@@ -609,7 +616,11 @@ public class ACSAlgorithm {
             ruta = aStar.astar_search(new int[]{xIni, yIni}, new int[]{xDes, yDes}, this.curTime.plusNanos(spentTime), 0);
         }
         rutaSol.addAll(ruta);
+        fuel.add(camion.calcFuelConsumption(ruta.size(), camion.getBestSolutionGLP().get(camion.getBestSolutionGLP().size()-1)));
+        opCost += fuel.get(fuel.size()-1);
 
+        fullOpCost.add(opCost);
+        camion.setBestSolutionFuel(fuel);
         return rutaSol;
     }
 
@@ -626,5 +637,13 @@ public class ACSAlgorithm {
 
     public void setCurTime(LocalDateTime curTime) {
         this.curTime = curTime;
+    }
+
+    public ArrayList<Double> getFullOpCost() {
+        return fullOpCost;
+    }
+
+    public void setFullOpCost(ArrayList<Double> fullOpCost) {
+        this.fullOpCost = fullOpCost;
     }
 }

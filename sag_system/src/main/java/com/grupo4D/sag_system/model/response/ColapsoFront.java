@@ -11,6 +11,7 @@ public class ColapsoFront {
     private int pedidosPorAtender;
     private ArrayList<CamionHRFront> hojaRuta;
     private ArrayList<Pedido> pedidosEnCola;
+    private String flotaFaltante;
     //Hoja de rutas
     //Camiones necesarios
     public ColapsoFront(){
@@ -55,6 +56,14 @@ public class ColapsoFront {
 
     public void setPedidosEnCola(ArrayList<Pedido> pedidosEnCola) {
         this.pedidosEnCola = pedidosEnCola;
+    }
+
+    public String getFlotaFaltante() {
+        return flotaFaltante;
+    }
+
+    public void setFlotaFaltante(String flotaFaltante) {
+        this.flotaFaltante = flotaFaltante;
     }
 
 }

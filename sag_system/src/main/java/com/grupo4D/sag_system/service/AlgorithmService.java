@@ -328,6 +328,7 @@ public class AlgorithmService {
                 fill.setActive(0);
                 fill.setIdCamion(key);
             }
+            fill.setCode(camionRepository.listarCodigo1Camion(key));
             respuesta.add(fill);
         }
         apiResponse.setCollapseInfo(null);
@@ -490,6 +491,8 @@ public class AlgorithmService {
 
         if (algoritmoACS.getHighestNum() != pedidosNuevos.size())
             System.out.println("No se atendieron todos los pedidos para " + tipo);
+
+        System.out.println("Se tienen " + camionesDisponibles.size() + " camiones disponibles para tipo " + tipo);
         //hormigas a camiones
         ArrayList<RutaXNodo> secuenciaRuta = new ArrayList<>();
         ArrayList<RutaXPedido> secuenciaPedido = new ArrayList<>();
@@ -506,6 +509,7 @@ public class AlgorithmService {
             ruta.setEstado("Iniciado");
             ruta.setTipo(tipo);
             ruta.setDesfase(desfase);
+            ruta.setCostoOperacion(algoritmoACS.getFullOpCost().get(i));
             //ruta.setFechaInicio(horaInicio.plusSeconds(20)+);
 
             //Dependiendo del camion, generamos la averia si es que es simulacion de 3 dias
@@ -551,6 +555,7 @@ public class AlgorithmService {
                 rutaXNodo.setNodo(nodo);
                 rutaXNodo.setRuta(ruta);
                 rutaXNodo.setSecuencia(k);
+
 
                 //respuesta para el front
                 NodoFront nodoFront = new NodoFront();
