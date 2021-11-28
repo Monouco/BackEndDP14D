@@ -395,9 +395,6 @@ public class AlgorithmService {
         return apiResponse;
     }
 
-
-    //public ArrayList<RutaFront> asignarPedidos(LocalDateTime horaInicio){
-    //public ArrayList<RutaFront> asignarPedidos(String fecha){
     public ArrayList<RutaFront> asignarPedidos(LocalDateTime fecha, ArrayList<Pedido> pedidosNuevos, int tipo, long desfase, int multiplier){
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd@HH:mm:ss");
         LocalDateTime horaInicio = fecha;
@@ -456,7 +453,7 @@ public class AlgorithmService {
         long nanos = 1000000000;
         double velocity = (double)10/36;
         double evaporationRate = 0.3;
-        boolean averiado = false;
+        int averiado = 0;
         //revisar
 
 
@@ -525,7 +522,7 @@ public class AlgorithmService {
                     StaticValues.virtualDate = fecha;
                     StaticValues.start = fecha.plusHours(2);
                     StaticValues.mult = multiplier;
-                    averiado = true;
+                    averiado++;
                     AveriaScheduled averia = applicationContext.getBean(AveriaScheduled.class);
                     taskExecutor.execute(averia);
                     break;
@@ -536,7 +533,7 @@ public class AlgorithmService {
                     StaticValues.virtualDate = fecha;
                     StaticValues.start = fecha.plusHours(3);
                     StaticValues.mult = multiplier;
-                    averiado = true;
+                    averiado++;
                     AveriaScheduled averia = applicationContext.getBean(AveriaScheduled.class);
                     taskExecutor.execute(averia);
                     break;
@@ -680,8 +677,8 @@ public class AlgorithmService {
         rutaXPedidoRepository.saveAll(secuenciaPedido);
         rutaXPlantaRepository.saveAll(secuenciaPlanta);
 
-        if(averiado)
-            ConcurrentValues.allowFail.release();
+        if(averiado > 0)
+            ConcurrentValues.allowFail.release(averiado);
 
         return solucion;
     }
