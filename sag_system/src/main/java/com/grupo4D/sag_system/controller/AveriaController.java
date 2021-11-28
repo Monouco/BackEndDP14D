@@ -151,24 +151,27 @@ public class AveriaController {
                 int i, index = rutaXNodos.size() - 1;
                 boolean flag = false;
                 for (i = 0; i < rutaXNodos.size(); i++) {
-                    tiempoAproximado += tiempo1Km;
-                    //Supongo que aca obtiene el valor, por lo que a partir de este nodo, vamos a volver el activo 0 para que no se tomen en cuenta
-                    if (tiempoAproximado > tiempoAveria && !flag) {
-                        index = i;
-                        flag = true;
+                    if(!flag) {
+                        tiempoAproximado += tiempo1Km;
+                        //Supongo que aca obtiene el valor, por lo que a partir de este nodo, vamos a volver el activo 0 para que no se tomen en cuenta
+                        if (tiempoAproximado > tiempoAveria) {
+                            index = i;
+                            flag = true;
+                        }
+                        if (rutaXNodos.get(i).getPedido() >= 0) {
+                            tiempoAproximado += 600 * nanos;
+                        }
+                        //Esto es que se averia atendiendo a alguien?
+                        if (tiempoAproximado > tiempoAveria ) {
+                            index = i;
+                            flag = true;
+                        }
                     }
-                    if (flag) {
+                    else{
                         rutaXNodos.get(i).setActivo(false);
                         continue;
                     }
-                    if (rutaXNodos.get(i).getPedido() >= 0) {
-                        tiempoAproximado += 600 * nanos;
-                    }
-                    //Esto es que se averia atendiendo a alguien?
-                    if (tiempoAproximado > tiempoAveria && !flag) {
-                        index = i;
-                        flag = true;
-                    }
+
                 }
                 //registrar el x y y en averia
                 System.out.println("Va a registrar el nodo en la averia" );
