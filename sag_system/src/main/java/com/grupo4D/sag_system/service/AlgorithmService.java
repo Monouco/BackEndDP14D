@@ -322,6 +322,7 @@ public class AlgorithmService {
                 fill.setActive(0);
                 fill.setIdCamion(key);
             }
+            fill.setCode(camionRepository.listarCodigo1Camion(key));
             respuesta.add(fill);
         }
         apiResponse.setCollapseInfo(null);
