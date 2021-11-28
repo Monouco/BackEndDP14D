@@ -159,7 +159,7 @@ public class AveriaController {
                     }
                     if (flag) {
                         rutaXNodos.get(i).setActivo(false);
-                        break;
+                        continue;
                     }
                     if (rutaXNodos.get(i).getPedido() >= 0) {
                         tiempoAproximado += 600 * nanos;
@@ -168,10 +168,6 @@ public class AveriaController {
                     if (tiempoAproximado > tiempoAveria && !flag) {
                         index = i;
                         flag = true;
-                    }
-                    if (flag) {
-                        rutaXNodos.get(i).setActivo(false);
-                        break;
                     }
                 }
                 //registrar el x y y en averia
