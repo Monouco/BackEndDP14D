@@ -159,7 +159,7 @@ public class AveriaController {
                             flag = true;
                         }
                     }
-                    else{
+                    if(flag){
                         rutaXNodos.get(i).setActivo(false);
                         continue;
                     }
@@ -168,7 +168,7 @@ public class AveriaController {
                         tiempoAproximado += 600 * nanos;
                     }
                     //Esto es que se averia atendiendo a alguien?
-                    if (tiempoAproximado > tiempoAveria ) {
+                    if (tiempoAproximado > tiempoAveria && !flag) {
                         index = i;
                         flag = true;
                     }
