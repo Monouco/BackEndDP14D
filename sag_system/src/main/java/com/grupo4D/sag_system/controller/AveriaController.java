@@ -158,18 +158,19 @@ public class AveriaController {
                             index = i;
                             flag = true;
                         }
-                        if (rutaXNodos.get(i).getPedido() >= 0) {
-                            tiempoAproximado += 600 * nanos;
-                        }
-                        //Esto es que se averia atendiendo a alguien?
-                        if (tiempoAproximado > tiempoAveria ) {
-                            index = i;
-                            flag = true;
-                        }
                     }
                     else{
                         rutaXNodos.get(i).setActivo(false);
                         continue;
+                    }
+
+                    if (rutaXNodos.get(i).getPedido() >= 0) {
+                        tiempoAproximado += 600 * nanos;
+                    }
+                    //Esto es que se averia atendiendo a alguien?
+                    if (tiempoAproximado > tiempoAveria ) {
+                        index = i;
+                        flag = true;
                     }
 
                 }
