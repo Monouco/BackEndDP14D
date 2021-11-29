@@ -10,6 +10,7 @@ import com.grupo4D.sag_system.service.PedidoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -60,9 +61,9 @@ public class PedidoController {
         return pedidoService.listarPedidosTemp();
     }
 
-    @RequestMapping(value = "/generarPedidosColapso", produces="application/zip",  method= RequestMethod.POST)
-    public void generarPedidosColapso (){
-        pedidoService.generarPedidosColapso();
+    @RequestMapping(value = "/generarPedidosColapso", produces="application/zip",  method= RequestMethod.GET)
+    public void generarPedidosColapso (HttpServletRequest request){
+        pedidoService.generarPedidosColapso( request);
     }
 
 
