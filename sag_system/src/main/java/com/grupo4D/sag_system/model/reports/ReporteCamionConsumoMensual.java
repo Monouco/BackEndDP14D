@@ -4,7 +4,7 @@ public class ReporteCamionConsumoMensual {
     private int idCamion;
     private String codigoCamion;
     private double petroleoConsumido;
-    private double distancia;
+    private long distancia;
     private String mes;
 
     public ReporteCamionConsumoMensual(){
@@ -43,11 +43,11 @@ public class ReporteCamionConsumoMensual {
         this.petroleoConsumido = petroleoConsumido;
     }
 
-    public double getDistancia() {
+    public long getDistancia() {
         return distancia;
     }
 
-    public void setDistancia(double distancia) {
+    public void setDistancia(long distancia) {
         this.distancia = distancia;
     }
 

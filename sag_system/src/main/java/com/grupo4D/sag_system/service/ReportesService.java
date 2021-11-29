@@ -157,7 +157,7 @@ public class ReportesService {
             consumo.setIdCamion((int)t[0]);
             consumo.setCodigoCamion((String)t[1]);
             consumo.setPetroleoConsumido((double)t[2]);
-            consumo.setDistancia((double)t[3]);
+            consumo.setDistancia((long)t[3]);
             consumo.setMes((String)t[4]);
             consumoMensual.add(consumo);
         }
