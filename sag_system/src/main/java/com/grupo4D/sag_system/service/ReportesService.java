@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.lang.reflect.Array;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -157,7 +158,8 @@ public class ReportesService {
             consumo.setIdCamion((int)t[0]);
             consumo.setCodigoCamion((String)t[1]);
             consumo.setPetroleoConsumido((double)t[2]);
-            consumo.setDistancia((long)t[3]);
+            BigDecimal dTemp = (BigDecimal) t[3];
+            consumo.setDistancia(dTemp.doubleValue());
             consumo.setMes((String)t[4]);
             consumoMensual.add(consumo);
         }
