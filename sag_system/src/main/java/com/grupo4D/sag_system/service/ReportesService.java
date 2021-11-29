@@ -139,7 +139,7 @@ public class ReportesService {
 
         Font tituloFont = workbook.createFont();
         tituloFont.setBold(true);
-        tituloFont.setFontHeight((short)22);
+        tituloFont.setFontHeight((short)(tituloFont.getFontHeight() + 5));
 
         Font headerFont = workbook.createFont();
         headerFont.setBold(true);
@@ -178,11 +178,11 @@ public class ReportesService {
         estiloHeader.setFont(codigoFont);
 
         CellStyle estiloCelda = workbook.createCellStyle();
-        estiloCodigo.setVerticalAlignment(VerticalAlignment.CENTER);
-        estiloCodigo.setBorderBottom(BorderStyle.MEDIUM);
-        estiloCodigo.setBorderLeft(BorderStyle.MEDIUM);
-        estiloCodigo.setBorderRight(BorderStyle.MEDIUM);
-        estiloCodigo.setBorderTop(BorderStyle.MEDIUM);
+        estiloCelda.setVerticalAlignment(VerticalAlignment.CENTER);
+        estiloCelda.setBorderBottom(BorderStyle.MEDIUM);
+        estiloCelda.setBorderLeft(BorderStyle.MEDIUM);
+        estiloCelda.setBorderRight(BorderStyle.MEDIUM);
+        estiloCelda.setBorderTop(BorderStyle.MEDIUM);
 
 
 
