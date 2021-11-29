@@ -158,9 +158,8 @@ public class ReportesService {
             consumo.setIdCamion((int)t[0]);
             consumo.setCodigoCamion((String)t[1]);
             //System.out.println("Esta clase es : "+t[2].getClass());
-            Double dTemp = (Double) t[2];
-            consumo.setPetroleoConsumido(dTemp.doubleValue());
-             dTemp = (Double) t[3];
+            consumo.setPetroleoConsumido((double) t[2]);
+            BigDecimal dTemp = (BigDecimal) t[3];
             consumo.setDistancia(dTemp.doubleValue());
             consumo.setMes((String)t[4]);
             consumoMensual.add(consumo);
