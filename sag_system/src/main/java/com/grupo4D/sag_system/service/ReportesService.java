@@ -137,6 +137,17 @@ public class ReportesService {
         sheet.setColumnWidth(2, 30 * 256);
         sheet.setColumnWidth(3, 30 * 256);
 
+        Font tituloFont = workbook.createFont();
+        tituloFont.setBold(true);
+        tituloFont.setFontHeight((short)22);
+
+        Font headerFont = workbook.createFont();
+        headerFont.setBold(true);
+        headerFont.setFontHeight((short)(headerFont.getFontHeight() + 1));
+
+        Font codigoFont = workbook.createFont();
+        codigoFont.setBold(true);
+
         CellStyle estiloTitulo = workbook.createCellStyle();
         estiloTitulo.setAlignment(HorizontalAlignment.CENTER);
         estiloTitulo.setVerticalAlignment(VerticalAlignment.CENTER);
@@ -144,6 +155,36 @@ public class ReportesService {
         estiloTitulo.setBorderLeft(BorderStyle.MEDIUM);
         estiloTitulo.setBorderRight(BorderStyle.MEDIUM);
         estiloTitulo.setBorderTop(BorderStyle.MEDIUM);
+
+        estiloTitulo.setFont(tituloFont);
+
+        CellStyle estiloHeader = workbook.createCellStyle();
+        estiloHeader.setAlignment(HorizontalAlignment.CENTER);
+        estiloHeader.setVerticalAlignment(VerticalAlignment.CENTER);
+        estiloHeader.setBorderBottom(BorderStyle.MEDIUM);
+        estiloHeader.setBorderLeft(BorderStyle.MEDIUM);
+        estiloHeader.setBorderRight(BorderStyle.MEDIUM);
+        estiloHeader.setBorderTop(BorderStyle.MEDIUM);
+
+        estiloHeader.setFont(headerFont);
+
+        CellStyle estiloCodigo = workbook.createCellStyle();
+        estiloCodigo.setVerticalAlignment(VerticalAlignment.CENTER);
+        estiloCodigo.setBorderBottom(BorderStyle.MEDIUM);
+        estiloCodigo.setBorderLeft(BorderStyle.MEDIUM);
+        estiloCodigo.setBorderRight(BorderStyle.MEDIUM);
+        estiloCodigo.setBorderTop(BorderStyle.MEDIUM);
+
+        estiloHeader.setFont(codigoFont);
+
+        CellStyle estiloCelda = workbook.createCellStyle();
+        estiloCodigo.setVerticalAlignment(VerticalAlignment.CENTER);
+        estiloCodigo.setBorderBottom(BorderStyle.MEDIUM);
+        estiloCodigo.setBorderLeft(BorderStyle.MEDIUM);
+        estiloCodigo.setBorderRight(BorderStyle.MEDIUM);
+        estiloCodigo.setBorderTop(BorderStyle.MEDIUM);
+
+
 
         String mesAnt = "";
         String mesAct;
@@ -175,6 +216,7 @@ public class ReportesService {
                 Cell celda;
                 for(int i = 1; i < 4; i++){
                     celda = filaTitulo.createCell(i);
+                    celda.setCellStyle(estiloTitulo);
                 }
 
                 sheet.addMergedRegion(new CellRangeAddress(k,k,1,3));
@@ -188,6 +230,10 @@ public class ReportesService {
                 Cell celdaDistancia = filaHeader.createCell(3);
                 celdaDistancia.setCellValue("Distancia Recorrida");
 
+                celdaCodigo.setCellStyle(estiloHeader);
+                celdaConsumo.setCellStyle(estiloHeader);
+                celdaDistancia.setCellStyle(estiloHeader);
+
                 rows += 3;
             }
             Row filaContenido = sheet.createRow(rows);
@@ -197,6 +243,10 @@ public class ReportesService {
             celdaConsumoVal.setCellValue(linea.getPetroleoConsumido());
             Cell celdaDistanciaVal = filaContenido.createCell(3);
             celdaDistanciaVal.setCellValue(linea.getDistancia());
+
+            celdaCodigoVal.setCellStyle(estiloCodigo);
+            celdaConsumoVal.setCellStyle(estiloCelda);
+            celdaDistanciaVal.setCellStyle(estiloCelda);
 
             rows++;
             mesAnt = mesAct;
