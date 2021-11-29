@@ -9,8 +9,7 @@ import com.grupo4D.sag_system.model.response.ConsumoPetroleoFront;
 import com.grupo4D.sag_system.model.response.ConsumoPetroleoNodoFront;
 import com.grupo4D.sag_system.model.response.RepGLPEntregadoXCamionFront;
 import com.grupo4D.sag_system.repository.*;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -135,6 +134,14 @@ public class ReportesService {
         sheet.setColumnWidth(1, 30 * 256);
         sheet.setColumnWidth(2, 30 * 256);
         sheet.setColumnWidth(3, 30 * 256);
+
+        CellStyle estiloTitulo = workbook.createCellStyle();
+        estiloTitulo.setAlignment(HorizontalAlignment.CENTER);
+        estiloTitulo.setVerticalAlignment(VerticalAlignment.CENTER);
+        estiloTitulo.setBorderBottom(BorderStyle.MEDIUM);
+        estiloTitulo.setBorderLeft(BorderStyle.MEDIUM);
+        estiloTitulo.setBorderRight(BorderStyle.MEDIUM);
+        estiloTitulo.setBorderTop(BorderStyle.MEDIUM);
 
         String mesAnt = "";
         String mesAct;
