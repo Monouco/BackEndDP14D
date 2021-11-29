@@ -14,11 +14,13 @@ import org.apache.tomcat.jni.Local;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import javax.servlet.http.HttpServletRequest;
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -48,8 +50,8 @@ public class PedidoService {
     @Autowired
     RutaXPedidoRepository rutaXPedidoRepository;
 
-    @RequestMapping(value = "/generarPedidosColapso", produces="application/zip", method= RequestMethod.POST)
-    public ResponseEntity<ByteArrayResource> generarPedidosColapso(){//
+    @RequestMapping(value = "/generarPedidosColapso", produces="application/zip", method= RequestMethod.GET)
+    public ResponseEntity<ByteArrayResource> generarPedidosColapso(HttpServletRequest request){//
         FechaFront fecha = new FechaFront();
         LocalDateTime l =LocalDateTime.of(2021, Month.NOVEMBER, 16, 00, 00, 01);
         fecha.setF(l);
@@ -167,9 +169,9 @@ public class PedidoService {
 
             return ResponseEntity.ok()
                     // Content-Disposition
-                    .header(HttpHeaders.CONTENT_DISPOSITION, "attachment;filename=" + "Archivos.zip")
+                    .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + "Archivos.zip")
                     // Content-Type
-//                    .contentType(mediaType) //
+                    .contentType(MediaType.parseMediaType("application/zip")) //
                     // Content-Lengh
                     .contentLength(data.length) //
                     .body(resource);
