@@ -60,9 +60,9 @@ public class PedidoController {
         return pedidoService.listarPedidosTemp();
     }
 
-    @PostMapping("/generarPedidosColapso")
-    public void generarPedidosColapso (@RequestBody FechaFront fecha){
-        pedidoService.generarPedidosColapso(fecha);
+    @RequestMapping(value = "/generarPedidosColapso", produces="application/zip",  method= RequestMethod.POST)
+    public void generarPedidosColapso (){
+        pedidoService.generarPedidosColapso();
     }
 
 
