@@ -20,10 +20,12 @@ import org.springframework.stereotype.Service;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.lang.reflect.Array;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 @Service
 public class ReportesService {
@@ -148,7 +150,20 @@ public class ReportesService {
         int k = 1;
         int rows = 0;
 
-        ArrayList<ReporteCamionConsumoMensual> consumoMensual = camionRepository.generarReporteConsumoMensual(fechaInicio, fechaFin);
+        ArrayList<ReporteCamionConsumoMensual> consumoMensual = new ArrayList<>();
+        List<Object[]> temp = camionRepository.generarReporteConsumoMensual(fechaInicio, fechaFin);
+        for (Object[] t:
+             temp) {
+            ReporteCamionConsumoMensual consumo = new ReporteCamionConsumoMensual();
+            consumo.setIdCamion((int)t[0]);
+            consumo.setCodigoCamion((String)t[1]);
+            //System.out.println("Esta clase es : "+t[2].getClass());
+            consumo.setPetroleoConsumido((double) t[2]);
+            BigDecimal dTemp = (BigDecimal) t[3];
+            consumo.setDistancia(dTemp.doubleValue());
+            consumo.setMes((String)t[4]);
+            consumoMensual.add(consumo);
+        }
 
         for (ReporteCamionConsumoMensual linea:
                 consumoMensual) {

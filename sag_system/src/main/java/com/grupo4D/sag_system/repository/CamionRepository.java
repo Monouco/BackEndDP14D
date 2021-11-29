@@ -11,6 +11,7 @@ import org.springframework.stereotype.Repository;
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.List;
 
 @Repository
 public interface CamionRepository extends CrudRepository<Camion,Integer> {
@@ -115,5 +116,5 @@ public interface CamionRepository extends CrudRepository<Camion,Integer> {
                     "monthname(r.fecha_inicio)" ,
             nativeQuery = true
     )
-    public ArrayList<ReporteCamionConsumoMensual> generarReporteConsumoMensual(LocalDateTime inicio, LocalDateTime fin);
+    public List<Object[]> generarReporteConsumoMensual(LocalDateTime inicio, LocalDateTime fin);
 }
