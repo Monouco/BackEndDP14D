@@ -139,11 +139,11 @@ public class ReportesService {
 
         Font tituloFont = workbook.createFont();
         tituloFont.setBold(true);
-        tituloFont.setFontHeight((short)(tituloFont.getFontHeight() + 5));
+        tituloFont.setFontHeight((short)(tituloFont.getFontHeight() + 30));
 
         Font headerFont = workbook.createFont();
         headerFont.setBold(true);
-        headerFont.setFontHeight((short)(headerFont.getFontHeight() + 1));
+        headerFont.setFontHeight((short)(headerFont.getFontHeight() + 6));
 
         Font codigoFont = workbook.createFont();
         codigoFont.setBold(true);
@@ -224,11 +224,11 @@ public class ReportesService {
 
                 Row filaHeader = sheet.createRow(k+1);
                 Cell celdaCodigo = filaHeader.createCell(1);
-                celdaCodigo.setCellValue("Codigo Camion");
+                celdaCodigo.setCellValue("Código Camión");
                 Cell celdaConsumo = filaHeader.createCell(2);
-                celdaConsumo.setCellValue("Consumo Petroleo");
+                celdaConsumo.setCellValue("Consumo Petróleo (m^3)");
                 Cell celdaDistancia = filaHeader.createCell(3);
-                celdaDistancia.setCellValue("Distancia Recorrida");
+                celdaDistancia.setCellValue("Distancia Recorrida (km)");
 
                 celdaCodigo.setCellStyle(estiloHeader);
                 celdaConsumo.setCellStyle(estiloHeader);
