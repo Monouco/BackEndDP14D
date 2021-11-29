@@ -11,7 +11,7 @@ public class ReporteCamionConsumoMensual {
 
     }
 
-    public ReporteCamionConsumoMensual(int idCamion, String codigoCamion, double petroleoConsumido, double distancia, String mes) {
+    public ReporteCamionConsumoMensual(int idCamion, String codigoCamion, double petroleoConsumido, long distancia, String mes) {
         this.idCamion = idCamion;
         this.codigoCamion = codigoCamion;
         this.petroleoConsumido = petroleoConsumido;
