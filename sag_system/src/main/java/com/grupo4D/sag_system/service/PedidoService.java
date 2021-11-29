@@ -10,12 +10,14 @@ import com.grupo4D.sag_system.model.statics.StaticValues;
 import com.grupo4D.sag_system.repository.PedidoRepository;
 import com.grupo4D.sag_system.repository.NodoRepository;
 import com.grupo4D.sag_system.repository.RutaXPedidoRepository;
+import org.apache.tomcat.jni.Local;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
 import java.io.BufferedInputStream;
 import java.io.File;
@@ -24,6 +26,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.time.Month;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
@@ -45,8 +48,11 @@ public class PedidoService {
     @Autowired
     RutaXPedidoRepository rutaXPedidoRepository;
 
-    @RequestMapping(value = "/zip", produces="application/zip")
-    public ResponseEntity<ByteArrayResource> generarPedidosColapso(FechaFront fecha){//
+    @RequestMapping(value = "/generarPedidosColapso", produces="application/zip", method= RequestMethod.POST)
+    public ResponseEntity<ByteArrayResource> generarPedidosColapso(){//
+        FechaFront fecha = new FechaFront();
+        LocalDateTime l =LocalDateTime.of(2021, Month.NOVEMBER, 16, 00, 00, 01);
+        fecha.setF(l);
         //funcion exponencial para registrar pedidos
         int limit =1200;//40 meses aprox
         double base = 5;
