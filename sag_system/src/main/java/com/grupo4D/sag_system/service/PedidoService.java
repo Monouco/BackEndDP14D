@@ -169,7 +169,7 @@ public class PedidoService {
 
             return ResponseEntity.ok()
                     // Content-Disposition
-                    .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + "Archivos.zip")
+                    .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" +   "Archivos.zip" + "\"")
                     // Content-Type
                     .contentType(MediaType.parseMediaType("application/zip")) //
                     // Content-Lengh
