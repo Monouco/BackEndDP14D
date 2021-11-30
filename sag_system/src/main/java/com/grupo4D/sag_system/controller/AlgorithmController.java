@@ -50,7 +50,7 @@ public class AlgorithmController {
     }
 
     @PostMapping("/simulacionTresDias")
-    public ArrayList<Pedido> simulacionTresDias(@RequestBody SimulacionFront pedidos){
+    public ArrayList<Pedido> simulacionTresDias(@RequestBody SimulacionFront pedidos) throws InterruptedException {
         return algoritmoService.asignarPedidos3Dias(pedidos.getOrders(), pedidos.getSpeed());
     }
 
@@ -60,7 +60,7 @@ public class AlgorithmController {
     }
 
     @PostMapping("/simulacionColapso")
-    public ArrayList<Pedido> simulacionColapso(@RequestBody SimulacionFront pedidos){
+    public ArrayList<Pedido> simulacionColapso(@RequestBody SimulacionFront pedidos) throws InterruptedException {
         return algoritmoService.asignarPedidosColapso(pedidos.getOrders(), pedidos.getSpeed());
     }
 
