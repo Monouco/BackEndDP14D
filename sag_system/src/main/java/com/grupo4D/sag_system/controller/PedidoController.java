@@ -53,6 +53,33 @@ public class PedidoController {
         return pedidoService.guardarPedidoNuevo(pedidoModel);
     }
 
+    @PostMapping("/registrarListaPedidos")
+    public ArrayList<Pedido> registrarListaPedidos(@RequestBody ArrayList<PedidoFront> pedidosFront){
+        ArrayList<Pedido> lista = new ArrayList<>();
+        for (PedidoFront pedidoFront: pedidosFront   ) {
+            Pedido pedidoModel = new Pedido();
+
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd@HH:mm:ss");
+            String fecha = pedidoFront.getFechaPedido();
+            LocalDateTime date = LocalDateTime.parse(fecha, formatter);
+
+            pedidoModel.setFechaLimite(date.plusHours(pedidoFront.getPlazoEntrega()));
+            pedidoModel.setFechaPedido(date);
+
+            pedidoModel.setPlazoEntrega(pedidoFront.getPlazoEntrega());
+            pedidoModel.setCantidadGLP(pedidoFront.getCantidadGLP());
+
+            Nodo nodo = new Nodo();
+            nodo.setCoordenadaX(pedidoFront.getUbicacionX());
+            nodo.setCoordenadaY(pedidoFront.getUbicacionY());
+            pedidoModel.setNodo(nodo);
+            lista.add(pedidoModel);
+        }
+
+        return pedidoService.guardarListaPedidos(lista);
+    }
+
+
     @GetMapping("/listarPedidos")
     public List<Pedido> listarPedidos(){
         return pedidoService.listarPedidos();
