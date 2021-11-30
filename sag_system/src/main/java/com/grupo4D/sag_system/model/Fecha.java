@@ -36,6 +36,10 @@ public class Fecha {
         this.tipo = tipo;
     }
 
+    public Fecha(int tipo){
+        this.tipo = tipo;
+    }
+
     public Fecha(String estado){
         this.estado = estado;
     }

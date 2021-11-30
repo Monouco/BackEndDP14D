@@ -2,6 +2,7 @@ package com.grupo4D.sag_system.service;
 
 import com.grupo4D.sag_system.model.*;
 import com.grupo4D.sag_system.model.reports.ReporteCamionConsumoMensual;
+import com.grupo4D.sag_system.model.reports.ReporteCapacidadAtencion;
 import com.grupo4D.sag_system.model.request.Fecha1TipoFront;
 import com.grupo4D.sag_system.model.request.Fecha2TipoFront;
 import com.grupo4D.sag_system.model.request.FechaFront;
@@ -127,7 +128,7 @@ public class ReportesService {
     }
 
 
-    public InputStreamResource reporteConsumoMensual(LocalDateTime fechaInicio, LocalDateTime fechaFin) throws Exception{
+    public InputStreamResource reporteConsumoMensual(LocalDateTime fechaInicio, LocalDateTime fechaFin, int tipo) throws Exception{
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         XSSFWorkbook workbook = new XSSFWorkbook();
 
@@ -192,7 +193,7 @@ public class ReportesService {
         int rows = 0;
 
         ArrayList<ReporteCamionConsumoMensual> consumoMensual = new ArrayList<>();
-        List<Object[]> temp = camionRepository.generarReporteConsumoMensual(fechaInicio, fechaFin);
+        List<Object[]> temp = camionRepository.generarReporteConsumoMensual(fechaInicio, fechaFin, tipo);
         for (Object[] t:
              temp) {
             ReporteCamionConsumoMensual consumo = new ReporteCamionConsumoMensual();
@@ -257,6 +258,123 @@ public class ReportesService {
         ByteArrayInputStream inputStream = new ByteArrayInputStream(stream.toByteArray());
         workbook.close();
         return new InputStreamResource(inputStream);
+    }
+
+
+    public InputStreamResource reporteCapacidadAtencion( int tipo) throws Exception{
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        XSSFWorkbook workbook = new XSSFWorkbook();
+
+        XSSFSheet sheet = workbook.createSheet("Reporte Capacidad Atencion ");
+        sheet.setColumnWidth(0, 5 * 256);
+        sheet.setColumnWidth(1, 30 * 256);
+        sheet.setColumnWidth(2, 30 * 256);
+        sheet.setColumnWidth(3, 30 * 256);
+
+        Font tituloFont = workbook.createFont();
+        tituloFont.setBold(true);
+        tituloFont.setFontHeight((short)(tituloFont.getFontHeight() + 30));
+
+        Font headerFont = workbook.createFont();
+        headerFont.setBold(true);
+        headerFont.setFontHeight((short)(headerFont.getFontHeight() + 6));
+
+        Font codigoFont = workbook.createFont();
+        codigoFont.setBold(true);
+
+        CellStyle estiloTitulo = workbook.createCellStyle();
+        estiloTitulo.setAlignment(HorizontalAlignment.CENTER);
+        estiloTitulo.setVerticalAlignment(VerticalAlignment.CENTER);
+        estiloTitulo.setBorderBottom(BorderStyle.MEDIUM);
+        estiloTitulo.setBorderLeft(BorderStyle.MEDIUM);
+        estiloTitulo.setBorderRight(BorderStyle.MEDIUM);
+        estiloTitulo.setBorderTop(BorderStyle.MEDIUM);
+
+        estiloTitulo.setFont(tituloFont);
+
+        CellStyle estiloHeader = workbook.createCellStyle();
+        estiloHeader.setAlignment(HorizontalAlignment.CENTER);
+        estiloHeader.setVerticalAlignment(VerticalAlignment.CENTER);
+        estiloHeader.setBorderBottom(BorderStyle.MEDIUM);
+        estiloHeader.setBorderLeft(BorderStyle.MEDIUM);
+        estiloHeader.setBorderRight(BorderStyle.MEDIUM);
+        estiloHeader.setBorderTop(BorderStyle.MEDIUM);
+
+        estiloHeader.setFont(headerFont);
+
+        CellStyle estiloCodigo = workbook.createCellStyle();
+        estiloCodigo.setVerticalAlignment(VerticalAlignment.CENTER);
+        estiloCodigo.setBorderBottom(BorderStyle.MEDIUM);
+        estiloCodigo.setBorderLeft(BorderStyle.MEDIUM);
+        estiloCodigo.setBorderRight(BorderStyle.MEDIUM);
+        estiloCodigo.setBorderTop(BorderStyle.MEDIUM);
+
+        estiloHeader.setFont(codigoFont);
+
+        CellStyle estiloCelda = workbook.createCellStyle();
+        estiloCelda.setVerticalAlignment(VerticalAlignment.CENTER);
+        estiloCelda.setBorderBottom(BorderStyle.MEDIUM);
+        estiloCelda.setBorderLeft(BorderStyle.MEDIUM);
+        estiloCelda.setBorderRight(BorderStyle.MEDIUM);
+        estiloCelda.setBorderTop(BorderStyle.MEDIUM);
+
+        int rows = 0;
+
+        ArrayList<ReporteCapacidadAtencion> lineas = new ArrayList<>();
+        List<Object[]> temp = pedidoRepository.capacidadAtencionReporte(tipo);
+        for (Object[] t:
+                temp) {
+            ReporteCapacidadAtencion capacidad = new ReporteCapacidadAtencion();
+            capacidad.setIndicador((double)t[0]);
+            capacidad.setMes((String)t[1]);
+            //System.out.println("Esta clase es : "+t[2].getClass());
+            capacidad.setAgno((int) t[2]);
+        }
+
+        Row filaHeader = sheet.createRow(1);
+        Cell celdaCodigo = filaHeader.createCell(1);
+        celdaCodigo.setCellValue("Año");
+        Cell celdaConsumo = filaHeader.createCell(2);
+        celdaConsumo.setCellValue("Mes");
+        Cell celdaDistancia = filaHeader.createCell(3);
+        celdaDistancia.setCellValue("Porcentaje Capacidad Atención");
+
+        celdaCodigo.setCellStyle(estiloHeader);
+        celdaConsumo.setCellStyle(estiloHeader);
+        celdaDistancia.setCellStyle(estiloHeader);
+
+        rows = 2;
+        for (ReporteCapacidadAtencion linea:
+                lineas) {
+
+            Row filaContenido = sheet.createRow(rows);
+            Cell celdaAgno = filaContenido.createCell(1);
+            celdaAgno.setCellValue(linea.getAgno());
+            Cell celdaMes = filaContenido.createCell(2);
+            celdaMes.setCellValue(linea.getMes());
+            Cell celdaIndicador = filaContenido.createCell(3);
+            celdaIndicador.setCellValue(Math.round(linea.getIndicador()*100)/100);
+
+            celdaAgno.setCellStyle(estiloCelda);
+            celdaMes.setCellStyle(estiloCelda);
+            celdaIndicador.setCellStyle(estiloCelda);
+
+            rows++;
+        }
+
+
+        workbook.write(stream);
+        ByteArrayInputStream inputStream = new ByteArrayInputStream(stream.toByteArray());
+        workbook.close();
+        return new InputStreamResource(inputStream);
+    }
+
+
+    public ReporteCapacidadAtencion capacidadAtencion (int tipo){
+        double porcentaje = pedidoRepository.capacidadAtencion(tipo);
+        ReporteCapacidadAtencion response = new ReporteCapacidadAtencion();
+        response.setIndicador(porcentaje);
+        return response;
     }
 }
 

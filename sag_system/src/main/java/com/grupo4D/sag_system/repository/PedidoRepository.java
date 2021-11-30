@@ -69,6 +69,27 @@ public interface PedidoRepository extends CrudRepository<Pedido,Integer> {
             nativeQuery = true)
     public ArrayList<Pedido> pedidosXFecha(String fecha);
 
+    @Query(
+            value = "select ifnull(avg(TIMESTAMPDIFF(MINUTE , p.fecha_pedido, ifnull(p.fecha_entrega,p.fecha_pedido))/(p.plazo_entrega*60)),0)*100 coeficiente, " +
+                    "monthname(p.fecha_pedido) mes, " +
+                    "year(p.fecha_pedido) agno " +
+                    "from pedido p " +
+                    "where p.activo = 1 " +
+                    "and p.fecha_entrega is not null " +
+                    "and tipo = ?1 " +
+                    "group by monthname(p.fecha_pedido), " +
+                    "year(p.fecha_pedido)",
+            nativeQuery = true)
+    public ArrayList<Object[]> capacidadAtencionReporte(int tipo);
+
+    @Query(
+            value = "select ifnull(avg(TIMESTAMPDIFF(MINUTE , p.fecha_pedido, ifnull(p.fecha_entrega,p.fecha_pedido))/(p.plazo_entrega*60)),0)*100 coeficiente " +
+                    "from pedido p " +
+                    "where p.activo = 1 " +
+                    "and p.fecha_entrega is not null " +
+                    "and tipo = ?1",
+            nativeQuery = true)
+    public double capacidadAtencion(int tipo);
 
 
     //posible cambio por algo mas eficiente que no requiera entrar a BD por cada pedido

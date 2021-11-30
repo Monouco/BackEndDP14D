@@ -108,7 +108,7 @@ public interface CamionRepository extends CrudRepository<Camion,Integer> {
                     "where c.activo = 1 " +
                     "and r.activo = 1 " +
                     "and t.activo = 1 " +
-                    "and r.tipo = 1 " +
+                    "and r.tipo = ?3 " +
                     //"and (r.fecha_inicio between ?1 and ?2 " +
                     //"or r.fecha_fin between ?1 and ?2) " +
                     "group by c.id_camion, " +
@@ -116,5 +116,5 @@ public interface CamionRepository extends CrudRepository<Camion,Integer> {
                     "monthname(r.fecha_inicio)" ,
             nativeQuery = true
     )
-    public List<Object[]> generarReporteConsumoMensual(LocalDateTime inicio, LocalDateTime fin);
+    public List<Object[]> generarReporteConsumoMensual(LocalDateTime inicio, LocalDateTime fin, int tipo);
 }

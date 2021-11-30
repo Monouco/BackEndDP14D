@@ -2,6 +2,7 @@ package com.grupo4D.sag_system.model.statics;
 
 import com.grupo4D.sag_system.model.Pedido;
 import com.grupo4D.sag_system.model.response.ColapsoFront;
+import org.springframework.core.io.InputStreamResource;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -30,4 +31,7 @@ public class StaticValues {
     public static ColapsoFront fullCollapseStatus = new ColapsoFront();
     public static ArrayList<Pedido> ordersSim = new ArrayList<>();
     public static ArrayList<Pedido> ordersCollapse = new ArrayList<>();
+    public static InputStreamResource reportCapacity;
+    public static InputStreamResource simReportCapacity;
+    public static InputStreamResource collapseReportCapacity;
 }

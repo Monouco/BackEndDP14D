@@ -13,6 +13,8 @@ public class FechaFront {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     LocalDateTime fechaFin;
 
+    private int tipo = 1;
+
     public FechaFront(LocalDateTime f) {
         this.fecha = f;
     }
@@ -47,6 +49,22 @@ public class FechaFront {
 
     public void setFechaFin(LocalDateTime fechaFin) {
         this.fechaFin = fechaFin;
+    }
+
+    public LocalDateTime getFecha() {
+        return fecha;
+    }
+
+    public void setFecha(LocalDateTime fecha) {
+        this.fecha = fecha;
+    }
+
+    public int getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(int tipo) {
+        this.tipo = tipo;
     }
 
 }

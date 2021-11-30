@@ -9,6 +9,7 @@ import com.grupo4D.sag_system.model.statics.StaticValues;
 import com.grupo4D.sag_system.repository.PedidoRepository;
 import com.grupo4D.sag_system.service.AlgorithmService;
 import com.grupo4D.sag_system.service.PedidoService;
+import com.grupo4D.sag_system.service.ReportesService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Scope;
@@ -40,6 +41,9 @@ public class AlgorithmThread implements Runnable {
 
     @Autowired
     PedidoService pedidoService;
+
+    @Autowired
+    ReportesService reportesService;
     /*
     public AlgorithmThread(int multiplier, LocalDateTime simulationDate, LocalDateTime startDate, int type){
         this.multiplier = multiplier;
@@ -143,6 +147,7 @@ public class AlgorithmThread implements Runnable {
                                     StaticValues.collapseStatus.setFlotaFaltante(toUpgrade);
                                     StaticValues.collapseFlag = true;
                                     StaticValues.comCollapseFlag = true;
+                                    StaticValues.reportCapacity = reportesService.reporteCapacidadAtencion(type);
                                     System.out.println(LocalDateTime.now(StaticValues.zoneId) + " Colapso Logistico tipo " + type + " a las " + simulationDate);
                                     break;
                                 }
@@ -155,6 +160,7 @@ public class AlgorithmThread implements Runnable {
                                     StaticValues.collapseSimStatus.setFlotaFaltante(toUpgrade);
                                     StaticValues.collapseSimulationFlag = true;
                                     StaticValues.comSimCollapseFlag = true;
+                                    StaticValues.simReportCapacity = reportesService.reporteCapacidadAtencion(type);
                                     System.out.println(LocalDateTime.now(StaticValues.zoneId) + " Colapso Logistico tipo " + type + " a las " + simulationDate);
                                     break;
                                 }
@@ -167,6 +173,7 @@ public class AlgorithmThread implements Runnable {
                                     StaticValues.fullCollapseStatus.setFlotaFaltante(toUpgrade);
                                     StaticValues.fullCollapseFlag = true;
                                     StaticValues.comFullCollapseFlag = true;
+                                    StaticValues.collapseReportCapacity = reportesService.reporteCapacidadAtencion(type);
                                     System.out.println(LocalDateTime.now(StaticValues.zoneId) + " Colapso Logistico tipo " + type + " a las " + simulationDate);
                                     break;
                                 }
