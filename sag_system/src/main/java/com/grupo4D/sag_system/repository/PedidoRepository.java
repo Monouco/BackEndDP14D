@@ -36,7 +36,7 @@ public interface PedidoRepository extends CrudRepository<Pedido,Integer> {
 
     @Query(
             value = "SELECT * FROM pedido u WHERE u.activo = 1 " +
-                    "and tipo = 1 ",
+                    "and tipo = 1 order by id_pedido desc",
             nativeQuery = true)
     public ArrayList<Pedido> listarPedidos();
 
