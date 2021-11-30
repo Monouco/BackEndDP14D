@@ -185,7 +185,7 @@ public class PedidoService {
         return msg;
     }
 
-    @RequestMapping(value = "/generarPedidosColapso", produces="application/zip", method= RequestMethod.GET)
+    @RequestMapping(value = "/generarPedidosColapso", method= RequestMethod.GET)
     public String generarPedidosColapso(HttpServletRequest request){//
         FechaFront fecha = new FechaFront();
         LocalDateTime l =LocalDateTime.of(2021, Month.NOVEMBER, 16, 00, 00, 01);
@@ -320,6 +320,7 @@ public class PedidoService {
         return msg;
     }
 
+    @RequestMapping(value = "/descargarPedidosColapso", produces="application/zip",  method= RequestMethod.GET)
     public ResponseEntity<ByteArrayResource> descargarPedidosColapso(HttpServletRequest request){
         try{
             byte[] data = Files.readAllBytes(Path.of("Archivos.zip"));
