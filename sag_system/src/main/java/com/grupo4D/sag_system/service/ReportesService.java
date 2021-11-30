@@ -325,7 +325,8 @@ public class ReportesService {
         for (Object[] t:
                 temp) {
             ReporteCapacidadAtencion capacidad = new ReporteCapacidadAtencion();
-            capacidad.setIndicador((double)t[0]);
+            BigDecimal dTemp = (BigDecimal) t[0];
+            capacidad.setIndicador(dTemp.doubleValue());
             capacidad.setMes((String)t[1]);
             //System.out.println("Esta clase es : "+t[2].getClass());
             capacidad.setAgno((int) t[2]);
