@@ -8,10 +8,7 @@ import com.grupo4D.sag_system.model.algorithm.Mapa;
 import com.grupo4D.sag_system.model.algorithm.Order;
 import com.grupo4D.sag_system.model.algorithm.pathFinding.ACSAlgorithm;
 import com.grupo4D.sag_system.model.response.*;
-import com.grupo4D.sag_system.model.runnable.AlgorithmThread;
-import com.grupo4D.sag_system.model.runnable.AveriaScheduled;
-import com.grupo4D.sag_system.model.runnable.FillDeposit;
-import com.grupo4D.sag_system.model.runnable.UpdateCurrentValues;
+import com.grupo4D.sag_system.model.runnable.*;
 import com.grupo4D.sag_system.model.statics.ConcurrentValues;
 import com.grupo4D.sag_system.model.statics.OutputLog;
 import com.grupo4D.sag_system.model.statics.StaticValues;
@@ -34,6 +31,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 @Service
 public class AlgorithmService {
@@ -683,7 +681,7 @@ public class AlgorithmService {
         return solucion;
     }
 
-    public ArrayList<Pedido> asignarPedidos3Dias(/*Fecha fecha, */ArrayList<Pedido> pedidos, int multiplier){
+    public ArrayList<Pedido> asignarPedidos3Dias(/*Fecha fecha, */ArrayList<Pedido> pedidos, int multiplier) throws InterruptedException {
         StaticValues.numCamion = 1;
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd@HH:mm:ss");
         LocalDateTime fechaInicio = pedidos.get(0).getFechaPedido(), fechaTemp;
@@ -704,7 +702,14 @@ public class AlgorithmService {
             if(pedidos.get(i).getFechaPedido().isAfter(fechaFin))
                 fechaFin = pedidos.get(i).getFechaPedido();
         }
-        pedidoRepository.saveAll(pedidos);
+        StaticValues.simulationType = 2;
+        StaticValues.ordersSim = pedidos;
+        InsertPedidosThread insertPedidos = applicationContext.getBean(InsertPedidosThread.class);
+
+        taskExecutor.execute(insertPedidos);
+
+        TimeUnit.SECONDS.sleep(3);
+        //pedidoRepository.saveAll(pedidos);
 
         //ArrayList<Pedido> pedidosActuales = pedidoRepository.listarPedidosDisponibles(fechaInicio, 2);
 
@@ -740,7 +745,7 @@ public class AlgorithmService {
 
     }
 
-    public ArrayList<Pedido> asignarPedidosColapso(/*Fecha fecha, */ArrayList<Pedido> pedidos, int multiplier){
+    public ArrayList<Pedido> asignarPedidosColapso(/*Fecha fecha, */ArrayList<Pedido> pedidos, int multiplier) throws InterruptedException {
         LocalDateTime fechaInicio = pedidos.get(0).getFechaPedido(), fechaTemp;
         LocalDateTime fechaFin = fechaInicio;
         int i;
@@ -759,7 +764,15 @@ public class AlgorithmService {
             if(pedidos.get(i).getFechaPedido().isAfter(fechaFin))
                 fechaFin = pedidos.get(i).getFechaPedido();
         }
-        pedidoRepository.saveAll(pedidos);
+        StaticValues.simulationType = 3;
+        StaticValues.ordersCollapse = pedidos;
+        InsertPedidosThread insertPedidos = applicationContext.getBean(InsertPedidosThread.class);
+
+        taskExecutor.execute(insertPedidos);
+
+        TimeUnit.SECONDS.sleep(3);
+
+        //pedidoRepository.saveAll(pedidos);
 
         //ArrayList<Pedido> pedidosActuales = pedidoRepository.listarPedidosDisponibles(fechaInicio, 2);
 

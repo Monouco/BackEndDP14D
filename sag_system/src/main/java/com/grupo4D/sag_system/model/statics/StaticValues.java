@@ -1,9 +1,11 @@
 package com.grupo4D.sag_system.model.statics;
 
+import com.grupo4D.sag_system.model.Pedido;
 import com.grupo4D.sag_system.model.response.ColapsoFront;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.ArrayList;
 
 public class StaticValues {
     public static int mult;
@@ -26,4 +28,6 @@ public class StaticValues {
     public static ColapsoFront collapseStatus = new ColapsoFront();
     public static ColapsoFront collapseSimStatus = new ColapsoFront();
     public static ColapsoFront fullCollapseStatus = new ColapsoFront();
+    public static ArrayList<Pedido> ordersSim = new ArrayList<>();
+    public static ArrayList<Pedido> ordersCollapse = new ArrayList<>();
 }
