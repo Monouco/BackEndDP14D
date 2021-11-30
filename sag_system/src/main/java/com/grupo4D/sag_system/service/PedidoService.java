@@ -58,6 +58,7 @@ public class PedidoService {
         //funcion exponencial para registrar pedidos
         int limit =1200;//40 meses aprox
 
+        //Para controlar los pedidos
         int a=5;
         double b=240;
         int x;
@@ -389,6 +390,24 @@ public Pedido guardarPedido(Pedido pedido){
         pedido.getNodo().setId(nodo.getId());
         pedido.setTipo(1); // 1 es simulacion dia a dia
         return pedidoRepository.save(pedido);
+    }
+
+    public ArrayList<Pedido> guardarListaPedidos(ArrayList<Pedido> lista){
+
+        ArrayList<Pedido> listaNueva = new ArrayList<>();
+        try{
+            for (Pedido p : lista ) {
+                p.setEstadoPedido("Nuevo");
+                Nodo nodo = nodoRepository.findIdNodoByCoordenadaXAndCoordenadaYAndActivoTrue(p.getNodo().getCoordenadaX(), p.getNodo().getCoordenadaY());
+                p.getNodo().setId(nodo.getId());
+                p.setTipo(1); // 1 es simulacion dia a dia
+                listaNueva.add(p);
+            }
+            pedidoRepository.saveAll(listaNueva);
+        }catch (Exception ex){
+            System.out.println(ex.getMessage());
+        }
+        return null;
     }
 
     public ArrayList<Pedido> listarPedidos() {
