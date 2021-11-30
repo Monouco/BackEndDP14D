@@ -6,6 +6,7 @@ public class ReporteCamionConsumoMensual {
     private double petroleoConsumido;
     private double distancia;
     private String mes;
+    private int agno;
 
     public ReporteCamionConsumoMensual(){
 
@@ -112,4 +113,13 @@ public class ReporteCamionConsumoMensual {
     public void setMes(String mes) {
         this.mes = mes;
     }
+
+    public int getAgno() {
+        return agno;
+    }
+
+    public void setAgno(int agno) {
+        this.agno = agno;
+    }
+
 }

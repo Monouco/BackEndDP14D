@@ -204,12 +204,13 @@ public class ReportesService {
             BigDecimal dTemp = (BigDecimal) t[3];
             consumo.setDistancia(dTemp.doubleValue());
             consumo.setMes((String)t[4]);
+            consumo.setAgno((int)t[5]);
             consumoMensual.add(consumo);
         }
 
         for (ReporteCamionConsumoMensual linea:
                 consumoMensual) {
-            mesAct = linea.getMes();
+            mesAct = linea.getMes() + "-" + linea.getAgno();
             if(mesAct != mesAnt){
                 k = rows +1;
 
