@@ -60,7 +60,7 @@ public class PedidoController {
             Pedido pedidoModel = new Pedido();
 
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd@HH:mm:ss");
-            String fecha = pedidoFront.getFechaPedido()+"@"+pedidoFront.getHora();
+            String fecha = pedidoFront.getFechaPedido();
             LocalDateTime date = LocalDateTime.parse(fecha, formatter);
 
             pedidoModel.setFechaLimite(date.plusHours(pedidoFront.getPlazoEntrega()));
