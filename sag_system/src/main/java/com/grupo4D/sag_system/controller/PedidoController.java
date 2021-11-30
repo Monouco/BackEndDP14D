@@ -8,6 +8,8 @@ import com.grupo4D.sag_system.model.request.FechaFront;
 import com.grupo4D.sag_system.model.request.PedidoFront;
 import com.grupo4D.sag_system.service.PedidoService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -62,8 +64,8 @@ public class PedidoController {
     }
 
     @RequestMapping(value = "/generarPedidosColapso", produces="application/zip",  method= RequestMethod.GET)
-    public void generarPedidosColapso (HttpServletRequest request){
-        pedidoService.generarPedidosColapso( request);
+    public ResponseEntity<ByteArrayResource> generarPedidosColapso (HttpServletRequest request){
+        return pedidoService.generarPedidosColapso( request);
     }
 
 
