@@ -63,9 +63,14 @@ public class PedidoController {
         return pedidoService.listarPedidosTemp();
     }
 
-    @RequestMapping(value = "/generarPedidosColapso", produces="application/zip",  method= RequestMethod.GET)
-    public ResponseEntity<ByteArrayResource> generarPedidosColapso (HttpServletRequest request){
-        return pedidoService.generarPedidosColapso( request);
+    @RequestMapping(value = "/generarPedidosColapso",  method= RequestMethod.GET)
+    public String generarPedidosColapso (HttpServletRequest request){
+        return pedidoService.generarPedidosColapso(request);
+    }
+
+    @RequestMapping(value = "/descargarPedidosColapso", produces="application/zip",  method= RequestMethod.GET)
+    public ResponseEntity<ByteArrayResource> descargarPedidosColapso (HttpServletRequest request){
+        return pedidoService.descargarPedidosColapso(request);
     }
 
 

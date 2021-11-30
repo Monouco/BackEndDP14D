@@ -50,8 +50,143 @@ public class PedidoService {
     @Autowired
     RutaXPedidoRepository rutaXPedidoRepository;
 
+    @RequestMapping(value = "/generarPedidosColapsoMetodoGLP", produces="application/zip", method= RequestMethod.GET)
+    public String generarPedidosColapsoMetodoGLP(HttpServletRequest request){//
+        FechaFront fecha = new FechaFront();
+        LocalDateTime l =LocalDateTime.of(2021, Month.NOVEMBER, 16, 00, 00, 01);
+        fecha.setF(l);
+        //funcion exponencial para registrar pedidos
+        int limit =1200;//40 meses aprox
+
+        int a=5;
+        double b=240;
+        int x;
+        double n=1.223;
+        //y es volumen total de GLP en m3 (max_GLP_dia) //y = a*x^n  + b
+                                            // y = 5*x^1.223 +240
+        double cantGLP;
+        int plazoEntrega;
+        LocalDateTime fechaPedido=fecha.getF();
+        int y;
+        int segundos;
+        int mes=fecha.getF().getMonthValue();
+        int anio=fecha.getF().getYear();
+        int mesAnt =fecha.getF().getMonthValue();
+        ArrayList<String> nombresArchivos = new ArrayList<>();
+        String path = "ventas"+Integer.toString(anio)+String.format("%02d",mes)+".txt";
+        nombresArchivos.add(path);
+        File arch = new File(path);
+        try{
+            for (int i=1;i<limit;i++){
+                FileWriter writer = new FileWriter(path, true);
+                double formula = a+b*Math.pow(i,n);
+                //System.out.print(Math.ceil(formula)+" aqui\n");
+                segundos = (int)Math.floor((24*60*60)/(formula+1));
+
+                for(int w=0;w<formula;w++){
+                    Pedido p = new Pedido();
+                    cantGLP = new Random().nextInt(30);
+                    x = new Random().nextInt(70);
+                    y = new Random().nextInt(50);
+                    Nodo nodo = new Nodo(x, y);
+                    plazoEntrega = 4 + new Random().nextInt(37);
+
+                    fechaPedido = fechaPedido.plusSeconds(segundos);
+//                    System.out.println(segundos*w);
+//                    System.out.println(fechaPedido);
+
+                    p.setCantidadGLP(cantGLP);
+                    p.setNodo(nodo);
+                    p.setPlazoEntrega(plazoEntrega);
+                    p.setFechaPedido(fechaPedido);
+
+                    DateTimeFormatter fo =  DateTimeFormatter.ofPattern("dd:HH:mm");
+
+                    writer.write(fo.format(fechaPedido));
+                    writer.write(",");
+                    writer.write(Integer.toString(x));
+                    writer.write(",");
+                    writer.write(Integer.toString(y));
+                    writer.write(",");
+                    writer.write(Integer.toString((int)cantGLP));
+                    writer.write(",");
+                    writer.write(Integer.toString(plazoEntrega));
+                    writer.write("\n");
+                }
+                fechaPedido = fechaPedido.plusDays(1).withHour(0).withMinute(0).withSecond(1);
+                if (mes < fechaPedido.getMonthValue()){
+                    mes = mes+1;
+                    if (anio < fechaPedido.getYear()){
+                        anio = anio+1;
+                    }
+                    writer.close();
+
+                    path = "ventas"+Integer.toString(anio)+String.format("%02d",mes)+".txt";
+                    nombresArchivos.add(path);
+                }else if (anio < fechaPedido.getYear()){
+                    anio = anio+1;
+                    mes = 1;
+                    writer.close();
+                    path = "ventas"+Integer.toString(anio)+String.format("%02d",mes)+".txt";
+                    nombresArchivos.add(path);
+                }
+                writer.close();
+            }
+
+            try
+            {
+                //Source files
+
+                //Zipped file
+                String zipFilename = "Archivos.zip";
+                File zipFile = new File(zipFilename);
+                FileOutputStream fos  = new FileOutputStream(zipFile);
+                ZipOutputStream zos = new ZipOutputStream(fos);
+                for(String s:nombresArchivos) {
+                    zipFile(s,zos);
+                }
+
+
+                zos.close();
+            }
+            catch (IOException e)
+            {
+                e.printStackTrace();
+                System.out.println("Error en compresión de archivos");
+            }
+//            byte[] data = Files.readAllBytes(Path.of("Archivos.zip"));
+//            ByteArrayResource resource = new ByteArrayResource(data);
+//
+            try{
+                for (String s: nombresArchivos){
+                    Files.deleteIfExists(Path.of(s));
+                }
+
+            }catch (IOException ex){
+                ex.printStackTrace();
+                System.out.println("Error en el borrado de archivos");
+            }
+            String msg= "Se ha generado pedidos para " + limit+ " días.";
+            return msg;
+//
+//            return ResponseEntity.ok()
+//                    // Content-Disposition
+//                    .header(HttpHeaders.CONTENT_DISPOSITION, "attachment;filename=\"" +   "Archivos.zip" + "\"")
+//                    // Content-Type
+//                    .contentType(MediaType.parseMediaType("application/zip")) //
+//                    // Content-Lengh
+//                    .contentLength(data.length) //
+//                    .body(resource);
+
+        }catch (IOException ex){
+            System.out.println("Error en el archivo de "+path);
+        }
+        String msg= "Error en el proceso de generación de pedidos";
+        return msg;
+    }
+
     @RequestMapping(value = "/generarPedidosColapso", produces="application/zip", method= RequestMethod.GET)
-    public ResponseEntity<ByteArrayResource> generarPedidosColapso(HttpServletRequest request){//
+    public String generarPedidosColapso(HttpServletRequest request){//
         FechaFront fecha = new FechaFront();
         LocalDateTime l =LocalDateTime.of(2021, Month.NOVEMBER, 16, 00, 00, 01);
         fecha.setF(l);
@@ -154,9 +289,9 @@ public class PedidoService {
                 e.printStackTrace();
                 System.out.println("Error en compresión de archivos");
             }
-            byte[] data = Files.readAllBytes(Path.of("Archivos.zip"));
-            ByteArrayResource resource = new ByteArrayResource(data);
-
+//            byte[] data = Files.readAllBytes(Path.of("Archivos.zip"));
+//            ByteArrayResource resource = new ByteArrayResource(data);
+//
             try{
                 for (String s: nombresArchivos){
                     Files.deleteIfExists(Path.of(s));
@@ -166,7 +301,29 @@ public class PedidoService {
                 ex.printStackTrace();
                 System.out.println("Error en el borrado de archivos");
             }
+            String msg= "Se ha generado pedidos para " + limit+ " días.";
+            return msg;
+//
+//            return ResponseEntity.ok()
+//                    // Content-Disposition
+//                    .header(HttpHeaders.CONTENT_DISPOSITION, "attachment;filename=\"" +   "Archivos.zip" + "\"")
+//                    // Content-Type
+//                    .contentType(MediaType.parseMediaType("application/zip")) //
+//                    // Content-Lengh
+//                    .contentLength(data.length) //
+//                    .body(resource);
 
+        }catch (IOException ex){
+            System.out.println("Error en el archivo de "+path);
+        }
+        String msg= "Error en el proceso de generación de pedidos";
+        return msg;
+    }
+
+    public ResponseEntity<ByteArrayResource> descargarPedidosColapso(HttpServletRequest request){
+        try{
+            byte[] data = Files.readAllBytes(Path.of("Archivos.zip"));
+            ByteArrayResource resource = new ByteArrayResource(data);
             return ResponseEntity.ok()
                     // Content-Disposition
                     .header(HttpHeaders.CONTENT_DISPOSITION, "attachment;filename=\"" +   "Archivos.zip" + "\"")
@@ -175,10 +332,11 @@ public class PedidoService {
                     // Content-Lengh
                     .contentLength(data.length) //
                     .body(resource);
-
-        }catch (IOException ex){
-            System.out.println("Error en el archivo de "+path);
+        }catch (IOException e){
+            e.printStackTrace();
+            System.out.println("Error en la descarga de archivos");
         }
+
         return null;
     }
 
