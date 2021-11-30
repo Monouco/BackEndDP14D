@@ -374,6 +374,8 @@ public class ReportesService {
         double porcentaje = pedidoRepository.capacidadAtencion(tipo);
         ReporteCapacidadAtencion response = new ReporteCapacidadAtencion();
         response.setIndicador(porcentaje);
+        response.setMes("");
+        response.setAgno(0);
         return response;
     }
 }
