@@ -731,6 +731,8 @@ public class AlgorithmService {
             e.printStackTrace();
         }*/
 
+
+
         UpdateCurrentValues updating = applicationContext.getBean(UpdateCurrentValues.class);
 
         taskExecutor.execute(updating);

@@ -23,7 +23,15 @@ public class InsertPedidosThread implements Runnable{
     @Override
     public void run(){
         this.type = StaticValues.simulationType;
-        this.orders = (type == 2) ? StaticValues.ordersSim : StaticValues.ordersCollapse;
+
+        if(type ==2){
+            this.orders = StaticValues.ordersSim;
+        }
+        else{
+            this.orders = StaticValues.ordersCollapse;
+        }
+
+        System.out.println("Pedidos por insertar " + type + ": " + this.orders.size());
 
         pedidoRepository.saveAll(this.orders);
     }
