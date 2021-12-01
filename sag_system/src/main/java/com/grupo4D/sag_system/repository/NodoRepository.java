@@ -16,7 +16,7 @@ public interface NodoRepository extends CrudRepository<Nodo,Integer> {
 
     public Nodo findNodoById(int idNodo);
 
-    @Query(value = "select u from nodo u where u.activo = 1", nativeQuery = true)
+    @Query(value = "select * from nodo u where u.activo = 1", nativeQuery = true)
     public ArrayList<Nodo> listarNodos();
 }
 
