@@ -38,7 +38,7 @@ public class BloqueoController {
     }
 
     @PostMapping("/registarBloqueos")
-    public List<BloqueosFront> registrarBloqueos( @RequestBody ArrayList<BloqueosFront> bloqueos){
+    public List<BloqueosFront> registrarBloqueos( @RequestBody ArrayList<BloqueosFront> bloqueos) throws InterruptedException {
         return bloqueoService.registrarBloqueos(bloqueos);
     }
 
