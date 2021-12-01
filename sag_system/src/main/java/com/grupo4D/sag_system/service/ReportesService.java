@@ -3,6 +3,7 @@ package com.grupo4D.sag_system.service;
 import com.grupo4D.sag_system.model.*;
 import com.grupo4D.sag_system.model.reports.ReporteCamionConsumoMensual;
 import com.grupo4D.sag_system.model.reports.ReporteCapacidadAtencion;
+import com.grupo4D.sag_system.model.reports.ReporteUsoTipo;
 import com.grupo4D.sag_system.model.request.Fecha1TipoFront;
 import com.grupo4D.sag_system.model.request.Fecha2TipoFront;
 import com.grupo4D.sag_system.model.request.FechaFront;
@@ -331,6 +332,23 @@ public class ReportesService {
             capacidad.setMes((String)t[1]);
             //System.out.println("Esta clase es : "+t[2].getClass());
             capacidad.setAgno((int) t[2]);
+            lineas.add(capacidad);
+        }
+
+        //System.out.println("Se esta ejecutando la capacidad de atencion con " + temp.size());
+        List<Object[]> tempA = tipoCamionRepository.porcentajeUsoTipo(tipo);
+        ArrayList<ReporteUsoTipo> lineaTipo = new ArrayList<>();
+        for (Object[] t:
+                tempA) {
+            ReporteUsoTipo uso = new ReporteUsoTipo();
+            uso.setId((int)t[0]);
+            uso.setCodigo((String)t[1]);
+            BigDecimal dTemp = (BigDecimal) t[2];
+            uso.setPorcentajeGLP(dTemp.doubleValue());
+            dTemp = (BigDecimal) t[3] ;
+            uso.setPorcentajePedido(dTemp.doubleValue());
+            //System.out.println("Esta clase es : "+t[2].getClass());
+            lineaTipo.add(uso);
         }
 
         Row filaHeader = sheet.createRow(1);
@@ -341,11 +359,23 @@ public class ReportesService {
         Cell celdaDistancia = filaHeader.createCell(3);
         celdaDistancia.setCellValue("Porcentaje Capacidad Atención");
 
+        Cell celdaTipo = filaHeader.createCell(5);
+        celdaTipo.setCellValue("Tipo Camión");
+        Cell celdaPGLP = filaHeader.createCell(6);
+        celdaPGLP.setCellValue("Porcentaje GLP Transportado");
+        Cell celdaPPed = filaHeader.createCell(7);
+        celdaPPed.setCellValue("Porcentaje Pedidos Atendidos");
+
         celdaCodigo.setCellStyle(estiloHeader);
         celdaConsumo.setCellStyle(estiloHeader);
         celdaDistancia.setCellStyle(estiloHeader);
 
+        celdaTipo.setCellStyle(estiloHeader);
+        celdaPGLP.setCellStyle(estiloHeader);
+        celdaPPed.setCellStyle(estiloHeader);
+
         rows = 2;
+        int cont = 0;
         for (ReporteCapacidadAtencion linea:
                 lineas) {
 
@@ -356,6 +386,19 @@ public class ReportesService {
             celdaMes.setCellValue(linea.getMes());
             Cell celdaIndicador = filaContenido.createCell(3);
             celdaIndicador.setCellValue(Math.round(linea.getIndicador()*100)/100);
+
+            if(cont < lineaTipo.size()){
+                Cell celdaCodigoAbv = filaContenido.createCell(5);
+                celdaCodigoAbv.setCellValue(lineaTipo.get(cont).getCodigo());
+                Cell celdaValGlp = filaContenido.createCell(6);
+                celdaValGlp.setCellValue(Math.round(lineaTipo.get(cont).getPorcentajeGLP()*100)/100);
+                Cell celdaValPedido = filaContenido.createCell(7);
+                celdaValPedido.setCellValue(Math.round(lineaTipo.get(cont).getPorcentajePedido()*100)/100);
+
+                celdaCodigoAbv.setCellStyle(estiloCelda);
+                celdaValGlp.setCellStyle(estiloCelda);
+                celdaValPedido.setCellStyle(estiloCelda);
+            }
 
             celdaAgno.setCellStyle(estiloCelda);
             celdaMes.setCellStyle(estiloCelda);
