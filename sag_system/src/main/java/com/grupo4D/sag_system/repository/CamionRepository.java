@@ -98,7 +98,7 @@ public interface CamionRepository extends CrudRepository<Camion,Integer> {
                     "    where rn.id_ruta = r.id_ruta " +
                     "    and rn.activo = 1 " +
                     "),0))  distanciaRecorrida, " +
-                    "monthname(r.fecha_inicio) mes " +
+                    "monthname(r.fecha_inicio) mes, " +
                     "year(r.fecha_inicio) agno " +
                     "from " +
                     "camion c  " +
@@ -109,7 +109,7 @@ public interface CamionRepository extends CrudRepository<Camion,Integer> {
                     "where c.activo = 1 " +
                     "and r.activo = 1 " +
                     "and t.activo = 1 " +
-                    "and r.tipo = 1 " +
+                    "and r.tipo = ?3 " +
                     //"and (r.fecha_inicio between ?1 and ?2 " +
                     //"or r.fecha_fin between ?1 and ?2) " +
                     "group by c.id_camion, " +
