@@ -713,14 +713,15 @@ public class AlgorithmService {
             if(pedidos.get(i).getFechaPedido().isAfter(fechaFin))
                 fechaFin = pedidos.get(i).getFechaPedido();
         }
-        StaticValues.simulationType = 2;
+        /*StaticValues.simulationType = 2;
         StaticValues.ordersSim = pedidos;
         InsertPedidosThread insertPedidos = applicationContext.getBean(InsertPedidosThread.class);
 
         taskExecutor.execute(insertPedidos);
 
-        TimeUnit.SECONDS.sleep(3);
-        //pedidoRepository.saveAll(pedidos);
+        TimeUnit.SECONDS.sleep(3);*/
+
+        pedidoRepository.saveAll(pedidos);
 
         //ArrayList<Pedido> pedidosActuales = pedidoRepository.listarPedidosDisponibles(fechaInicio, 2);
 
@@ -787,15 +788,16 @@ public class AlgorithmService {
             if(pedidos.get(i).getFechaPedido().isAfter(fechaFin))
                 fechaFin = pedidos.get(i).getFechaPedido();
         }
+        /*
         StaticValues.simulationType = 3;
         StaticValues.ordersCollapse = pedidos;
         InsertPedidosThread insertPedidos = applicationContext.getBean(InsertPedidosThread.class);
 
         taskExecutor.execute(insertPedidos);
 
-        TimeUnit.SECONDS.sleep(3);
+        TimeUnit.SECONDS.sleep(3);*/
 
-        //pedidoRepository.saveAll(pedidos);
+        pedidoRepository.saveAll(pedidos);
 
         //ArrayList<Pedido> pedidosActuales = pedidoRepository.listarPedidosDisponibles(fechaInicio, 2);
 
