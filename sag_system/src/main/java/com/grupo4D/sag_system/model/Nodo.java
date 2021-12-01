@@ -65,4 +65,8 @@ public class Nodo {
     public void setActivo(boolean activo) {
         this.activo = activo;
     }
+
+    public String getCoor(){
+        return coordenadaX + "," + coordenadaY;
+    }
 }

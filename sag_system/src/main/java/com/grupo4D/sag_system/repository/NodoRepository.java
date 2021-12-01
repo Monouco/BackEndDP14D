@@ -5,6 +5,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.ArrayList;
+
 @Repository
 public interface NodoRepository extends CrudRepository<Nodo,Integer> {
 
@@ -13,5 +15,8 @@ public interface NodoRepository extends CrudRepository<Nodo,Integer> {
     public Nodo findIdNodoByCoordenadaXAndCoordenadaYAndActivoTrue(int coordenadaX, int coordenadaY);
 
     public Nodo findNodoById(int idNodo);
+
+    @Query(value = "select u from Nodo u where u.activo = 1", nativeQuery = true)
+    public ArrayList<Nodo> listarNodos();
 }
 

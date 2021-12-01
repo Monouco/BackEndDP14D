@@ -20,6 +20,7 @@ import java.lang.reflect.Array;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.concurrent.TimeUnit;
 
 @Service
@@ -81,6 +82,13 @@ public class BloqueoService{
         ArrayList<Bloqueo> bloqueos = new ArrayList<>();
         ArrayList<NodoXBloqueo> nodos =  new ArrayList<>();
         Nodo temp;
+        HashMap<String,Nodo> listaNodos = new HashMap<>();
+        ArrayList<Nodo> nodosAct = nodoRepository.listarNodos();
+
+        for (Nodo n:
+                nodosAct) {
+            listaNodos.put(n.getCoor(),n);
+        }
 
         for (BloqueosFront bloqueoFront:
              bloqueosFront) {
@@ -95,7 +103,8 @@ public class BloqueoService{
 
             for (NodoFront nodoBloqueo:
                  bloqueoFront.getPath()) {
-                temp = nodoRepository.findIdNodoByCoordenadaXAndCoordenadaYAndActivoTrue(nodoBloqueo.getX(),nodoBloqueo.getY());
+                //temp = nodoRepository.findIdNodoByCoordenadaXAndCoordenadaYAndActivoTrue(nodoBloqueo.getX(),nodoBloqueo.getY());
+                temp = listaNodos.get(nodoBloqueo.getX() + "," + nodoBloqueo.getY());
                 NodoXBloqueo nodo = new NodoXBloqueo();
                 nodo.setNodo(temp);
                 nodo.setBloqueo(bloqueo);

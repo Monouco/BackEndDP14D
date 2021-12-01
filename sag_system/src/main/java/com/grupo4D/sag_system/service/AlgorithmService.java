@@ -688,11 +688,20 @@ public class AlgorithmService {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd@HH:mm:ss");
         LocalDateTime fechaInicio = pedidos.get(0).getFechaPedido(), fechaTemp;
         LocalDateTime fechaFin = fechaInicio;
+        HashMap<String,Nodo> listaNodos = new HashMap<>();
+        ArrayList<Nodo> nodosAct = nodoRepository.listarNodos();
+
+        for (Nodo n:
+             nodosAct) {
+            listaNodos.put(n.getCoor(),n);
+        }
+
         int i;
         for(i = 0; i<pedidos.size();i++){
             pedidos.get(i).setEstadoPedido("Nuevo");
-            Nodo nodo = nodoRepository.findIdNodoByCoordenadaXAndCoordenadaYAndActivoTrue(pedidos.get(i).getNodo().getCoordenadaX(),
-                    pedidos.get(i).getNodo().getCoordenadaY());
+            /*Nodo nodo = nodoRepository.findIdNodoByCoordenadaXAndCoordenadaYAndActivoTrue(pedidos.get(i).getNodo().getCoordenadaX(),
+                    pedidos.get(i).getNodo().getCoordenadaY());*/
+            Nodo nodo = listaNodos.get(pedidos.get(i).getNodo().getCoor());
             pedidos.get(i).getNodo().setId(nodo.getId());
             pedidos.get(i).setTipo(2);  //2 es simulacion 3 dias
             fechaTemp = pedidos.get(i).getFechaPedido();
@@ -752,11 +761,21 @@ public class AlgorithmService {
     public ArrayList<Pedido> asignarPedidosColapso(/*Fecha fecha, */ArrayList<Pedido> pedidos, int multiplier) throws InterruptedException {
         LocalDateTime fechaInicio = pedidos.get(0).getFechaPedido(), fechaTemp;
         LocalDateTime fechaFin = fechaInicio;
+
+        HashMap<String,Nodo> listaNodos = new HashMap<>();
+        ArrayList<Nodo> nodosAct = nodoRepository.listarNodos();
+
+        for (Nodo n:
+                nodosAct) {
+            listaNodos.put(n.getCoor(),n);
+        }
+
         int i;
         for(i = 0; i<pedidos.size();i++){
             pedidos.get(i).setEstadoPedido("Nuevo");
-            Nodo nodo = nodoRepository.findIdNodoByCoordenadaXAndCoordenadaYAndActivoTrue(pedidos.get(i).getNodo().getCoordenadaX(),
-                    pedidos.get(i).getNodo().getCoordenadaY());
+            /*Nodo nodo = nodoRepository.findIdNodoByCoordenadaXAndCoordenadaYAndActivoTrue(pedidos.get(i).getNodo().getCoordenadaX(),
+                    pedidos.get(i).getNodo().getCoordenadaY());*/
+            Nodo nodo = listaNodos.get(pedidos.get(i).getNodo().getCoor());
             pedidos.get(i).getNodo().setId(nodo.getId());
             pedidos.get(i).setTipo(3);  //2 es simulacion 3 dias
             fechaTemp = pedidos.get(i).getFechaPedido();
