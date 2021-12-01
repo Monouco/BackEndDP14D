@@ -224,7 +224,7 @@ public class ReportesService {
                 }
 
                 sheet.addMergedRegion(new CellRangeAddress(k,k,1,3));
-                filaTitulo.getCell(1).setCellValue(mesAct);
+                filaTitulo.getCell(1).setCellValue(mesAct + "-" + linea.getAgno());
 
                 Row filaHeader = sheet.createRow(k+1);
                 Cell celdaCodigo = filaHeader.createCell(1);
