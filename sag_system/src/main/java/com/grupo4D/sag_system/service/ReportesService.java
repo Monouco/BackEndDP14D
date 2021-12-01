@@ -211,7 +211,8 @@ public class ReportesService {
 
         for (ReporteCamionConsumoMensual linea:
                 consumoMensual) {
-            mesAct = linea.getMes() + "-" + linea.getAgno();
+            //mesAct = linea.getMes() + "-" + linea.getAgno();
+            mesAct = linea.getMes();
             if(mesAct != mesAnt){
                 k = rows +1;
 
