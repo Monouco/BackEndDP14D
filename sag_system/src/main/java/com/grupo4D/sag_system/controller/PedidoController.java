@@ -95,6 +95,11 @@ public class PedidoController {
         return pedidoService.generarPedidosColapso(request);
     }
 
+    @RequestMapping(value = "/generarPedidosColapsoMetodoGLP",  method= RequestMethod.GET)
+    public String generarPedidosColapsoMetodoGLP (HttpServletRequest request){
+        return pedidoService.generarPedidosColapsoMetodoGLP(request);
+    }
+
     @RequestMapping(value = "/descargarPedidosColapso", produces="application/zip",  method= RequestMethod.GET)
     public ResponseEntity<ByteArrayResource> descargarPedidosColapso (HttpServletRequest request){
         return pedidoService.descargarPedidosColapso(request);
