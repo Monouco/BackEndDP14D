@@ -65,6 +65,23 @@ public class PedidoService {
         double n=1.223;
         //y es volumen total de GLP en m3 (max_GLP_dia) //y = a*x^n  + b
                                             // y = 5*x^1.223 +240
+
+        //controlar plazo de entrega
+//        10% en 4 horas
+//        40% entre 5 y 12 horas
+//        40% entre 12 y 18 horas
+//        10% entre 18 y 36 horas.
+
+//        cantidad de GLP por camión cisterna se ha usado el siguiente esquema:
+//        T+ = 1         = 4.8% (1/21)        genera de 25m3 a más
+//                TA = 2         = 9.5% (2/21)        genera de 15 a menos de 25m3
+//                TB= 4         =19.05% (4/21)      genera de 10 a menos de 15m3
+//                TC = 4        = 19.05 (4/21)        genera de 5 a menos de 10m3
+//                TD = 10      = 47.6% (10/21)     genera de 1 a menos de 5m3
+
+//        La determinación de la cantidad de GLP por pedido está influenciada por el tipo de camión (TA,..,TD, T+). Pero se usó una función aleatoria.
+
+
         double cantGLP;
         int plazoEntrega;
         LocalDateTime fechaPedido=fecha.getF();
@@ -72,48 +89,113 @@ public class PedidoService {
         int segundos;
         int mes=fecha.getF().getMonthValue();
         int anio=fecha.getF().getYear();
-        int mesAnt =fecha.getF().getMonthValue();
         ArrayList<String> nombresArchivos = new ArrayList<>();
         String path = "ventas"+Integer.toString(anio)+String.format("%02d",mes)+".txt";
         nombresArchivos.add(path);
         File arch = new File(path);
         try{
-            for (int i=1;i<limit;i++){
+            ArrayList<Pedido> pedidos = new ArrayList<>();
+            int cantPedidos = 0;
+            for (int i=1;i<limit;i++){  //por dia
                 FileWriter writer = new FileWriter(path, true);
-                double formula = a+b*Math.pow(i,n);
+                double formula = b+a*Math.pow(i,n); //total de GLP a enviar en el dia i
                 //System.out.print(Math.ceil(formula)+" aqui\n");
-                segundos = (int)Math.floor((24*60*60)/(formula+1));
 
-                for(int w=0;w<formula;w++){
+
+                double cantidadActualGLP = 0;
+
+                while(cantidadActualGLP<formula){
                     Pedido p = new Pedido();
+                    double rand =  new Random().nextDouble();
+                    if (rand < 0.048){ //si es T+ (mayor a 25m3)
+                        cantGLP = new Random().nextInt() + 25;
+                    }else if (rand < 0.143 && rand>=0.048){ //si TA (mayor a 15 menor a 25)
+                        cantGLP = new Random().nextInt(10)+15;
+                    }else if (rand <0.3335 && rand>= 0.143){ //si TB (mayor a 10 menor a 15)
+                        cantGLP = new Random().nextInt(5)+10;
+                    }else if (rand < 0.524 && rand>= 0.3335){//si TC (mayor a 5 menor a 10)
+                        cantGLP = new Random().nextInt(5)+5;
+                    }else{ // si TD (mayor a 1 menor a 5)
+                        cantGLP = new Random().nextInt(5)+1;
+                    }
                     cantGLP = new Random().nextInt(30);
+
+                    cantidadActualGLP +=cantGLP;
                     x = new Random().nextInt(70);
                     y = new Random().nextInt(50);
                     Nodo nodo = new Nodo(x, y);
-                    plazoEntrega = 4 + new Random().nextInt(37);
-
-                    fechaPedido = fechaPedido.plusSeconds(segundos);
-//                    System.out.println(segundos*w);
-//                    System.out.println(fechaPedido);
+                    //        10% en 4 horas
+//        40% entre 5 y 12 horas
+//        40% entre 12 y 18 horas
+//        10% entre 18 y 36 horas.
+                    double randPlazo = new Random().nextDouble();
+                    if (rand < 0.1){ //si es T+ (mayor a 25m3)
+                        plazoEntrega = 4;
+                    }else if (rand < 0.5 && rand>=0.1){ //si TA (mayor a 15 menor a 25)
+                        plazoEntrega = new Random().nextInt(8)+5;
+                    }else if (rand <0.9&& rand>= 0.5){ //si TB (mayor a 10 menor a 15)
+                        plazoEntrega = new Random().nextInt(7)+12;
+                    }else{ // si TD (mayor a 1 menor a 5)
+                        plazoEntrega = new Random().nextInt(19)+18;
+                    }
 
                     p.setCantidadGLP(cantGLP);
                     p.setNodo(nodo);
                     p.setPlazoEntrega(plazoEntrega);
+
+                    pedidos.add(p);
+                    cantPedidos +=1;
+                }
+
+                segundos = (int)Math.floor((24*60*60)/(cantPedidos+1));
+                for (Pedido p: pedidos) {
+                    fechaPedido = fechaPedido.plusSeconds(segundos);
                     p.setFechaPedido(fechaPedido);
 
                     DateTimeFormatter fo =  DateTimeFormatter.ofPattern("dd:HH:mm");
 
                     writer.write(fo.format(fechaPedido));
                     writer.write(",");
-                    writer.write(Integer.toString(x));
+                    writer.write(Integer.toString(p.getNodo().getCoordenadaX()));
                     writer.write(",");
-                    writer.write(Integer.toString(y));
+                    writer.write(Integer.toString(p.getNodo().getCoordenadaY()));
                     writer.write(",");
-                    writer.write(Integer.toString((int)cantGLP));
+                    writer.write(Integer.toString((int)p.getCantidadGLP()));
                     writer.write(",");
-                    writer.write(Integer.toString(plazoEntrega));
+                    writer.write(Integer.toString(p.getPlazoEntrega()));
                     writer.write("\n");
                 }
+
+//                for(int w=0;w<formula;w++){
+//                    Pedido p = new Pedido();
+//                    cantGLP = new Random().nextInt(30);
+//                    x = new Random().nextInt(70);
+//                    y = new Random().nextInt(50);
+//                    Nodo nodo = new Nodo(x, y);
+//                    plazoEntrega = 4 + new Random().nextInt(37);
+//
+//                    fechaPedido = fechaPedido.plusSeconds(segundos);
+////                    System.out.println(segundos*w);
+////                    System.out.println(fechaPedido);
+//
+//                    p.setCantidadGLP(cantGLP);
+//                    p.setNodo(nodo);
+//                    p.setPlazoEntrega(plazoEntrega);
+//                    p.setFechaPedido(fechaPedido);
+//
+//                    DateTimeFormatter fo =  DateTimeFormatter.ofPattern("dd:HH:mm");
+//
+//                    writer.write(fo.format(fechaPedido));
+//                    writer.write(",");
+//                    writer.write(Integer.toString(x));
+//                    writer.write(",");
+//                    writer.write(Integer.toString(y));
+//                    writer.write(",");
+//                    writer.write(Integer.toString((int)cantGLP));
+//                    writer.write(",");
+//                    writer.write(Integer.toString(plazoEntrega));
+//                    writer.write("\n");
+//                }
                 fechaPedido = fechaPedido.plusDays(1).withHour(0).withMinute(0).withSecond(1);
                 if (mes < fechaPedido.getMonthValue()){
                     mes = mes+1;
