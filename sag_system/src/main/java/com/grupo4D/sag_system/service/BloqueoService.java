@@ -5,17 +5,22 @@ import com.grupo4D.sag_system.model.Nodo;
 import com.grupo4D.sag_system.model.NodoXBloqueo;
 import com.grupo4D.sag_system.model.response.BloqueosFront;
 import com.grupo4D.sag_system.model.response.NodoFront;
+import com.grupo4D.sag_system.model.runnable.InsertBloqueosThread;
+import com.grupo4D.sag_system.model.runnable.InsertPedidosThread;
 import com.grupo4D.sag_system.model.statics.StaticValues;
 import com.grupo4D.sag_system.repository.BloqueoRepository;
 import com.grupo4D.sag_system.repository.NodoRepository;
 import com.grupo4D.sag_system.repository.NodoXBloqueoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.core.task.TaskExecutor;
 import org.springframework.stereotype.Service;
 
 import java.lang.reflect.Array;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.concurrent.TimeUnit;
 
 @Service
 public class BloqueoService{
@@ -27,6 +32,12 @@ public class BloqueoService{
 
     @Autowired
     NodoXBloqueoRepository nodoXBloqueoRepository;
+
+    @Autowired
+    private TaskExecutor taskExecutor;
+
+    @Autowired
+    private ApplicationContext applicationContext;
 
 
     public Bloqueo guardarBloqueo(Bloqueo bloqueo){
@@ -66,7 +77,7 @@ public class BloqueoService{
         return response;
     }
 
-    public ArrayList<BloqueosFront> registrarBloqueos ( ArrayList<BloqueosFront> bloqueosFront){
+    public ArrayList<BloqueosFront> registrarBloqueos ( ArrayList<BloqueosFront> bloqueosFront) throws InterruptedException {
         ArrayList<Bloqueo> bloqueos = new ArrayList<>();
         ArrayList<NodoXBloqueo> nodos =  new ArrayList<>();
         Nodo temp;
@@ -93,8 +104,20 @@ public class BloqueoService{
             }
             bloqueos.add(bloqueo);
         }
+
+        //Lo mandamos a un thread
+        StaticValues.roadBlocks = bloqueos;
+        StaticValues.blockedNodes = nodos;
+
+        InsertBloqueosThread insertPedidos = applicationContext.getBean(InsertBloqueosThread.class);
+
+        taskExecutor.execute(insertPedidos);
+
+        TimeUnit.SECONDS.sleep(3);
+
+         /*
         camionRepository.saveAll(bloqueos);
-        nodoXBloqueoRepository.saveAll(nodos);
+        nodoXBloqueoRepository.saveAll(nodos);*/
 
         return bloqueosFront;
     }

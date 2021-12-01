@@ -27,4 +27,67 @@ public interface TipoCamionRepository extends CrudRepository<TipoCamion,Integer>
 
     public TipoCamion findTipoCamionById(int id);
 
+    @Query(
+            value = "with nPedidos as " +
+                    "( " +
+                    " select count(id_pedido) totalPedido, " +
+                    "    ifnull(sum(cantidad_glp),1) totalGlp " +
+                    "    from ( " +
+                    "  select distinct p.id_pedido id_pedido, " +
+                    "        p.cantidad_glp cantidad_glp " +
+                    "  from  ruta r  " +
+                    "  inner join rutaxpedido rp " +
+                    "  on rp.id_ruta = r.id_ruta " +
+                    "  inner join pedido p " +
+                    "  on p.id_pedido = rp.id_pedido " +
+                    "  where 1=1 " +
+                    "  and r.activo = 1 " +
+                    "  and rp.activo = 1 " +
+                    "  and p.activo = 1 " +
+                    "  and r.tipo = ?1 " +
+                    "    ) pedidosProgramados " +
+                    ") " +
+                    "select t.id_tipo_camion, " +
+                    "t.abreviatura, " +
+                    "( " +
+                    " select sum(rp.cantidad_glp_enviado) " +
+                    " from camion c   " +
+                    " inner join ruta r on " +
+                    " r.id_camion = c.id_camion " +
+                    " inner join rutaxpedido rp " +
+                    " on rp.id_ruta = r.id_ruta " +
+                    " inner join pedido p " +
+                    " on p.id_pedido = rp.id_pedido " +
+                    "    where  " +
+                    " t.id_tipo_camion = c.id_tipo_camion " +
+                    "    and c.activo = 1 " +
+                    "    and r.activo = 1 " +
+                    "    and rp.activo = 1 " +
+                    "    and p.activo = 1 " +
+                    "    and r.tipo = ?1 " +
+                    ") / np.totalGlp *100 porcentajeGLPAtendido, " +
+                    "( " +
+                    " select count(distinct p.id_pedido) " +
+                    " from camion c   " +
+                    " inner join ruta r on " +
+                    " r.id_camion = c.id_camion " +
+                    " inner join rutaxpedido rp " +
+                    " on rp.id_ruta = r.id_ruta " +
+                    " inner join pedido p " +
+                    " on p.id_pedido = rp.id_pedido " +
+                    "    where  " +
+                    " t.id_tipo_camion = c.id_tipo_camion " +
+                    "    and c.activo = 1 " +
+                    "    and r.activo = 1 " +
+                    "    and rp.activo = 1 " +
+                    "    and p.activo = 1 " +
+                    "    and r.tipo = ?1 " +
+                    ") / np.totalPedido * 100 porcentajePedidosAtendido, " +
+                    "np.totalGlp " +
+                    "from tipo_camion t, " +
+                    "nPedidos np " +
+                    "where t.activo = 1",
+            nativeQuery = true)
+    public ArrayList<Object[]> porcentajeUsoTipo(int tipo);
+
 }

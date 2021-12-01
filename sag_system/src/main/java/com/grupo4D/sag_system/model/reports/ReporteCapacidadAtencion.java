@@ -1,55 +1,20 @@
 package com.grupo4D.sag_system.model.reports;
 
-public class ReporteCamionConsumoMensual {
-    private int idCamion;
-    private String codigoCamion;
-    private double petroleoConsumido;
-    private double distancia;
+public class ReporteCapacidadAtencion {
+    private double indicador;
     private String mes;
     private int agno;
 
-    public ReporteCamionConsumoMensual(){
+    public ReporteCapacidadAtencion(){
 
     }
 
-    public ReporteCamionConsumoMensual(int idCamion, String codigoCamion, double petroleoConsumido, double distancia, String mes) {
-        this.idCamion = idCamion;
-        this.codigoCamion = codigoCamion;
-        this.petroleoConsumido = petroleoConsumido;
-        this.distancia = distancia;
-        this.mes = mes;
+    public double getIndicador() {
+        return indicador;
     }
 
-    public int getIdCamion() {
-        return idCamion;
-    }
-
-    public void setIdCamion(int idCamion) {
-        this.idCamion = idCamion;
-    }
-
-    public String getCodigoCamion() {
-        return codigoCamion;
-    }
-
-    public void setCodigoCamion(String codigoCamion) {
-        this.codigoCamion = codigoCamion;
-    }
-
-    public double getPetroleoConsumido() {
-        return petroleoConsumido;
-    }
-
-    public void setPetroleoConsumido(double petroleoConsumido) {
-        this.petroleoConsumido = petroleoConsumido;
-    }
-
-    public double getDistancia() {
-        return distancia;
-    }
-
-    public void setDistancia(double distancia) {
-        this.distancia = distancia;
+    public void setIndicador(double indicador) {
+        this.indicador = indicador;
     }
 
     public String getMes() {

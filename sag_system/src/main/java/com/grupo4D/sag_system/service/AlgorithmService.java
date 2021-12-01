@@ -513,34 +513,36 @@ public class AlgorithmService {
             //ruta.setFechaInicio(horaInicio.plusSeconds(20)+);
 
             //Dependiendo del camion, generamos la averia si es que es simulacion de 3 dias
-            switch (StaticValues.numCamion){
-                case(2): {
-                    StaticValues.simulationType = tipo;
-                    StaticValues.idCamion = camionesDisponibles.get(i).getId();
-                    StaticValues.virtualDate = fecha;
-                    StaticValues.start = fecha.plusHours(2);
-                    StaticValues.mult = multiplier;
-                    averiado++;
-                    AveriaScheduled averia = applicationContext.getBean(AveriaScheduled.class);
-                    taskExecutor.execute(averia);
-                    break;
+            if(tipo == 2) {
+                switch (StaticValues.numCamion) {
+                    case (2): {
+                        StaticValues.simulationType = tipo;
+                        StaticValues.idCamion = camionesDisponibles.get(i).getId();
+                        StaticValues.virtualDate = fecha;
+                        StaticValues.start = fecha.plusHours(2);
+                        StaticValues.mult = multiplier;
+                        averiado++;
+                        AveriaScheduled averia = applicationContext.getBean(AveriaScheduled.class);
+                        taskExecutor.execute(averia);
+                        break;
+                    }
+                    case (4): {
+                        StaticValues.simulationType = tipo;
+                        StaticValues.idCamion = camionesDisponibles.get(i).getId();
+                        StaticValues.virtualDate = fecha;
+                        StaticValues.start = fecha.plusHours(3);
+                        StaticValues.mult = multiplier;
+                        averiado++;
+                        AveriaScheduled averia = applicationContext.getBean(AveriaScheduled.class);
+                        taskExecutor.execute(averia);
+                        break;
+                    }
+                    default: {
+                        break;
+                    }
                 }
-                case(4): {
-                    StaticValues.simulationType = tipo;
-                    StaticValues.idCamion = camionesDisponibles.get(i).getId();
-                    StaticValues.virtualDate = fecha;
-                    StaticValues.start = fecha.plusHours(3);
-                    StaticValues.mult = multiplier;
-                    averiado++;
-                    AveriaScheduled averia = applicationContext.getBean(AveriaScheduled.class);
-                    taskExecutor.execute(averia);
-                    break;
-                }
-                default: {
-                    break;
-                }
+                StaticValues.numCamion++;
             }
-            StaticValues.numCamion++;
 
             //rutaRepository.save(ruta);
 
@@ -728,6 +730,8 @@ public class AlgorithmService {
         } catch (IOException e) {
             e.printStackTrace();
         }*/
+
+
 
         UpdateCurrentValues updating = applicationContext.getBean(UpdateCurrentValues.class);
 
