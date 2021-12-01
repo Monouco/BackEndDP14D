@@ -409,7 +409,6 @@ public class ReportesService {
                 celdaCodigoAbv.setCellStyle(estiloCelda);
                 celdaValGlp.setCellStyle(estiloCelda);
                 celdaValPedido.setCellStyle(estiloCelda);
-
             }
 
             cont++;
