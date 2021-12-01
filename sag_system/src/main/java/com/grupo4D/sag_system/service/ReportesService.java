@@ -343,9 +343,9 @@ public class ReportesService {
             ReporteUsoTipo uso = new ReporteUsoTipo();
             uso.setId((int)t[0]);
             uso.setCodigo((String)t[1]);
-            BigDecimal dTemp = (BigDecimal) t[2];
+            Double dTemp = (Double) t[2];
             uso.setPorcentajeGLP(dTemp.doubleValue());
-            dTemp = (BigDecimal) t[3] ;
+            dTemp = (Double) t[3] ;
             uso.setPorcentajePedido(dTemp.doubleValue());
             //System.out.println("Esta clase es : "+t[2].getClass());
             lineaTipo.add(uso);
