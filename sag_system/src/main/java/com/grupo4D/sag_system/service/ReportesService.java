@@ -243,7 +243,7 @@ public class ReportesService {
             Cell celdaCodigoVal = filaContenido.createCell(1);
             celdaCodigoVal.setCellValue(linea.getCodigoCamion());
             Cell celdaConsumoVal = filaContenido.createCell(2);
-            celdaConsumoVal.setCellValue(linea.getPetroleoConsumido());
+            celdaConsumoVal.setCellValue(String.valueOf(Math.round(linea.getPetroleoConsumido()*100)/100));
             Cell celdaDistanciaVal = filaContenido.createCell(3);
             celdaDistanciaVal.setCellValue(linea.getDistancia());
 
@@ -392,7 +392,7 @@ public class ReportesService {
                 Cell celdaMes = filaContenido.createCell(2);
                 celdaMes.setCellValue(linea.getMes());
                 Cell celdaIndicador = filaContenido.createCell(3);
-                celdaIndicador.setCellValue(Math.round(linea.getIndicador() * 100) / 100);
+                celdaIndicador.setCellValue(String.valueOf(Math.round(linea.getIndicador() * 100) / 100));
 
                 celdaAgno.setCellStyle(estiloCelda);
                 celdaMes.setCellStyle(estiloCelda);
@@ -403,9 +403,9 @@ public class ReportesService {
                 Cell celdaCodigoAbv = filaContenido.createCell(5);
                 celdaCodigoAbv.setCellValue(lineaTipo.get(cont).getCodigo());
                 Cell celdaValGlp = filaContenido.createCell(6);
-                celdaValGlp.setCellValue(Math.round(lineaTipo.get(cont).getPorcentajeGLP()*100)/100);
+                celdaValGlp.setCellValue(String.valueOf(Math.round(lineaTipo.get(cont).getPorcentajeGLP()*100)/100));
                 Cell celdaValPedido = filaContenido.createCell(7);
-                celdaValPedido.setCellValue(Math.round(lineaTipo.get(cont).getPorcentajePedido()*100)/100);
+                celdaValPedido.setCellValue(String.valueOf(Math.round(lineaTipo.get(cont).getPorcentajePedido()*100)/100));
 
                 celdaCodigoAbv.setCellStyle(estiloCelda);
                 celdaValGlp.setCellStyle(estiloCelda);
