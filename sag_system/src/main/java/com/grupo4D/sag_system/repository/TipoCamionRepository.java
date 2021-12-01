@@ -85,7 +85,8 @@ public interface TipoCamionRepository extends CrudRepository<TipoCamion,Integer>
                     ") / np.totalPedido * 100 porcentajePedidosAtendido " +
                     "from tipo_camion t, " +
                     "nPedidos np " +
-                    "where t.activo = 1",
+                    "where t.activo = 1 " +
+                    "order by id_tipo_camion asc",
             nativeQuery = true)
     public ArrayList<Object[]> porcentajeUsoTipo(int tipo);
 

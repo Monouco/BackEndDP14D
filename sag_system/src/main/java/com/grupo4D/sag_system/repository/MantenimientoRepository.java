@@ -14,7 +14,8 @@ public interface MantenimientoRepository extends CrudRepository<Mantenimiento,In
 
     @Query(
             value = "SELECT * FROM mantenimiento u WHERE u.activo = 1 " +
-                    "and tipo_simulacion = 1 " ,
+                    "and tipo_simulacion = 1 " +
+                    "order by fecha_entrada desc" ,
             nativeQuery = true)
     public ArrayList<Mantenimiento> listarMantenimientos();
 }

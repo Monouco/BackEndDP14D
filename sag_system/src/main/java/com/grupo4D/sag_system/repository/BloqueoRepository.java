@@ -18,7 +18,8 @@ public interface BloqueoRepository extends CrudRepository<Bloqueo,Integer> {
                     "and DATE_ADD(fecha_inicio, INTERVAL (-1 * desfase + duracion/?3)/ 1000 + tiempo_espera * (1+1/?3)  MICROSECOND) >= ?1 " +
                     //"and DATE_ADD(fecha_inicio, INTERVAL (-1 * desfase + duracion/?3)/ 1000 MICROSECOND) >= ?1 " +
                     "and tipo = ?2 " +
-                    "and vigente = 1",
+                    "and vigente = 1 " +
+                    "order by fecha_inicio desc",
             nativeQuery = true)
     public ArrayList<Bloqueo> listarBloqueosActuales(LocalDateTime fecha, int tipo, double velocidad);
 

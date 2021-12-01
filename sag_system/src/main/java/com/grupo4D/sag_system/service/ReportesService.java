@@ -380,6 +380,7 @@ public class ReportesService {
         rows = 2;
         int cont = 0;
         int maxIter = (lineas.size() > lineaTipo.size()) ? lineas.size() : lineaTipo.size();
+        System.out.println("Cantidad de iteraciones " + maxIter);
         for (cont =0 ; cont < maxIter; cont++) {
 
             Row filaContenido = sheet.createRow(rows);
