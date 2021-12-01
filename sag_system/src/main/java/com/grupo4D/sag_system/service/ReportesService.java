@@ -272,6 +272,9 @@ public class ReportesService {
         sheet.setColumnWidth(1, 30 * 256);
         sheet.setColumnWidth(2, 30 * 256);
         sheet.setColumnWidth(3, 30 * 256);
+        sheet.setColumnWidth(5, 30 * 256);
+        sheet.setColumnWidth(6, 30 * 256);
+        sheet.setColumnWidth(7, 30 * 256);
 
         Font tituloFont = workbook.createFont();
         tituloFont.setBold(true);
@@ -398,6 +401,8 @@ public class ReportesService {
                 celdaCodigoAbv.setCellStyle(estiloCelda);
                 celdaValGlp.setCellStyle(estiloCelda);
                 celdaValPedido.setCellStyle(estiloCelda);
+
+                cont++;
             }
 
             celdaAgno.setCellStyle(estiloCelda);
