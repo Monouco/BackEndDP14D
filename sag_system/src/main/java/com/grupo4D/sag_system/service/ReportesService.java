@@ -393,7 +393,7 @@ public class ReportesService {
                 celdaMes.setCellValue(linea.getMes());
                 Cell celdaIndicador = filaContenido.createCell(3);
                 //celdaIndicador.setCellValue(String.valueOf(Math.round(linea.getIndicador() * 100) / 100));
-                celdaIndicador.setCellValue(String.valueOf(Math.round(linea.getIndicador() * 100) / 100));
+                celdaIndicador.setCellValue(String.valueOf(Math.round(linea.getIndicador() * 10000) / 100));
 
                 celdaAgno.setCellStyle(estiloCelda);
                 celdaMes.setCellStyle(estiloCelda);
