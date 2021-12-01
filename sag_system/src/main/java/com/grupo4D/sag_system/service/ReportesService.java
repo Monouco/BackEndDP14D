@@ -67,14 +67,14 @@ public class ReportesService {
             //System.out.println(rxps.size()+ " tamaño rutasXPEDIDO");
             //System.out.println(r.getId()+ " idRuta============");
             for (RutaXPedido rxp: rxps ) {
-                System.out.println(rxp.getCantidadGLPEnviado()+" GLP");
+                //System.out.println(rxp.getCantidadGLPEnviado()+" GLP");
                 glpCamiones[r.getCamion().getId()] += rxp.getCantidadGLPEnviado();
             }
         }
 
 
         for (int i=0;i<30;i++){
-            System.out.println(glpCamiones[i]);
+            //System.out.println(glpCamiones[i]);
             if (glpCamiones[i]!=0){
                 RepGLPEntregadoXCamionFront repCamion = new RepGLPEntregadoXCamionFront();
                 repCamion.setIdCamion(i);
