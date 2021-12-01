@@ -412,7 +412,6 @@ public class ReportesService {
                 celdaValPedido.setCellStyle(estiloCelda);
             }
 
-            cont++;
             rows++;
         }
 
