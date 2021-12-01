@@ -379,16 +379,24 @@ public class ReportesService {
 
         rows = 2;
         int cont = 0;
-        for (ReporteCapacidadAtencion linea:
-                lineas) {
+        int maxIter = (lineas.size() > lineaTipo.size()) ? lineas.size() : lineaTipo.size();
+        for (cont =0 ; cont < maxIter; cont++) {
 
             Row filaContenido = sheet.createRow(rows);
-            Cell celdaAgno = filaContenido.createCell(1);
-            celdaAgno.setCellValue(linea.getAgno());
-            Cell celdaMes = filaContenido.createCell(2);
-            celdaMes.setCellValue(linea.getMes());
-            Cell celdaIndicador = filaContenido.createCell(3);
-            celdaIndicador.setCellValue(Math.round(linea.getIndicador()*100)/100);
+
+            if(cont < lineas.size()) {
+                ReporteCapacidadAtencion linea = lineas.get(cont);
+                Cell celdaAgno = filaContenido.createCell(1);
+                celdaAgno.setCellValue(linea.getAgno());
+                Cell celdaMes = filaContenido.createCell(2);
+                celdaMes.setCellValue(linea.getMes());
+                Cell celdaIndicador = filaContenido.createCell(3);
+                celdaIndicador.setCellValue(Math.round(linea.getIndicador() * 100) / 100);
+
+                celdaAgno.setCellStyle(estiloCelda);
+                celdaMes.setCellStyle(estiloCelda);
+                celdaIndicador.setCellStyle(estiloCelda);
+            }
 
             if(cont < lineaTipo.size()){
                 Cell celdaCodigoAbv = filaContenido.createCell(5);
@@ -402,13 +410,9 @@ public class ReportesService {
                 celdaValGlp.setCellStyle(estiloCelda);
                 celdaValPedido.setCellStyle(estiloCelda);
 
-                cont++;
             }
 
-            celdaAgno.setCellStyle(estiloCelda);
-            celdaMes.setCellStyle(estiloCelda);
-            celdaIndicador.setCellStyle(estiloCelda);
-
+            cont++;
             rows++;
         }
 
