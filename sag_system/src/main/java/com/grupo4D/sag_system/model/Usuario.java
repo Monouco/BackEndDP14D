@@ -1,7 +1,11 @@
 package com.grupo4D.sag_system.model;
 
 import javax.persistence.*;
+import javax.xml.bind.DatatypeConverter;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.time.LocalDateTime;
+
 
 @Entity
 @Table(name="Usuario")
@@ -14,7 +18,7 @@ public class Usuario {
     private int id;
     //Resto de atributos
 
-    @Column(name="nombreUsuario")
+    @Column(name="nombre")
     private String nombre;
 
     @Column(name="apellidoPaterno")
@@ -26,11 +30,35 @@ public class Usuario {
     @Column(name="correo")
     private String correo;
 
+    @Column(name="nombreUsuario")
+    private String nombreUsuario;
+
     @Column(name="clave")
     private String clave;
 
+    @Column(name="telefono")
+    private String telefono;
+
     @Column(name="activo")
     private boolean activo = true;
+
+
+
+    public String getNombreUsuario() {
+        return nombreUsuario;
+    }
+
+    public void setNombreUsuario(String nombreUsuario) {
+        this.nombreUsuario = nombreUsuario;
+    }
+
+    public String getTelefono() {
+        return telefono;
+    }
+
+    public void setTelefono(String telefono) {
+        this.telefono = telefono;
+    }
 
     public int getId() {
         return id;
