@@ -54,26 +54,15 @@ public class ReportesService {
         String f = fecha.getF().getYear()+"-"+ fecha.getF().getMonthValue()+"-"+fecha.getF().getDayOfMonth()+"%";
         String fe = fecha.getF().getYear()+"-"+ fecha.getF().getMonthValue()+"-"+fecha.getF().getDayOfMonth();
         ArrayList<RepGLPEntregadoXCamionFront> rep = new ArrayList<>();
-//        ArrayList<Camion> camiones = (ArrayList<Camion>) camionRepository.findAll();
-//        ArrayList<Pedido> pedidos = pedidoRepository.pedidosXFecha(f);
-//        ArrayList<RutaXPedido> rutasXPedido = rutaXPedidoRepository.rutasXFecha(f);
         ArrayList<Ruta> rutas = rutaRepository.rutasCompletadasPorFechaYTipo(f,fecha.getTipo());
-        //System.out.println(rutas.size()+ " tamaño rutas");
         double [] glpCamiones = new double[30];
 
         for (Ruta r: rutas ) {
-            //System.out.println(r.getCamion().getId()+ " Camion");
-            //selecciona la rutaxpedido con el idRuta e idCamion
             ArrayList<RutaXPedido> rxps = rutaXPedidoRepository.rutasXIdRuta(r.getId());
-            //System.out.println(rxps.size()+ " tamaño rutasXPEDIDO");
-            //System.out.println(r.getId()+ " idRuta============");
             for (RutaXPedido rxp: rxps ) {
-                //System.out.println(rxp.getCantidadGLPEnviado()+" GLP");
                 glpCamiones[r.getCamion().getId()] += rxp.getCantidadGLPEnviado();
             }
         }
-
-
         for (int i=0;i<30;i++){
             //System.out.println(glpCamiones[i]);
             if (glpCamiones[i]!=0){
@@ -84,6 +73,51 @@ public class ReportesService {
                 String p = camionRepository.listarCodigo1Camion(repCamion.getIdCamion());
                 repCamion.setPlaca(p);
                 rep.add(repCamion);
+            }
+        }
+        return rep;
+    }
+
+    public ArrayList<RepGLPEntregadoXCamionFront> glpXCamionEntreFechas(Fecha2TipoFront fecha, int periodo){ //periodo =1 meses; periodo=2 anios
+        FechaFront fInicio = new FechaFront(fecha.getFechaInicio());
+        FechaFront fFin = new FechaFront(fecha.getFechaFin());
+        String fI = fInicio.getF().getYear()+"-"+ fInicio.getF().getMonthValue()+"-"+fInicio.getF().getDayOfMonth();
+        String fF = fFin.getF().getYear()+"-"+ fFin.getF().getMonthValue()+"-"+fFin.getF().getDayOfMonth();
+        ArrayList<RepGLPEntregadoXCamionFront> rep = new ArrayList<>();
+        ArrayList<Ruta> rutas = rutaRepository.rutasCompletadasEntreFechasPorTipo(fI,fF, fecha.getTipo());
+
+        int mesActual=fFin.getF().getMonthValue();
+        int anioActual = fFin.getF().getYear();
+
+        double [] glpCamiones = new double[30];
+
+        for (Ruta r: rutas ) {
+            if ((rutas.lastIndexOf(r)==rutas.size()-1) || (mesActual != r.getFechaFin().getMonthValue()  && periodo==1)|| (anioActual!=r.getFechaFin().getYear() && periodo==2)){
+                for (int i=0;i<30;i++){
+                    //System.out.println(glpCamiones[i]);
+                    if (glpCamiones[i]!=0){
+                        String fechaPeriodo ="";
+                        if (periodo==1){
+                            fechaPeriodo=anioActual+"-"+mesActual;
+                        }else if (periodo==2){
+                            fechaPeriodo= String.valueOf(anioActual);
+                        }
+                        RepGLPEntregadoXCamionFront repCamion = new RepGLPEntregadoXCamionFront();
+                        repCamion.setIdCamion(i);
+                        repCamion.setCantidadGLP(glpCamiones[i]);
+                        repCamion.setFecha(fechaPeriodo);
+                        String p = camionRepository.listarCodigo1Camion(repCamion.getIdCamion());
+                        repCamion.setPlaca(p);
+                        rep.add(repCamion);
+                    }
+                    glpCamiones[i]=0;
+                }
+                mesActual = r.getFechaFin().getMonthValue();
+                anioActual = r.getFechaFin().getYear();
+            }
+            ArrayList<RutaXPedido> rxps = rutaXPedidoRepository.rutasXIdRuta(r.getId());
+            for (RutaXPedido rxp: rxps ) {
+                glpCamiones[r.getCamion().getId()] += rxp.getCantidadGLPEnviado();
             }
         }
         return rep;

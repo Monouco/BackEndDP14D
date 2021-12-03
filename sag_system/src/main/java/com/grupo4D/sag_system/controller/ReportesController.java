@@ -42,6 +42,17 @@ public class ReportesController {
         return reportesService.consumoPetroleoDiario(req);
     }
 
+
+    @PostMapping("/GLPEntregadoXCamionXMeses")
+    public ArrayList<RepGLPEntregadoXCamionFront> reporteGLPporMeses(@RequestBody Fecha2TipoFront req){
+        return reportesService.glpXCamionEntreFechas(req,1);
+    }
+
+    @PostMapping("/GLPEntregadoXCamionXAnios")
+    public ArrayList<RepGLPEntregadoXCamionFront> reporteGLPporAnios(@RequestBody Fecha2TipoFront req){
+        return reportesService.glpXCamionEntreFechas(req,2);
+    }
+
     @PostMapping("/ConsumoMensual")
     public ResponseEntity<Resource> reporteConsumoMensual(@RequestBody FechaFront fecha) throws Exception{
         String filename = "ReporteConsumoMensual.xlsx";
