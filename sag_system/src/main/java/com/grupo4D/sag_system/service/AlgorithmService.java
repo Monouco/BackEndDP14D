@@ -569,7 +569,7 @@ public class AlgorithmService {
                 NodoFront nodoFront = new NodoFront();
                 nodoFront.setX(j[0]);
                 nodoFront.setY(j[1]);
-                if(j.length ==3){
+                if(j.length >=3){
                     nodoFront.setPedido(j[2]);
                     rutaXNodo.setPedido(j[2]);
                     if(j[2] >= 0){
@@ -634,6 +634,9 @@ public class AlgorithmService {
                 path.add(nodoFront);
                 secuenciaRuta.add(rutaXNodo);
                 k++;
+            }
+            if(temp == 0){
+                System.out.println("Error en la ejecucion, no se pudo aumentar el contador");
             }
             long tiempoRuta = (long)(( (1000 * k)/(velocity * hormigas.get(i).getVelocity()) + atendidos * tiempoAtencion) * nanos);
             ruta.setFechaFin(ruta.getFechaInicio().plusNanos(tiempoRuta));
