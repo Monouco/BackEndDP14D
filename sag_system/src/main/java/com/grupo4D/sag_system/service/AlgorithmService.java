@@ -682,9 +682,20 @@ public class AlgorithmService {
         pedidoRepository.saveAll(pedidosNuevos);
         camionRepository.saveAll(camionesDisponibles);
         plantaRepository.saveAll(plantas);
-        rutaXNodoRepository.saveAll(secuenciaRuta);
-        rutaXPedidoRepository.saveAll(secuenciaPedido);
-        rutaXPlantaRepository.saveAll(secuenciaPlanta);
+        try {
+            rutaXNodoRepository.saveAll(secuenciaRuta);
+            if(secuenciaPedido.size()==0){
+                System.out.println("Error, no se ha puesto ruta por nodo");
+            }
+            if(secuenciaPlanta.size()==0){
+                System.out.println("Error, no se ha puesto ruta por planta");
+            }
+            rutaXPlantaRepository.saveAll(secuenciaPlanta);
+            rutaXPedidoRepository.saveAll(secuenciaPedido);
+        }
+        catch (Exception e){
+            System.out.println(e.getMessage());
+        }
 
         if(averiado > 0)
             ConcurrentValues.allowFail.release(averiado);
