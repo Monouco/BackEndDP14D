@@ -132,11 +132,19 @@ public class ReportesService {
             celda.setCellStyle(estiloTitulo);
         }
 
+        sheet.addMergedRegion(new CellRangeAddress(k,k,1,2));
+        filaTitulo.getCell(1).setCellValue("Reporte Cantidad de Pedidos Entregados");
 
-        filaTitulo.getCell(1).setCellValue("Mes");
-        filaTitulo.getCell(2).setCellValue("Cantidad Pedidos Entregados");
+        Row filaHeader = sheet.createRow(k+1);
+        Cell celdaCodigo = filaHeader.createCell(1);
+        celdaCodigo.setCellValue("Mes");
+        Cell celdaConsumo = filaHeader.createCell(2);
+        celdaConsumo.setCellValue("Cantidad Pedidos Entregados");
 
-        rows += 2;
+        celdaCodigo.setCellStyle(estiloHeader);
+        celdaConsumo.setCellStyle(estiloHeader);
+
+        rows += 3;
 
         for (ReporteCantidadPedidos linea: cantPedidos) {
             Row filaContenido = sheet.createRow(rows);
