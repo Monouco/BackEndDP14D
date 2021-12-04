@@ -485,7 +485,7 @@ public class AlgorithmService {
             //pedidoRepository.save(pedidosNuevos.get(i));
         }
 
-        ACSAlgorithm algoritmoACS  = new ACSAlgorithm(numAlmacenes, numOrdenes,mapa1.getPlantaPrincipal(),hTurno, fecha);
+        ACSAlgorithm algoritmoACS  = new ACSAlgorithm(numAlmacenes, numOrdenes,mapa1.getPlantaPrincipal(),hTurno, fecha, 0.5);
 
         hormigas = algoritmoACS.findSolution(hormigas,ordenes,mapa1,cycles,steps, camionesDisponibles.size(),evaporationRate);
 
@@ -509,6 +509,7 @@ public class AlgorithmService {
             ruta.setEstado("Iniciado");
             ruta.setTipo(tipo);
             ruta.setDesfase(desfase);
+            ruta.setActivo(true);
             ruta.setCostoOperacion(algoritmoACS.getFullOpCost().get(i));
             //ruta.setFechaInicio(horaInicio.plusSeconds(20)+);
 
