@@ -451,7 +451,7 @@ public class AlgorithmService {
         int numAlmacenes = 3;
         int numOrdenes = pedidosNuevos.size();
         int hTurno = 24;
-        int cycles = 200;
+        int cycles = 500;
         int steps = 100;
         int tiempoAtencion = 600;
         long nanos = 1000000000;

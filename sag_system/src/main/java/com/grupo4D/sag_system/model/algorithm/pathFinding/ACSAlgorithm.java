@@ -298,7 +298,7 @@ public class ACSAlgorithm {
                     else {
                         //pedido no atendido, evaluar
                         probabilidades[m + numAlmacenes] = calcProb(camion, ordenes, m, tiempoActual, numAlmacenes, mapa, depositos); // atractividad + feromona
-                        if(camion.getUsedCapacity() < pedidos[m])
+                        if(camion.getUsedCapacity() < pedidos[m] && camion.getUsedCapacity() < camion.getCapacity()*0.7)
                             probabilidades[m + numAlmacenes] *= this.factPen;
                     }
                 }
@@ -363,7 +363,7 @@ public class ACSAlgorithm {
             coor = depositos.get(last + numAlmacenes).getCoor();
             //x = posX almacen actual, y = posY almacen actual
             manhattan = Math.abs(coor[0] - des[0]) + Math.abs(coor[1] - des[1]);
-            if(last == ordenPedido)
+            if(ordenPedido < 0)
                 return 0.0; //esta en la misma planta
         }
         else{
