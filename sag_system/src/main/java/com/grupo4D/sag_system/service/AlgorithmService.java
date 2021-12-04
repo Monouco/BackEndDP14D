@@ -158,7 +158,7 @@ public class AlgorithmService {
                         double [] cantPetroleoTanque = new double[nodosDeRuta.size()];
                         int salto=0;
 
-                        if (nodosDeRuta.size()>0) {
+                        if (nodosDeRuta.size()>0 && pedidosDeRuta.size()>0) {
                             ArrayList<Integer> distancias = new ArrayList<>();
                             TipoCamion tCamion = tipoCamionRepository.listarTipoCamion(c.getTipoCamion().getId());
                             cantPetroleoTanque[0] = tCamion.getCapacidadPetroleo();
@@ -213,7 +213,6 @@ public class AlgorithmService {
                     }
 
                 }
-
                 hojaDeRuta.add(camionHR);
             }
 
