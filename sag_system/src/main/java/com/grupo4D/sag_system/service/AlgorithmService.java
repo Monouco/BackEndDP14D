@@ -157,7 +157,6 @@ public class AlgorithmService {
                         double [] pesos = new double[nodosDeRuta.size()];
                         double [] cantPetroleoTanque = new double[nodosDeRuta.size()];
                         int salto=0;
-                        System.out.println(r.getId());
 
                         if (nodosDeRuta.size()>0) {
                             ArrayList<Integer> distancias = new ArrayList<>();
