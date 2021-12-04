@@ -39,7 +39,7 @@ public interface RutaRepository extends CrudRepository<Ruta,Integer> {
     public ArrayList<Ruta> rutasCompletadasPorFechaYTipo(String fecha, int tipo);
 
     @Query(
-            value = "select * from ruta where  DATE(fecha_inicio) >=?1 and DATE(fecha_fin) <=  ?2 " +
+            value = "select * from ruta where  DATE(fecha_fin) >=?1 and DATE(fecha_fin) <=  ?2 " +
                     " and activo=1 and tipo= ?3 and estado_ruta='Completado' order by fecha_fin asc",
             nativeQuery = true)
     public ArrayList<Ruta> rutasCompletadasEntreFechasPorTipo(String fI, String fF, int tipo);
