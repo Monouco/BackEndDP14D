@@ -232,7 +232,7 @@ public class Ant {
             fitnessCur = numCl*this.fuelCapacity/2 - this.fuelConsumption;
             if(fitnessCur<0){
                 //Evitamos que haya fitness negativo
-                fitnessCur = -1/fitnessCur;
+                fitnessCur = -1 * ((Math.abs(fitnessCur) >= 1) ?  1/fitnessCur :  fitnessCur);
             }
         }
         return fitnessCur;

@@ -67,15 +67,24 @@ public class ACSAlgorithm {
             numAtendidos = 0;
 
             //Armamos las soluciones por pasos
-            //for (int j = 0; j < steps; j++) {
+            for (int j = 0; j < k; j++) {
+                ArrayList<Integer> sequence = new ArrayList<>();
+                //Buscamos con cual tenemos mejor soluciono
+                for(int m = j; m < k + j; m++){
+                    if( m < k)
+                        sequence.add(m);
+                    else
+                        sequence.add(m-k);
+                }
                 //Por cada una de las hormigas
-                for (int l = 0; l < k; l++) {
+                for (int l :
+                        sequence) {
                     //Si ya se atendieron todos los pedidos
                     if (numAtendidos == numOrders) break;
 
                     camion = camiones.get(l);
 
-                    while(numAtendidos != numOrders) {
+                    while (numAtendidos != numOrders) {
 
                         glpDisponible = camion.getUsedCapacity();
                         //Aca va lo de las 8 horas y petroleo restante
@@ -87,8 +96,8 @@ public class ACSAlgorithm {
                         ordenAnterior = camion.getLastSolution(numAlmacenes);
 
                         //Esto es el colapso logistico o no se puede atender por capacidad actual
-                        //if (siguienteOrden == -1 - numAlmacenes) {
-                        if (siguienteOrden < 0) {
+                        if (siguienteOrden == -1 - numAlmacenes) {
+                            //if (siguienteOrden < 0) {
                             //Si el anterior era negativo, entonces es porque no ha salido o ha ido a recargar antes y aun asi no pudo
                             if (ordenAnterior < 0) {
                                 reservaActual = camion.deleteLast();
@@ -182,82 +191,82 @@ public class ACSAlgorithm {
                 }
                 // Se atendieron todos los pedidos
                 //if (numAtendidos == numOrders) break;
-            //}
+                //}
 
-            fitnessTemp = 0;
-            fitnessCur = 0;
-            bestAnt = 0;
-            bestFit = 0;
-            //En otro momento hare lo de A*
-            for (int l = 0; l < k; l++) {
-                camion = camiones.get(l);
-                ordenAnterior = camion.getLastSolution(numAlmacenes);
-                camion.addSolutionGLP(camion.getUsedCapacity());
-                if (ordenAnterior < 0) {
-                    if (ordenAnterior == -1 - numAlmacenes) {
-                        xIni = camion.getxPos();
-                        yIni = camion.getyPos();
-                        coordenate = new int[2];
-                        coordenate[0] = xIni;
-                        coordenate[1] = yIni;
-                        camion.addRoute(coordenate);
+                fitnessTemp = 0;
+                fitnessCur = 0;
+                bestAnt = 0;
+                bestFit = 0;
+                //En otro momento hare lo de A*
+                for (int l = 0; l < k; l++) {
+                    camion = camiones.get(l);
+                    ordenAnterior = camion.getLastSolution(numAlmacenes);
+                    camion.addSolutionGLP(camion.getUsedCapacity());
+                    if (ordenAnterior < 0) {
+                        if (ordenAnterior == -1 - numAlmacenes) {
+                            xIni = camion.getxPos();
+                            yIni = camion.getyPos();
+                            coordenate = new int[2];
+                            coordenate[0] = xIni;
+                            coordenate[1] = yIni;
+                            camion.addRoute(coordenate);
+                        } else {
+                            //Se encuentra en una planta, verificar (esto no puede suceder)
+                            xIni = mapa1.getPlantaPrincipal()[0];
+                            yIni = mapa1.getPlantaPrincipal()[1];
+                        }
                     } else {
-                        //Se encuentra en una planta, verificar (esto no puede suceder)
-                        xIni = mapa1.getPlantaPrincipal()[0];
-                        yIni = mapa1.getPlantaPrincipal()[1];
+                        lastOrden = ordenes.get(ordenAnterior);
+                        xIni = lastOrden.getDesX();
+                        yIni = lastOrden.getDesY();
                     }
+                    //Posiciones del almacen principal
+                    xDes = mapa1.getPlantaPrincipal()[0];
+                    yDes = mapa1.getPlantaPrincipal()[1];
+                    ruta = manhattanPath(xIni, yIni, xDes, yDes);
+                    camion.addRoute(ruta);
+
+                    //calculando fitnessGlobal
+                    fitnessCur = camion.calcFitness();
+                    fitnessTemp = fitnessTemp + fitnessCur;
+                    //System.out.println("Para el camion "+l+" en it "+i+" el fitness: "+fitnessTemp);
+
+                    //Aca guardamos a la mejor hormiga, pero opino que deberiamos tener las n mejores hormigas
+                    if (fitnessCur > bestFit) {
+                        bestAnt = l;
+                        bestFit = fitnessCur;
+                    }
+
+                    //Recordar este cambio para el momento en que se tengan que agregar pedidos espontaneos
+                    camion.setUsedCapacity(camion.getCapacity());
+
+                }
+
+                if (numAtendidos != numOrders) {
+                    updatePheromone(evaporationRate, numOrders, bestFit / 2, camiones.get(bestAnt), numAlmacenes);
+                    //Es solucion inviable y colapso logistico
+                    //fitnessTemp = -1;
+                    //bestFit = -1;
                 } else {
-                    lastOrden = ordenes.get(ordenAnterior);
-                    xIni = lastOrden.getDesX();
-                    yIni = lastOrden.getDesY();
-                }
-                //Posiciones del almacen principal
-                xDes = mapa1.getPlantaPrincipal()[0];
-                yDes = mapa1.getPlantaPrincipal()[1];
-                ruta = manhattanPath(xIni, yIni, xDes, yDes);
-                camion.addRoute(ruta);
-
-                //calculando fitnessGlobal
-                fitnessCur = camion.calcFitness();
-                fitnessTemp = fitnessTemp + fitnessCur;
-                //System.out.println("Para el camion "+l+" en it "+i+" el fitness: "+fitnessTemp);
-
-                //Aca guardamos a la mejor hormiga, pero opino que deberiamos tener las n mejores hormigas
-                if (fitnessCur > bestFit) {
-                    bestAnt = l;
-                    bestFit = fitnessCur;
+                    //Actualizamos la feromona
+                    //if (bestFit >= 0) {
+                    //highestNum = numOrders;
+                    updatePheromone(evaporationRate, numOrders, bestFit, camiones.get(bestAnt), numAlmacenes);
                 }
 
-                //Recordar este cambio para el momento en que se tengan que agregar pedidos espontaneos
-                camion.setUsedCapacity(camion.getCapacity());
 
-            }
-
-            if (numAtendidos != numOrders) {
-                updatePheromone(evaporationRate, numOrders, bestFit/2, camiones.get(bestAnt), numAlmacenes);
-                //Es solucion inviable y colapso logistico
-                //fitnessTemp = -1;
-                //bestFit = -1;
-            }
-            else{
-            //Actualizamos la feromona
-            //if (bestFit >= 0) {
-                //highestNum = numOrders;
-                updatePheromone(evaporationRate, numOrders, bestFit, camiones.get(bestAnt), numAlmacenes);
-            }
-
-
-            //Cambiando la mejor solucion de todos los camiones
-            for (int l = 0; l < k; l++) {
-                //Cambiando a mejor solucion
-                if (fitnessTemp >= globalFitness) {
-                    globalFitness = fitnessTemp;
-                    highestNum = numAtendidos;
-                    camiones.get(l).changeSolution();
+                //Cambiando la mejor solucion de todos los camiones
+                for (int l = 0; l < k; l++) {
+                    //Cambiando a mejor solucion
+                    if (fitnessTemp >= globalFitness) {
+                        globalFitness = fitnessTemp;
+                        highestNum = numAtendidos;
+                        camiones.get(l).changeSolution();
+                    }
+                    camiones.get(l).clearSolution();
                 }
-                camiones.get(l).clearSolution();
-            }
 
+            }
         }
 
         //Procederemos a generar la nueva solucion utilizando el algoritmo A*
@@ -276,12 +285,12 @@ public class ACSAlgorithm {
         double chosen = 0.0;
         double sum = 0.0;
         int next = -1-numAlmacenes;
-        double [] probabilidades = new double [numOrders + numAlmacenes];
+        double [] probabilidades = new double [numOrders ];
         int camino = camion.getRoute().size();
         double tiempoActual = ( ( (camino == 0 ) ? 1 : camino) - 1) / camion.getVelocity() ;
         int atendidos=0;
         for (int pedido:
-             camion.getSolution()) {
+                camion.getSolution()) {
             if(pedido >= 0 ) atendidos ++;
         }
         tiempoActual += (1/6)*atendidos;
@@ -290,30 +299,26 @@ public class ACSAlgorithm {
         if(camion.getUsedCapacity() != 0.0){
 
             //calculando las probabilidades de todos
-            for(int m = -numAlmacenes; m < numOrders; m++){
+            for(int m = 0; m < numOrders; m++){
                 //pedido atendido
-                if(m >= 0) {
-                    if (pedidos[m] == 0.0 || camion.getLastSolution(numAlmacenes) == m)
-                        probabilidades[m + numAlmacenes] = 0;
-                    else {
-                        //pedido no atendido, evaluar
-                        probabilidades[m + numAlmacenes] = calcProb(camion, ordenes, m, tiempoActual, numAlmacenes, mapa, depositos); // atractividad + feromona
-                        if(camion.getUsedCapacity() < pedidos[m] && camion.getUsedCapacity() < camion.getCapacity()*0.7)
-                            probabilidades[m + numAlmacenes] *= this.factPen;
-                    }
+                if (pedidos[m] == 0.0 || camion.getLastSolution(numAlmacenes) == m)
+                    probabilidades[m ] = 0;
+                else {
+                    //pedido no atendido, evaluar
+                    probabilidades[m ] = calcProb(camion, ordenes, m, tiempoActual, numAlmacenes, mapa, depositos); // atractividad + feromona
+                        /*if(camion.getUsedCapacity() < pedidos[m] && camion.getUsedCapacity() < camion.getCapacity()*0.7)
+                            probabilidades[m + numAlmacenes] *= this.factPen;*/
                 }
-                else{
-                    probabilidades[m + numAlmacenes] = calcProb(camion, ordenes, m, tiempoActual, numAlmacenes, mapa, depositos);
-                }
-                sum += probabilidades[m + numAlmacenes];
+
+                sum += probabilidades[m ];
             }
 
             chosen = Math.random();
             //chosen = rand.nextDouble();
 
-            for(int m = -numAlmacenes; m < numOrders; m++){
+            for(int m = 0; m < numOrders; m++){
                 //normalizando y hallando la verdadera probabilidad
-                prob += (probabilidades[m + numAlmacenes])/sum;
+                prob += (probabilidades[m ])/sum;
                 if(chosen < prob){
                     next = m;
                     break;
