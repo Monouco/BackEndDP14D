@@ -220,7 +220,7 @@ public class AlgorithmService {
 
             return hojaDeRuta;
         }catch (Exception e){
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
         return  null;
     }
