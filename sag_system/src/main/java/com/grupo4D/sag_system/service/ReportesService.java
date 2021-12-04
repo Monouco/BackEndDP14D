@@ -24,6 +24,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.lang.reflect.Array;
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.time.LocalDateTime;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -115,7 +116,8 @@ public class ReportesService {
         for (Object[] t:
                 temp) {
             ReporteCantidadPedidos c = new ReporteCantidadPedidos();
-            c.setCantidadPedidos((int)t[0]);
+            BigInteger b = (BigInteger) t[0];
+            c.setCantidadPedidos(b.intValue());
             c.setFecha((String)t[1]);
             cantPedidos.add(c);
         }
@@ -130,16 +132,16 @@ public class ReportesService {
             celda.setCellStyle(estiloTitulo);
         }
 
-        sheet.addMergedRegion(new CellRangeAddress(k,k,1,3));
-        filaTitulo.getCell(1).setCellValue("Mes");
-        filaTitulo.getCell(2).setCellValue("Cantidad Pedidos");
 
-        rows += 1;
+        filaTitulo.getCell(1).setCellValue("Mes");
+        filaTitulo.getCell(2).setCellValue("Cantidad Pedidos Entregados");
+
+        rows += 2;
 
         for (ReporteCantidadPedidos linea: cantPedidos) {
             Row filaContenido = sheet.createRow(rows);
             Cell celdaCodigoVal = filaContenido.createCell(1);
-            celdaCodigoVal.setCellValue(linea.getFecha());
+            celdaCodigoVal.setCellValue(linea.getMes());
             Cell celdaConsumoVal = filaContenido.createCell(2);
             celdaConsumoVal.setCellValue(String.valueOf(linea.getCantidadPedidos()));
 
