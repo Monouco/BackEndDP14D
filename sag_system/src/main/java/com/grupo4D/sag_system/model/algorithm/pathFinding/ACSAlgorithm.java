@@ -20,15 +20,17 @@ public class ACSAlgorithm {
     private double bestFitness;
     private ArrayList<Double> fullOpCost = new ArrayList<>();
     private LocalDateTime curTime;
+    private double factPen;
     //private Random rand;
 
-    public ACSAlgorithm(int numAlmacenes, int numOrders, int [] coorAlmacen, int hTurno, LocalDateTime curTime){
+    public ACSAlgorithm(int numAlmacenes, int numOrders, int [] coorAlmacen, int hTurno, LocalDateTime curTime, double factPen){
         this.numAlmacenes = numAlmacenes;
         this.coorAlmacen = coorAlmacen;
         //Considerando los almacenes dentro de la feromona
         this.pheromone = new double[numOrders + numAlmacenes][numOrders + numAlmacenes];
         this.hTurno = hTurno;
         this.curTime = curTime;
+        this.factPen = factPen;
         //rand = new Random(seed);
     }
 
@@ -79,13 +81,14 @@ public class ACSAlgorithm {
                         //Aca va lo de las 8 horas y petroleo restante
                         //if (glpDisponible == 0.0 ) continue;
 
-                        siguienteOrden = getNextOrder(camion, ordenes, numOrders, pedidos, numAlmacenes, mapa1);
+                        siguienteOrden = getNextOrder(camion, ordenes, numOrders, pedidos, numAlmacenes, mapa1, depositos);
 
                         //Se aumenta la ruta
                         ordenAnterior = camion.getLastSolution(numAlmacenes);
 
                         //Esto es el colapso logistico o no se puede atender por capacidad actual
-                        if (siguienteOrden == -1 - numAlmacenes) {
+                        //if (siguienteOrden == -1 - numAlmacenes) {
+                        if (siguienteOrden < 0) {
                             //Si el anterior era negativo, entonces es porque no ha salido o ha ido a recargar antes y aun asi no pudo
                             if (ordenAnterior < 0) {
                                 reservaActual = camion.deleteLast();
@@ -268,12 +271,12 @@ public class ACSAlgorithm {
         return camiones;
     }
 
-    private int getNextOrder(Ant camion,  ArrayList<Order> ordenes, int numOrders, double[] pedidos, int numAlmacenes, Mapa mapa){
+    private int getNextOrder(Ant camion,  ArrayList<Order> ordenes, int numOrders, double[] pedidos, int numAlmacenes, Mapa mapa, ArrayList<DepositGLP> depositos){
         double prob = 0.0;
         double chosen = 0.0;
         double sum = 0.0;
         int next = -1-numAlmacenes;
-        double [] probabilidades = new double [numOrders];
+        double [] probabilidades = new double [numOrders + numAlmacenes];
         int camino = camion.getRoute().size();
         double tiempoActual = ( ( (camino == 0 ) ? 1 : camino) - 1) / camion.getVelocity() ;
         int atendidos=0;
@@ -287,22 +290,30 @@ public class ACSAlgorithm {
         if(camion.getUsedCapacity() != 0.0){
 
             //calculando las probabilidades de todos
-            for(int m = 0; m < numOrders; m++){
+            for(int m = -numAlmacenes; m < numOrders; m++){
                 //pedido atendido
-                if(pedidos[m] == 0.0 || camion.getLastSolution(numAlmacenes) == m)
-                    probabilidades[m]=0;
-                else
-                    //pedido no atendido, evaluar
-                    probabilidades[m] = calcProb(camion, ordenes, m, tiempoActual, numAlmacenes, mapa); // atractividad + feromona
-                sum += probabilidades[m];
+                if(m >= 0) {
+                    if (pedidos[m] == 0.0 || camion.getLastSolution(numAlmacenes) == m)
+                        probabilidades[m + numAlmacenes] = 0;
+                    else {
+                        //pedido no atendido, evaluar
+                        probabilidades[m + numAlmacenes] = calcProb(camion, ordenes, m, tiempoActual, numAlmacenes, mapa, depositos); // atractividad + feromona
+                        if(camion.getUsedCapacity() < pedidos[m] && camion.getUsedCapacity() < camion.getCapacity()*0.7)
+                            probabilidades[m + numAlmacenes] *= this.factPen;
+                    }
+                }
+                else{
+                    probabilidades[m + numAlmacenes] = calcProb(camion, ordenes, m, tiempoActual, numAlmacenes, mapa, depositos);
+                }
+                sum += probabilidades[m + numAlmacenes];
             }
 
             chosen = Math.random();
             //chosen = rand.nextDouble();
 
-            for(int m = 0; m < numOrders; m++){
+            for(int m = -numAlmacenes; m < numOrders; m++){
                 //normalizando y hallando la verdadera probabilidad
-                prob += (probabilidades[m])/sum;
+                prob += (probabilidades[m + numAlmacenes])/sum;
                 if(chosen < prob){
                     next = m;
                     break;
@@ -314,13 +325,13 @@ public class ACSAlgorithm {
         return next;
     }
 
-    private double calcProb(Ant camion, ArrayList<Order> ordenes, int ordenPedido,  double tiempoActual, int numAlmacenes, Mapa mapa){
+    private double calcProb(Ant camion, ArrayList<Order> ordenes, int ordenPedido,  double tiempoActual, int numAlmacenes, Mapa mapa, ArrayList<DepositGLP> depositos){
         double atractividad = 0;
         double pheromoneCur;
         double prob = 0;
         //Calculando atractividad
         int last = camion.getLastSolution(numAlmacenes);
-        Order pedido = ordenes.get(ordenPedido);
+
         Order pedidoAnt = null;
         int manhattan = 0;
         int manhattanBack = 0;
@@ -330,26 +341,53 @@ public class ACSAlgorithm {
         double tiempoEstimado;
         LocalDateTime tiempoActualDate = this.curTime.plusSeconds((long)(tiempoActual*3600));
         LocalDateTime tiempoEstimadoDate;
+
+        Order pedido = null;
+        DepositGLP planta = null;
+        int des[] = new int[2];
+        if (ordenPedido >= 0 ){
+            pedido = ordenes.get(ordenPedido);
+            des[0] = pedido.getDesX();
+            des[1] = pedido.getDesY();
+        }else{
+            planta = depositos.get(ordenPedido + numAlmacenes);
+            des = planta.getCoor();
+        }
+
         //No olvidar inicializar localizacion del camion
         if(last <= -1){
             if(last == -1-numAlmacenes)
                 last++;
             //Cambiar metodo para obtener el almacen actual
-            coor = mapa.getPlantaPrincipal();
+            //coor = mapa.getPlantaPrincipal();
+            coor = depositos.get(last + numAlmacenes).getCoor();
             //x = posX almacen actual, y = posY almacen actual
-            manhattan = Math.abs(coor[0] - pedido.getDesX()) + Math.abs(coor[1] - pedido.getDesY());
+            manhattan = Math.abs(coor[0] - des[0]) + Math.abs(coor[1] - des[1]);
+            if(ordenPedido < 0)
+                return 0.0; //esta en la misma planta
         }
         else{
             pedidoAnt = ordenes.get(last);
-            manhattan = Math.abs(pedidoAnt.getDesX() - pedido.getDesX()) + Math.abs(pedidoAnt.getDesY() - pedido.getDesY());
+            manhattan = Math.abs(pedidoAnt.getDesX() - des[0]) + Math.abs(pedidoAnt.getDesY() - des[1]);
 
         }
         //calculamos la distancia de vuelta
-        manhattanBack = Math.abs(coorAlmacen[0] - pedido.getDesX()) + Math.abs( coorAlmacen[1]-pedido.getDesX());
+        manhattanBack = Math.abs(coorAlmacen[0] - des[0]) + Math.abs( coorAlmacen[1] - des[1]);
         //Consideraremos que no deja combustible, asi tendremos un margen para hacerle frente a algun imprevisto
         if(!camion.tryOrder(manhattan + manhattanBack)) return 0;
+
+        //Si es planta aqui retorna
+        if(ordenPedido < 0){
+            pheromoneCur = pheromone[last + numAlmacenes][ordenPedido + numAlmacenes];
+            prob = ((double) 1 / manhattan + pheromoneCur +
+                    (camion.getCapacity() - camion.getUsedCapacity()) / camion.getCapacity()) *
+                    (double) 1 / manhattan  * (camion.getCapacity() - camion.getUsedCapacity()) / camion.getCapacity();
+            return prob;
+        }
+
         tiempoEstimado = manhattan/camion.getVelocity() + 1/6;
         tiempoVuelta = manhattanBack/camion.getVelocity();
+
         //Calculo temporal
         //tiempoRestante = pedido.getDeadLine() - tiempoActual;
         tiempoRestante = (double)ChronoUnit.MINUTES.between(tiempoActualDate, pedido.getFechaFin()) / 60;
