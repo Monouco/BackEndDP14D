@@ -17,6 +17,7 @@ import org.apache.tomcat.jni.Local;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.core.task.TaskExecutor;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.stereotype.Service;
 
 import java.io.BufferedWriter;
@@ -57,7 +58,7 @@ public class AlgorithmService {
     TipoCamionRepository tipoCamionRepository;
 
     @Autowired
-    private TaskExecutor taskExecutor;
+    private ThreadPoolTaskExecutor taskExecutor;
 
     @Autowired
     private ApplicationContext applicationContext;

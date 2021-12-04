@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.core.env.Environment;
 import org.springframework.core.task.TaskExecutor;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.stereotype.Component;
 
 import java.io.BufferedWriter;
@@ -28,7 +29,7 @@ public class Init implements InitializingBean {
     private Environment environment;
 
     @Autowired
-    private TaskExecutor taskExecutor;
+    private ThreadPoolTaskExecutor taskExecutor;
 
     @Autowired
     private ApplicationContext applicationContext;
@@ -41,6 +42,8 @@ public class Init implements InitializingBean {
         StaticValues.virtualDate = LocalDateTime.now(StaticValues.zoneId);
         StaticValues.simulationType = 1;
         StaticValues.end = null;
+
+        taskExecutor.setMaxPoolSize(30);
 
         /*File log = new File("../logs/daily/log.txt");
         try {
