@@ -14,6 +14,7 @@ import javax.transaction.Transactional;
 import java.lang.reflect.Array;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.List;
 
 @Repository
 public interface PedidoRepository extends CrudRepository<Pedido,Integer> {
@@ -91,8 +92,12 @@ public interface PedidoRepository extends CrudRepository<Pedido,Integer> {
             nativeQuery = true)
     public double capacidadAtencion(int tipo);
 
+    @Query(
+            value = "select count(fecha_entrega), monthname(fecha_entrega) from pedido where tipo =?1 and  DATE(fecha_entrega) >= ?2 and DATE(fecha_entrega) <=  ?3 and estado_pedido='Atendido' and activo=1 group by month(fecha_entrega)"  ,
+            nativeQuery = true
+    )
+    public List<Object[]> generarReportePedidosEntregados(int tipo, String fI, String fF);
 
-    //posible cambio por algo mas eficiente que no requiera entrar a BD por cada pedido
 
 
 

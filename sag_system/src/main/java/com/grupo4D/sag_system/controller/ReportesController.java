@@ -52,6 +52,15 @@ public class ReportesController {
     public ArrayList<RepGLPEntregadoXCamionFront> reporteGLPporAnios(@RequestBody Fecha2TipoFront req){
         return reportesService.glpXCamionEntreFechas(req,2);
     }
+    @PostMapping("/PedidosEntregados")
+    public ResponseEntity<Resource> reportePedidosEntregados(@RequestBody Fecha2TipoFront fecha) throws Exception{
+        String filename = "ReportePedidosEntregados.xlsx";
+        InputStreamResource file = reportesService.cantidadPedidosEntregadosPorFechas(fecha);
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + filename)
+                .contentType(MediaType.parseMediaType("application/vnd.ms-excel"))
+                .body(file);
+    }
 
     @PostMapping("/ConsumoMensual")
     public ResponseEntity<Resource> reporteConsumoMensual(@RequestBody FechaFront fecha) throws Exception{

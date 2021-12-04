@@ -2,6 +2,7 @@ package com.grupo4D.sag_system.service;
 
 import com.grupo4D.sag_system.model.*;
 import com.grupo4D.sag_system.model.reports.ReporteCamionConsumoMensual;
+import com.grupo4D.sag_system.model.reports.ReporteCantidadPedidos;
 import com.grupo4D.sag_system.model.reports.ReporteCapacidadAtencion;
 import com.grupo4D.sag_system.model.reports.ReporteUsoTipo;
 import com.grupo4D.sag_system.model.request.Fecha1TipoFront;
@@ -23,6 +24,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.lang.reflect.Array;
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.time.LocalDateTime;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -49,6 +51,119 @@ public class ReportesService {
 
     @Autowired
     TipoCamionRepository tipoCamionRepository;
+
+    public InputStreamResource cantidadPedidosEntregadosPorFechas (Fecha2TipoFront req) throws Exception{
+        String fInicio = req.getFechaInicio().getYear()+"-"+req.getFechaInicio().getMonthValue()+"-"+req.getFechaInicio().getDayOfMonth();
+        String fFin = req.getFechaFin().getYear()+"-"+req.getFechaFin().getMonthValue()+"-"+req.getFechaFin().getDayOfMonth();
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        XSSFWorkbook workbook = new XSSFWorkbook();
+
+        XSSFSheet sheet = workbook.createSheet("Reporte Pedidos Entregados ");
+        sheet.setColumnWidth(0, 5 * 256);
+        sheet.setColumnWidth(1, 30 * 256);
+        sheet.setColumnWidth(2, 30 * 256);
+        sheet.setColumnWidth(3, 30 * 256);
+
+        Font tituloFont = workbook.createFont();
+        tituloFont.setBold(true);
+        tituloFont.setFontHeight((short)(tituloFont.getFontHeight() + 30));
+
+        Font headerFont = workbook.createFont();
+        headerFont.setBold(true);
+        headerFont.setFontHeight((short)(headerFont.getFontHeight() + 6));
+
+        Font codigoFont = workbook.createFont();
+        codigoFont.setBold(true);
+
+        CellStyle estiloTitulo = workbook.createCellStyle();
+        estiloTitulo.setAlignment(HorizontalAlignment.CENTER);
+        estiloTitulo.setVerticalAlignment(VerticalAlignment.CENTER);
+        estiloTitulo.setBorderBottom(BorderStyle.MEDIUM);
+        estiloTitulo.setBorderLeft(BorderStyle.MEDIUM);
+        estiloTitulo.setBorderRight(BorderStyle.MEDIUM);
+        estiloTitulo.setBorderTop(BorderStyle.MEDIUM);
+
+        estiloTitulo.setFont(tituloFont);
+
+        CellStyle estiloHeader = workbook.createCellStyle();
+        estiloHeader.setAlignment(HorizontalAlignment.CENTER);
+        estiloHeader.setVerticalAlignment(VerticalAlignment.CENTER);
+        estiloHeader.setBorderBottom(BorderStyle.MEDIUM);
+        estiloHeader.setBorderLeft(BorderStyle.MEDIUM);
+        estiloHeader.setBorderRight(BorderStyle.MEDIUM);
+        estiloHeader.setBorderTop(BorderStyle.MEDIUM);
+
+        estiloHeader.setFont(headerFont);
+
+        CellStyle estiloCodigo = workbook.createCellStyle();
+        estiloCodigo.setVerticalAlignment(VerticalAlignment.CENTER);
+        estiloCodigo.setBorderBottom(BorderStyle.MEDIUM);
+        estiloCodigo.setBorderLeft(BorderStyle.MEDIUM);
+        estiloCodigo.setBorderRight(BorderStyle.MEDIUM);
+        estiloCodigo.setBorderTop(BorderStyle.MEDIUM);
+
+        estiloHeader.setFont(codigoFont);
+
+        CellStyle estiloCelda = workbook.createCellStyle();
+        estiloCelda.setVerticalAlignment(VerticalAlignment.CENTER);
+        estiloCelda.setBorderBottom(BorderStyle.MEDIUM);
+        estiloCelda.setBorderLeft(BorderStyle.MEDIUM);
+        estiloCelda.setBorderRight(BorderStyle.MEDIUM);
+        estiloCelda.setBorderTop(BorderStyle.MEDIUM);
+
+        ArrayList<ReporteCantidadPedidos> cantPedidos = new ArrayList<>();
+        List<Object[]> temp = pedidoRepository.generarReportePedidosEntregados(req.getTipo(), fInicio, fFin);
+        for (Object[] t:
+                temp) {
+            ReporteCantidadPedidos c = new ReporteCantidadPedidos();
+            BigInteger b = (BigInteger) t[0];
+            c.setCantidadPedidos(b.intValue());
+            c.setFecha((String)t[1]);
+            cantPedidos.add(c);
+        }
+
+        int k = 1;
+        int rows = 0;
+
+        Row filaTitulo = sheet.createRow(k);
+        Cell celda;
+        for(int i = 1; i < 3; i++){
+            celda = filaTitulo.createCell(i);
+            celda.setCellStyle(estiloTitulo);
+        }
+
+        sheet.addMergedRegion(new CellRangeAddress(k,k,1,2));
+        filaTitulo.getCell(1).setCellValue("Reporte Cantidad de Pedidos Entregados");
+
+        Row filaHeader = sheet.createRow(k+1);
+        Cell celdaCodigo = filaHeader.createCell(1);
+        celdaCodigo.setCellValue("Mes");
+        Cell celdaConsumo = filaHeader.createCell(2);
+        celdaConsumo.setCellValue("Cantidad Pedidos Entregados");
+
+        celdaCodigo.setCellStyle(estiloHeader);
+        celdaConsumo.setCellStyle(estiloHeader);
+
+        rows += 3;
+
+        for (ReporteCantidadPedidos linea: cantPedidos) {
+            Row filaContenido = sheet.createRow(rows);
+            Cell celdaCodigoVal = filaContenido.createCell(1);
+            celdaCodigoVal.setCellValue(linea.getMes());
+            Cell celdaConsumoVal = filaContenido.createCell(2);
+            celdaConsumoVal.setCellValue(String.valueOf(linea.getCantidadPedidos()));
+
+            celdaCodigoVal.setCellStyle(estiloCodigo);
+            celdaConsumoVal.setCellStyle(estiloCelda);
+
+            rows++;
+        }
+
+        workbook.write(stream);
+        ByteArrayInputStream inputStream = new ByteArrayInputStream(stream.toByteArray());
+        workbook.close();
+        return new InputStreamResource(inputStream);
+    }
 
     public ArrayList<RepGLPEntregadoXCamionFront> glpXCamionXFecha(Fecha1TipoFront fecha){
         String f = fecha.getF().getYear()+"-"+ fecha.getF().getMonthValue()+"-"+fecha.getF().getDayOfMonth()+"%";
