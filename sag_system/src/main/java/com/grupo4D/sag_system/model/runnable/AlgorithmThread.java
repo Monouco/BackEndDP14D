@@ -129,6 +129,11 @@ public class AlgorithmThread implements Runnable {
                             leftGLP -= nTypeC*10;
                             int nTypeD = (int)Math.ceil(leftGLP/5);
                             String toUpgrade = "Se necesitaran: \n";
+
+                            nTypeA = (int)Math.ceil(nTypeA*0.01);
+                            nTypeB = (int)Math.ceil(nTypeB*0.01);
+                            nTypeC = (int)Math.ceil(nTypeC*0.01);
+                            nTypeD = (int)Math.ceil(nTypeC*0.01);
                             if(nTypeA >0)
                                 toUpgrade = toUpgrade  + nTypeA + " camiones del Tipo A \n";
                             if(nTypeB >0)
