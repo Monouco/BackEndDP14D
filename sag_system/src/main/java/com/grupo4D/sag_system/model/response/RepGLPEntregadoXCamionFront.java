@@ -1,6 +1,6 @@
 package com.grupo4D.sag_system.model.response;
 
-public class RepGLPEntregadoXCamionFront {
+public class RepGLPEntregadoXCamionFront implements Comparable<RepGLPEntregadoXCamionFront> {
     private int idCamion;
     private String placa;
     private double cantidadGLP;
@@ -14,6 +14,15 @@ public class RepGLPEntregadoXCamionFront {
         this.placa = placa;
         this.cantidadGLP = cantidadGLP;
         this.fecha = fecha;
+    }
+
+    @Override
+    public int compareTo(RepGLPEntregadoXCamionFront o) {
+        if (this.getFecha().compareTo(o.getFecha())!=0){
+            return this.getFecha().compareTo(o.getFecha());
+        }else{
+            return this.getIdCamion()-o.getIdCamion();
+        }
     }
 
     public int getIdCamion() {

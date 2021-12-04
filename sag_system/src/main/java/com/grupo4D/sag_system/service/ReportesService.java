@@ -27,10 +27,8 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.time.LocalDateTime;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+
 @Service
 public class ReportesService {
 
@@ -177,9 +175,10 @@ public class ReportesService {
             for (RutaXPedido rxp: rxps ) {
                 glpCamiones[r.getCamion().getId()] += rxp.getCantidadGLPEnviado();
             }
+            //System.out.println(r.getId() + " GLP AÑADIDO: "+ glpCamiones[r.getCamion().getId()]);
         }
         for (int i=0;i<30;i++){
-            //System.out.println(glpCamiones[i]);
+            //System.out.println(glpCamiones[i] + " GLP CAMION");
             if (glpCamiones[i]!=0){
                 RepGLPEntregadoXCamionFront repCamion = new RepGLPEntregadoXCamionFront();
                 repCamion.setIdCamion(i);
@@ -194,6 +193,7 @@ public class ReportesService {
     }
 
     public ArrayList<RepGLPEntregadoXCamionFront> glpXCamionEntreFechas(Fecha2TipoFront fecha, int periodo){ //periodo =1 meses; periodo=2 anios
+        System.out.println("=============================== INGRESO A FUNCION ===============================");
         FechaFront fInicio = new FechaFront(fecha.getFechaInicio());
         FechaFront fFin = new FechaFront(fecha.getFechaFin());
         String fI = fInicio.getF().getYear()+"-"+ fInicio.getF().getMonthValue()+"-"+fInicio.getF().getDayOfMonth();
@@ -207,7 +207,7 @@ public class ReportesService {
         double [] glpCamiones = new double[30];
 
         for (Ruta r: rutas ) {
-            if ((rutas.lastIndexOf(r)==rutas.size()-1) || (mesActual != r.getFechaFin().getMonthValue()  && periodo==1)|| (anioActual!=r.getFechaFin().getYear() && periodo==2)){
+            if ( (mesActual != r.getFechaFin().getMonthValue()  && periodo==1)|| (anioActual!=r.getFechaFin().getYear() && periodo==2)){
                 for (int i=0;i<30;i++){
                     //System.out.println(glpCamiones[i]);
                     if (glpCamiones[i]!=0){
@@ -233,8 +233,37 @@ public class ReportesService {
             ArrayList<RutaXPedido> rxps = rutaXPedidoRepository.rutasXIdRuta(r.getId());
             for (RutaXPedido rxp: rxps ) {
                 glpCamiones[r.getCamion().getId()] += rxp.getCantidadGLPEnviado();
+                System.out.println(r.getId() + " GLP AÑADIDO: "+ glpCamiones[r.getCamion().getId()] + " ID CAMION: "+ r.getCamion().getId());
+                if (r.getCamion().getId()==13){
+                    System.out.println("CAMION 13!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+                }
             }
+            if ((rutas.indexOf(r)==rutas.size()-1) || (mesActual != r.getFechaFin().getMonthValue()  && periodo==1)|| (anioActual!=r.getFechaFin().getYear() && periodo==2)){
+                for (int i=0;i<30;i++){
+                    //System.out.println(glpCamiones[i]);
+                    if (glpCamiones[i]!=0){
+                        String fechaPeriodo ="";
+                        if (periodo==1){
+                            fechaPeriodo=anioActual+"-"+mesActual;
+                        }else if (periodo==2){
+                            fechaPeriodo= String.valueOf(anioActual);
+                        }
+                        RepGLPEntregadoXCamionFront repCamion = new RepGLPEntregadoXCamionFront();
+                        repCamion.setIdCamion(i);
+                        repCamion.setCantidadGLP(glpCamiones[i]);
+                        repCamion.setFecha(fechaPeriodo);
+                        String p = camionRepository.listarCodigo1Camion(repCamion.getIdCamion());
+                        repCamion.setPlaca(p);
+                        rep.add(repCamion);
+                    }
+                    glpCamiones[i]=0;
+                }
+                mesActual = r.getFechaFin().getMonthValue();
+                anioActual = r.getFechaFin().getYear();
+            }
+
         }
+        Collections.sort(rep);
         return rep;
     }
 
