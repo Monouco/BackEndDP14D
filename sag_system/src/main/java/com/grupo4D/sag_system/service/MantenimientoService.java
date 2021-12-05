@@ -37,6 +37,7 @@ public class MantenimientoService{
             Mantenimiento mantenimiento = new Mantenimiento();
             mantenimiento.setTipoSimulacion(1);
             mantenimiento.setTipo("Preventivo");
+            mantenimiento.setVigente(true);
             mantenimiento.setFechaEntrada(temp.getFecha());
             mantenimiento.setFechaSalida(temp.getFecha().plusDays(1));
             Camion camion = camionRepository.obtenerCamion(temp.getTipo(), temp.getNumero());

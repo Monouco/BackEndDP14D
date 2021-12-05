@@ -444,7 +444,7 @@ public class AlgorithmService {
             mapa1.setPlantaPrincipal(coor);
         }
 
-        mapa1.initializeCurrentRoadBlocks(fecha, fecha.plusHours(7), tipo);
+        mapa1.initializeCurrentRoadBlocks(fecha, fecha.plusHours(8), tipo);
 
 
         //revisar
