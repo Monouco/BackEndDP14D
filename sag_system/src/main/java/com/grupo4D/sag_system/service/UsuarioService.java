@@ -67,7 +67,7 @@ public class UsuarioService {
     }
 
     public ArrayList<Usuario> listarUsuarios() {
-        return (ArrayList<Usuario>) usuarioRepository.findAll();
+        return (ArrayList<Usuario>) usuarioRepository.findAllByActivoTrue();
     }
 
 
