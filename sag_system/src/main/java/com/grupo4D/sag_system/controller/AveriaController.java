@@ -187,7 +187,7 @@ public class AveriaController {
                 }
                 System.out.println("Registro el nodo: x: "+ rutaXNodos.get(index).getNodo().getCoordenadaX()+" y: "+rutaXNodos.get(index).getNodo().getCoordenadaY());
                 //Guardamos los valores cambiados de la ruta y nodos de la rutaXNodo
-                TimeUnit.SECONDS.sleep(1);
+                //TimeUnit.SECONDS.sleep(1);
                 rutaRepository.save(rutaCamion);
                 rutaXNodoRepository.saveAll(rutaXNodos);
                 //Ahora tenemos que averiar los nodosXAlmacen y nodosXPedidos a partir del nodo donde se quedo
