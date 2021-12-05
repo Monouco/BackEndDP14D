@@ -43,7 +43,7 @@ public class Init implements InitializingBean {
         StaticValues.simulationType = 1;
         StaticValues.end = null;
 
-        taskExecutor.setMaxPoolSize(30);
+        taskExecutor.setMaxPoolSize(50);
 
         /*File log = new File("../logs/daily/log.txt");
         try {
