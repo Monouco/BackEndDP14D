@@ -19,6 +19,7 @@ import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 @RestController
 @RequestMapping("/averia")
@@ -63,7 +64,7 @@ public class AveriaController {
     }
 
     @PostMapping("/registrarAveriaNueva")
-    public Averia registrarAveriaNueva(@RequestBody AveriaFront averia){
+    public Averia registrarAveriaNueva(@RequestBody AveriaFront averia) throws InterruptedException {
         long nanos = 1000000000;
         Camion camion = camionRepository.findCamionById(averia.getIdCamion());
         Averia averiaModel = new Averia();
@@ -186,6 +187,7 @@ public class AveriaController {
                 }
                 System.out.println("Registro el nodo: x: "+ rutaXNodos.get(index).getNodo().getCoordenadaX()+" y: "+rutaXNodos.get(index).getNodo().getCoordenadaY());
                 //Guardamos los valores cambiados de la ruta y nodos de la rutaXNodo
+                TimeUnit.SECONDS.sleep(1);
                 rutaRepository.save(rutaCamion);
                 rutaXNodoRepository.saveAll(rutaXNodos);
                 //Ahora tenemos que averiar los nodosXAlmacen y nodosXPedidos a partir del nodo donde se quedo
