@@ -49,7 +49,7 @@ public interface TipoCamionRepository extends CrudRepository<TipoCamion,Integer>
                     ") " +
                     "select t.id_tipo_camion, " +
                     "t.abreviatura, " +
-                    "( " +
+                    "ifnull(( " +
                     " select sum(rp.cantidad_glp_enviado) " +
                     " from camion c   " +
                     " inner join ruta r on " +
@@ -65,7 +65,7 @@ public interface TipoCamionRepository extends CrudRepository<TipoCamion,Integer>
                     "    and rp.activo = 1 " +
                     "    and p.activo = 1 " +
                     "    and r.tipo = ?1 " +
-                    ") / ifnull(np.totalGlp,1) *100 porcentajeGLPAtendido, " +
+                    ") / ifnull(np.totalGlp,1),0) *100 porcentajeGLPAtendido, " +
                     "( " +
                     " select count(distinct p.id_pedido) " +
                     " from camion c   " +
