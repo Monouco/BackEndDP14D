@@ -26,7 +26,7 @@ public interface PedidoRepository extends CrudRepository<Pedido,Integer> {
             value = "SELECT * FROM pedido u WHERE u.activo = 1 " +
                     "and (estado_pedido = 'Nuevo' " +
                     "or estado_pedido = 'Por Reprogramar' " +
-                    //"or estado_pedido = 'En ruta' " +
+                    "or estado_pedido = 'En ruta' " +
                     ") " +
                     "and fecha_pedido <= ?1 " +
                     "and tipo = ?2 " +
