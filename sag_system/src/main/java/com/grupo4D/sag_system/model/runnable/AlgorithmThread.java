@@ -73,7 +73,7 @@ public class AlgorithmThread implements Runnable {
         long sleepTime ;
 
         if(type == 1){
-            sleepTime = 180000;
+            sleepTime = 300000;
         }
         else{
             sleepTime = 3000;
