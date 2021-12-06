@@ -65,7 +65,7 @@ public interface TipoCamionRepository extends CrudRepository<TipoCamion,Integer>
                     "    and rp.activo = 1 " +
                     "    and p.activo = 1 " +
                     "    and r.tipo = ?1 " +
-                    ") / ifnull(np.totalGlp,0) *100 porcentajeGLPAtendido, " +
+                    ") / ifnull(np.totalGlp,1) *100 porcentajeGLPAtendido, " +
                     "( " +
                     " select count(distinct p.id_pedido) " +
                     " from camion c   " +
@@ -82,7 +82,7 @@ public interface TipoCamionRepository extends CrudRepository<TipoCamion,Integer>
                     "    and rp.activo = 1 " +
                     "    and p.activo = 1 " +
                     "    and r.tipo = ?1 " +
-                    ") / ifnull(np.totalPedido,0) * 100 porcentajePedidosAtendido " +
+                    ") / ifnull(np.totalPedido,1) * 100 porcentajePedidosAtendido " +
                     "from tipo_camion t, " +
                     "nPedidos np " +
                     "where t.activo = 1 " +
