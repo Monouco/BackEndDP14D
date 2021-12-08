@@ -901,9 +901,6 @@ public class AlgorithmService {
                 continue;
             }
 
-            if (r.getSecuencia()==176){
-                System.out.println("hola");
-            }
             switch (2*(curCoor[0]-coorAnt[0]) + (curCoor[1]-coorAnt[1])){
                 case -2:{
                     curDir = "l";
