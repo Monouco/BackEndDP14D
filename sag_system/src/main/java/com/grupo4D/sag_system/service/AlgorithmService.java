@@ -862,6 +862,7 @@ public class AlgorithmService {
     public HojaRutaFront hojaRutaNodos(int idRuta){
         HojaRutaFront hojaRutaFront = new HojaRutaFront();
         ArrayList<NodoHojaRutaFront> nodosHojaRuta = new ArrayList<>();
+        ArrayList<NodoHojaRutaFront> lista = new ArrayList<>();
         ArrayList<String> nodos = new ArrayList<>();
         ArrayList<String> tipos = new ArrayList<>();
         String route;
@@ -897,6 +898,9 @@ public class AlgorithmService {
                 continue;
             }
 
+            if (r.getSecuencia()==176){
+                System.out.println("hola");
+            }
             switch (2*(curCoor[0]-coorAnt[0]) + (curCoor[1]-coorAnt[1])){
                 case -2:{
                     curDir = "l";
@@ -927,23 +931,34 @@ public class AlgorithmService {
                 route = coorAnt[0] + ", " + coorAnt[1];
                 dir = curDir;
                 nodos.add(route);
-                if (r.getPedido()>=0){ //Si es un pedido
-                    tipo = "Pedido " + mapa.get(r.getSecuencia());
+//                if (r.getPedido()>=0){ //Si es un pedido
+//                    tipo = "Pedido " + mapa.get(r.getSecuencia());
+//                    tipos.add(tipo);
+//                }else if (mapa.containsKey(r.getSecuencia())){ //si no es un pedido pero si una planta
+//                    tipo = "Planta " + mapa.get(r.getSecuencia());
+//                    tipos.add(tipo);
+//                }else{  //si es solo esquina
+//                    tipo = "-";
+//                    tipos.add(tipo);
+//                }
+                int i = nodosDeRuta.indexOf(r);
+                if (nodosDeRuta.get(i-1).getPedido()>=0){ //Si es un pedido
+                    tipo = "Pedido " + mapa.get(nodosDeRuta.get(i-1).getSecuencia());
                     tipos.add(tipo);
-                }else if (mapa.containsKey(r.getSecuencia())){ //si no es un pedido pero si una planta
-                    tipo = "Planta " + mapa.get(r.getSecuencia());
+                }else if (mapa.containsKey(nodosDeRuta.get(i-1).getSecuencia())){ //si no es un pedido pero si una planta
+                    tipo = "Planta " + mapa.get(nodosDeRuta.get(i-1).getSecuencia()) ;
                     tipos.add(tipo);
                 }else{  //si es solo esquina
                     tipo = "-";
                     tipos.add(tipo);
                 }
             }else if (r.getPedido()>=0){ //Caso pedidos
-                route = coorAnt[0] + ", " + coorAnt[1];
+                route = curCoor[0] + ", " + curCoor[1];
                 nodos.add(route);
                 tipo = "Pedido " + mapa.get(r.getSecuencia());
                 tipos.add(tipo);
             }else if (mapa.containsKey(r.getSecuencia())){ //Caso plantas
-                route = coorAnt[0] + ", " + coorAnt[1];
+                route = curCoor[0] + ", " + curCoor[1];
                 nodos.add(route);
                 tipo = "Planta " + mapa.get(r.getSecuencia());
                 tipos.add(tipo);
@@ -959,8 +974,9 @@ public class AlgorithmService {
             }
 
         }
-        System.out.println(nodos.size());
-        System.out.println(tipos.size());
+//        System.out.println(nodos.size());
+//        System.out.println(tipos.size());
+
         if (nodos.size()== tipos.size()) {
             for (int j = 1; j < nodos.size(); j++) {
                 System.out.println(j);
@@ -968,17 +984,26 @@ public class AlgorithmService {
                 n.setInicio(nodos.get(j - 1));
                 n.setLlegada(nodos.get(j));
                 //Llenar si es planta o pedido o nada
-                if (j==nodos.size()-1){
-                    n.setTipo(tipos.get(j));
-                }else{
-                    n.setTipo(tipos.get(j-1));
-                }
+//                if (j==nodos.size()-1){
+//                    n.setTipo(tipos.get(j));
+//                }else{
+//                    n.setTipo(tipos.get(j-1));
+//                }
+                n.setTipo(tipos.get(j));
                 nodosHojaRuta.add(n);
                 System.out.println(nodos.get(j));
                 System.out.println(tipos.get(j-1)+"\n");
             }
+
+            for (NodoHojaRutaFront n : nodosHojaRuta){
+                if (n.getInicio().equals(n.getLlegada())){
+                    continue;
+                }else{
+                    lista.add(n);
+                }
+            }
         }
-        hojaRutaFront.setNodos(nodosHojaRuta);
+        hojaRutaFront.setNodos(lista);
         return hojaRutaFront;
     }
 
