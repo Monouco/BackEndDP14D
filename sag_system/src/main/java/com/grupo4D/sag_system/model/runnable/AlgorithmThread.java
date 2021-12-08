@@ -173,6 +173,7 @@ public class AlgorithmThread implements Runnable {
                                     StaticValues.collapseSimStatus.setFechaColapso(simulationDate);
                                     StaticValues.collapseSimStatus.setPedidosAtendidos(pedidoRepository.pedidosAtendidos(type));
                                     StaticValues.collapseSimStatus.setPedidosPorAtender(pedidoRepository.pedidosPorAtendidos(type));
+                                    System.out.println(LocalDateTime.now(StaticValues.zoneId) + " Entrando a colapso " + type + " a las " + simulationDate);
                                     StaticValues.collapseSimStatus.setHojaRuta(algorithmService.obtenerHojaDeRuta(new TipoSimulacionFront(type,multiplier)));
                                     StaticValues.collapseSimStatus.setPedidosEnCola(orders);
                                     StaticValues.collapseSimStatus.setFlotaFaltante(toUpgrade);
