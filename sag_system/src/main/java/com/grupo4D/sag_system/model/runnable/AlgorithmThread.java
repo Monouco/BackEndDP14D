@@ -152,6 +152,7 @@ public class AlgorithmThread implements Runnable {
                                 toUpgrade = toUpgrade +  nTypeC + " camiones del Tipo C \n";
                             if(nTypeD >0)
                                 toUpgrade = toUpgrade +  nTypeD + " camiones del Tipo D \n";
+                            System.out.println(LocalDateTime.now(StaticValues.zoneId) + " Entrando a colapso " + type + " a las " + simulationDate);
                             switch (type){
                                 case 1: {
                                     StaticValues.collapseStatus.setFechaColapso(simulationDate);
