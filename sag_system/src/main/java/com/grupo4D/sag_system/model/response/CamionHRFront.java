@@ -12,6 +12,7 @@ public class CamionHRFront {
     private double cantPetroleoFinalRuta;
     private double cantGlpActual;
     private ArrayList<PedidoHRFront> pedidos;
+    private int idRuta;
 
     public CamionHRFront() {
     }
@@ -111,4 +112,13 @@ public class CamionHRFront {
     public void setPedidos(ArrayList<PedidoHRFront> pedidos) {
         this.pedidos = pedidos;
     }
+
+    public int getIdRuta() {
+        return idRuta;
+    }
+
+    public void setIdRuta(int idRuta) {
+        this.idRuta = idRuta;
+    }
+
 }

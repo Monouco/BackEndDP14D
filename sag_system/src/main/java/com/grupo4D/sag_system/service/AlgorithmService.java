@@ -145,7 +145,7 @@ public class AlgorithmService {
                         camionHR.setNumPedidos(pedidos.size());
                         camionHR.setPedidos(pedidos);
                         camionHR.setCantGlpActual(cantGLPTransportado); //cantidad de glp entregado
-
+                        camionHR.setIdRuta(r.getId());
 
 
                         //Se saca los nodos de una ruta en particular
@@ -734,13 +734,6 @@ public class AlgorithmService {
             if(pedidos.get(i).getFechaPedido().isAfter(fechaFin))
                 fechaFin = pedidos.get(i).getFechaPedido();
         }
-        /*StaticValues.simulationType = 2;
-        StaticValues.ordersSim = pedidos;
-        InsertPedidosThread insertPedidos = applicationContext.getBean(InsertPedidosThread.class);
-
-        taskExecutor.execute(insertPedidos);
-
-        TimeUnit.SECONDS.sleep(3);*/
 
         pedidoRepository.saveAll(pedidos);
 
@@ -761,16 +754,6 @@ public class AlgorithmService {
         } catch (IOException e) {
             e.printStackTrace();
         }*/
-
-
-
-        /*UpdateCurrentValues updating = applicationContext.getBean(UpdateCurrentValues.class);
-
-        taskExecutor.execute(updating);
-
-        FillDeposit fillDeposit = applicationContext.getBean(FillDeposit.class);
-
-        taskExecutor.execute(fillDeposit);*/
 
         AlgorithmThread algorithm = applicationContext.getBean(AlgorithmThread.class);
 
