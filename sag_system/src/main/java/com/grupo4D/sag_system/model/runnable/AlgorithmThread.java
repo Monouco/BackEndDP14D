@@ -219,6 +219,17 @@ public class AlgorithmThread implements Runnable {
                         break;
                     }
 
+                    switch (type){
+                        case 2: {
+                            StaticValues.simRealTime = LocalDateTime.now(StaticValues.zoneId);
+                            break;
+                        }
+                        case 3: {
+                            StaticValues.collapseRealTime = LocalDateTime.now(StaticValues.zoneId);
+                            break;
+                        }
+                    }
+
                     algorithmService.asignarPedidos(simulationDate, orders, type, offset, multiplier);
 
                     /*switch (type){
