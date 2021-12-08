@@ -924,7 +924,7 @@ public class AlgorithmService {
             }
             //Caso esquinas
             if(dir != curDir){
-                route = coorAnt[0] + "," + coorAnt[1];
+                route = coorAnt[0] + ", " + coorAnt[1];
                 dir = curDir;
                 nodos.add(route);
                 if (r.getPedido()>=0){ //Si es un pedido
