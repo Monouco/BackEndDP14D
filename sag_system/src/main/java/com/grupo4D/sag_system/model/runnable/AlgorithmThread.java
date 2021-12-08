@@ -155,43 +155,43 @@ public class AlgorithmThread implements Runnable {
 
                             switch (type){
                                 case 1: {
-                                    StaticValues.collapseFlag = true;
-                                    StaticValues.comCollapseFlag = true;
                                     StaticValues.collapseStatus.setFechaColapso(simulationDate);
                                     StaticValues.collapseStatus.setPedidosAtendidos(pedidoRepository.pedidosAtendidos(type));
                                     StaticValues.collapseStatus.setPedidosPorAtender(pedidoRepository.pedidosPorAtendidos(type));
-                                    StaticValues.collapseStatus.setHojaRuta(algorithmService.obtenerHojaDeRuta(new TipoSimulacionFront(type,multiplier)));
                                     StaticValues.collapseStatus.setPedidosEnCola(orders);
                                     StaticValues.collapseStatus.setFlotaFaltante(toUpgrade);
                                     StaticValues.reportCapacity = reportesService.reporteCapacidadAtencion(type);
+                                    StaticValues.collapseStatus.setHojaRuta(algorithmService.obtenerHojaDeRuta(new TipoSimulacionFront(type,multiplier)));
+                                    StaticValues.collapseFlag = true;
+                                    StaticValues.comCollapseFlag = true;
                                     System.out.println(LocalDateTime.now(StaticValues.zoneId) + " Colapso Logistico tipo " + type + " a las " + simulationDate);
                                     break;
                                 }
                                 case 2: {
-                                    StaticValues.collapseSimulationFlag = true;
-                                    StaticValues.comSimCollapseFlag = true;
                                     StaticValues.collapseSimStatus.setFechaColapso(simulationDate);
                                     StaticValues.collapseSimStatus.setPedidosAtendidos(pedidoRepository.pedidosAtendidos(type));
                                     StaticValues.collapseSimStatus.setPedidosPorAtender(pedidoRepository.pedidosPorAtendidos(type));
-                                    System.out.println(LocalDateTime.now(StaticValues.zoneId) + " Entrando a colapso " + type + " a las " + simulationDate);
-                                    StaticValues.collapseSimStatus.setHojaRuta(algorithmService.obtenerHojaDeRuta(new TipoSimulacionFront(type,multiplier)));
                                     StaticValues.collapseSimStatus.setPedidosEnCola(orders);
                                     StaticValues.collapseSimStatus.setFlotaFaltante(toUpgrade);
                                     StaticValues.simReportCapacity = reportesService.reporteCapacidadAtencion(type);
+                                    System.out.println(LocalDateTime.now(StaticValues.zoneId) + " Entrando a colapso " + type + " a las " + simulationDate);
+                                    StaticValues.collapseSimStatus.setHojaRuta(algorithmService.obtenerHojaDeRuta(new TipoSimulacionFront(type,multiplier)));
+                                    StaticValues.collapseSimulationFlag = true;
+                                    StaticValues.comSimCollapseFlag = true;
                                     System.out.println(LocalDateTime.now(StaticValues.zoneId) + " Colapso Logistico tipo " + type + " a las " + simulationDate);
                                     break;
                                 }
                                 case 3: {
-                                    StaticValues.fullCollapseFlag = true;
-                                    StaticValues.comFullCollapseFlag = true;
                                     StaticValues.fullCollapseStatus.setFechaColapso(simulationDate);
                                     StaticValues.fullCollapseStatus.setPedidosAtendidos(pedidoRepository.pedidosAtendidos(type));
                                     StaticValues.fullCollapseStatus.setPedidosPorAtender(pedidoRepository.pedidosPorAtendidos(type));
-                                    System.out.println(LocalDateTime.now(StaticValues.zoneId) + " Entrando a colapso " + type + " a las " + simulationDate);
-                                    StaticValues.fullCollapseStatus.setHojaRuta(algorithmService.obtenerHojaDeRuta(new TipoSimulacionFront(type,multiplier)));
                                     StaticValues.fullCollapseStatus.setPedidosEnCola(orders);
                                     StaticValues.fullCollapseStatus.setFlotaFaltante(toUpgrade);
                                     StaticValues.collapseReportCapacity = reportesService.reporteCapacidadAtencion(type);
+                                    System.out.println(LocalDateTime.now(StaticValues.zoneId) + " Entrando a colapso " + type + " a las " + simulationDate);
+                                    StaticValues.fullCollapseStatus.setHojaRuta(algorithmService.obtenerHojaDeRuta(new TipoSimulacionFront(type,multiplier)));
+                                    StaticValues.fullCollapseFlag = true;
+                                    StaticValues.comFullCollapseFlag = true;
                                     System.out.println(LocalDateTime.now(StaticValues.zoneId) + " Colapso Logistico tipo " + type + " a las " + simulationDate);
                                     break;
                                 }
@@ -200,19 +200,19 @@ public class AlgorithmThread implements Runnable {
                         }
                     }
 
-                    if(StaticValues.collapseFlag && type == 1){
+                    if(StaticValues.comCollapseFlag && type == 1){
                         System.out.println(LocalDateTime.now(StaticValues.zoneId) + " Terminando simulacion " + type + " por colapso a las " + simulationDate);
                         /*ConcurrentValues.freeUpdateVal.acquire();
                         ConcurrentValues.updateVal.release();*/
                         break;
                     }
-                    if(StaticValues.collapseSimulationFlag && type == 2){
+                    if(StaticValues.comSimCollapseFlag && type == 2){
                         System.out.println(LocalDateTime.now(StaticValues.zoneId) + " Terminando simulacion " + type + " por colapso a las " + simulationDate);
                         /*ConcurrentValues.freeUpdateValSimulation.acquire();
                         ConcurrentValues.updateValSimulation.release();*/
                         break;
                     }
-                    if(StaticValues.fullCollapseFlag && type == 3){
+                    if(StaticValues.comFullCollapseFlag && type == 3){
                         System.out.println(LocalDateTime.now(StaticValues.zoneId) + " Terminando simulacion " + type + " por colapso a las " + simulationDate);
                         /*ConcurrentValues.freeUpdateValCollapse.acquire();
                         ConcurrentValues.updateValCollapse.release();*/
@@ -262,21 +262,23 @@ public class AlgorithmThread implements Runnable {
                     //log.write(LocalDateTime.now(StaticValues.zoneId) + " Pedidos atendidos para el tipo " + type + "Tiempo de simulacion " + simulationDate + '\n');
 
                 } else {
-                    switch (type){
-                        case 2: {
-                            StaticValues.simInTime = simulationDate;
-                            StaticValues.simRealTime = startDate;
-                            break;
-                        }
-                        case 3: {
-                            StaticValues.collapseInTime = simulationDate;
-                            StaticValues.collapseRealTime = startDate;
-                            break;
-                        }
-                    }
                     System.out.println("No hubieron pedidos para el tipo " + type + " Tiempo de simulacion " + simulationDate);
                     //log.write("No hubieron pedidos para el tipo " + type + " Tiempo de simulacion " + simulationDate + '\n');
                 }
+
+                switch (type){
+                    case 2: {
+                        StaticValues.simInTime = simulationDate;
+                        StaticValues.simRealTime = startDate;
+                        break;
+                    }
+                    case 3: {
+                        StaticValues.collapseInTime = simulationDate;
+                        StaticValues.collapseRealTime = startDate;
+                        break;
+                    }
+                }
+
                 this.simulationDate = (type ==1) ? LocalDateTime.now(StaticValues.zoneId).plusSeconds(sleepTime / 1000 * multiplier) : this.simulationDate.plusSeconds(sleepTime / 1000 * multiplier);
                 //this.startDate = this.startDate.plusSeconds(sleepTime/1000);
                 this.startDate = LocalDateTime.now(StaticValues.zoneId).plusSeconds(sleepTime / 1000 );
