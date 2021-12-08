@@ -64,4 +64,10 @@ public class AlgorithmController {
         return algoritmoService.asignarPedidosColapso(pedidos.getOrders(), pedidos.getSpeed());
     }
 
+    @PostMapping("/tiempoSimulacion")
+    public Fecha tiempoSimulacion(@RequestBody Fecha obj) throws InterruptedException {
+        int velocidad = (int) obj.getVelocidad();
+        return algoritmoService.fechaSimulacion(obj.getTipo(), velocidad);
+    }
+
 }

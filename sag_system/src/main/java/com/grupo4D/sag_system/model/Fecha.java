@@ -15,6 +15,14 @@ public class Fecha {
 
     private String estado;
 
+    private LocalDateTime horaActual;
+
+    public Fecha(LocalDateTime horaActual, int tipo, double velocidad){
+        this.horaActual = horaActual;
+        this.velocidad = velocidad;
+        this.tipo = tipo;
+    }
+
     public Fecha(LocalDateTime fecha) {
         this.fecha = fecha;
     }

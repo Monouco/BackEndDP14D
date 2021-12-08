@@ -764,13 +764,13 @@ public class AlgorithmService {
 
 
 
-        UpdateCurrentValues updating = applicationContext.getBean(UpdateCurrentValues.class);
+        /*UpdateCurrentValues updating = applicationContext.getBean(UpdateCurrentValues.class);
 
         taskExecutor.execute(updating);
 
         FillDeposit fillDeposit = applicationContext.getBean(FillDeposit.class);
 
-        taskExecutor.execute(fillDeposit);
+        taskExecutor.execute(fillDeposit);*/
 
         AlgorithmThread algorithm = applicationContext.getBean(AlgorithmThread.class);
 
@@ -838,13 +838,13 @@ public class AlgorithmService {
             e.printStackTrace();
         }*/
 
-        UpdateCurrentValues updating = applicationContext.getBean(UpdateCurrentValues.class);
+        /*UpdateCurrentValues updating = applicationContext.getBean(UpdateCurrentValues.class);
 
         taskExecutor.execute(updating);
 
         FillDeposit fillDeposit = applicationContext.getBean(FillDeposit.class);
 
-        taskExecutor.execute(fillDeposit);
+        taskExecutor.execute(fillDeposit);*/
 
         AlgorithmThread algorithm = applicationContext.getBean(AlgorithmThread.class);
 
@@ -852,6 +852,34 @@ public class AlgorithmService {
 
         return pedidos;
 
+    }
+
+    public Fecha fechaSimulacion(int tipo, int velocidad){
+        LocalDateTime result = LocalDateTime.now(StaticValues.zoneId);
+        long nanos = 1000000000;
+        long nanosDiff = 0;
+        switch (tipo){
+            case 1: {
+                return new Fecha(result,tipo,velocidad);
+            }
+            case 2: {
+                if (StaticValues.simRealTime != null) {
+                    nanosDiff = ChronoUnit.NANOS.between(StaticValues.simRealTime, result);
+                    result = StaticValues.simInTime;
+                }
+
+            }
+            case 3: {
+                if (StaticValues.collapseRealTime != null) {
+                    nanosDiff = ChronoUnit.NANOS.between(StaticValues.collapseRealTime, result);
+                    result = StaticValues.collapseInTime;
+                }
+            }
+        }
+
+        result = result.plusNanos(nanosDiff * velocidad);
+
+        return new Fecha((nanosDiff != 0) ? result : null,tipo,velocidad);
     }
 
 

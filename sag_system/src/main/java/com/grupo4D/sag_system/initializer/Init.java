@@ -54,13 +54,13 @@ public class Init implements InitializingBean {
             System.out.println(e.getMessage());
         }*/
 
-        UpdateCurrentValues updating = applicationContext.getBean(UpdateCurrentValues.class);
+        //UpdateCurrentValues updating = applicationContext.getBean(UpdateCurrentValues.class);
 
-        taskExecutor.execute(updating);
+        //taskExecutor.execute(updating);
 
-        FillDeposit fillDeposit = applicationContext.getBean(FillDeposit.class);
+        //FillDeposit fillDeposit = applicationContext.getBean(FillDeposit.class);
 
-        taskExecutor.execute(fillDeposit);
+        //taskExecutor.execute(fillDeposit);
 
         //LOG.info(Arrays.asList(environment.getDefaultProfiles()));
         AlgorithmThread algorithm = applicationContext.getBean(AlgorithmThread.class);

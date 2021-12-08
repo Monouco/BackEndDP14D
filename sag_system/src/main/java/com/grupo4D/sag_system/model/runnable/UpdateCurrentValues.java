@@ -37,7 +37,7 @@ public class UpdateCurrentValues implements Runnable{
         //Considerando 3 min
         long sleepTime ;
         if(type == 1){
-            sleepTime = 180000;
+            sleepTime = 300000;
         }
         else{
             sleepTime = 3000;

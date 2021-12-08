@@ -6,7 +6,9 @@ import com.grupo4D.sag_system.model.response.TipoSimulacionFront;
 import com.grupo4D.sag_system.model.statics.ConcurrentValues;
 import com.grupo4D.sag_system.model.statics.OutputLog;
 import com.grupo4D.sag_system.model.statics.StaticValues;
+import com.grupo4D.sag_system.repository.CamionRepository;
 import com.grupo4D.sag_system.repository.PedidoRepository;
+import com.grupo4D.sag_system.repository.PlantaRepository;
 import com.grupo4D.sag_system.service.AlgorithmService;
 import com.grupo4D.sag_system.service.PedidoService;
 import com.grupo4D.sag_system.service.ReportesService;
@@ -44,6 +46,12 @@ public class AlgorithmThread implements Runnable {
 
     @Autowired
     ReportesService reportesService;
+
+    @Autowired
+    CamionRepository camionRepository;
+
+    @Autowired
+    PlantaRepository plantaRepository;
     /*
     public AlgorithmThread(int multiplier, LocalDateTime simulationDate, LocalDateTime startDate, int type){
         this.multiplier = multiplier;
@@ -107,6 +115,8 @@ public class AlgorithmThread implements Runnable {
                     StaticValues.endSimulationFlag = true;
                     break;
                 }
+
+                camionRepository.updatingValues(simulationDate, type, ChronoUnit.NANOS.between(LocalDateTime.now(StaticValues.zoneId),simulationDate));
 
                 orders = pedidoService.listarPedidosDisponibles(simulationDate, type);
 
@@ -183,6 +193,7 @@ public class AlgorithmThread implements Runnable {
                                     break;
                                 }
                             }
+                            break;
                         }
                     }
 
@@ -205,7 +216,9 @@ public class AlgorithmThread implements Runnable {
                         break;
                     }
 
-                    switch (type){
+                    algorithmService.asignarPedidos(simulationDate, orders, type, offset, multiplier);
+
+                    /*switch (type){
                         case 1: {
                             try {
                                 ConcurrentValues.freeUpdateVal.acquire();
@@ -240,42 +253,21 @@ public class AlgorithmThread implements Runnable {
                             }
                             break;
                         }
-                    }
+                    }*/
 
                     System.out.println(LocalDateTime.now(StaticValues.zoneId) + " Pedidos atendidos para el tipo " + type + "Tiempo de simulacion " + simulationDate);
                     //log.write(LocalDateTime.now(StaticValues.zoneId) + " Pedidos atendidos para el tipo " + type + "Tiempo de simulacion " + simulationDate + '\n');
 
                 } else {
                     switch (type){
-                        case 1: {
-                            try {
-                                ConcurrentValues.freeUpdateVal.acquire();
-                                ConcurrentValues.updateVal.release();
-                            }
-                            catch (Exception e){
-                                System.out.println(e.getMessage());
-                                ConcurrentValues.updateVal.release();
-                            }
-                            break;
-                        }
                         case 2: {
-                            try {
-                                ConcurrentValues.freeUpdateValSimulation.acquire();
-                                ConcurrentValues.updateValSimulation.release();
-                            }catch (Exception e){
-                                System.out.println(e.getMessage());
-                                ConcurrentValues.updateValSimulation.release();
-                            }
+                            StaticValues.simInTime = simulationDate;
+                            StaticValues.simRealTime = startDate;
                             break;
                         }
                         case 3: {
-                            try {
-                                ConcurrentValues.freeUpdateValCollapse.acquire();
-                                ConcurrentValues.updateValCollapse.release();
-                            }catch (Exception e){
-                                System.out.println(e.getMessage());
-                                ConcurrentValues.updateValCollapse.release();
-                            }
+                            StaticValues.collapseInTime = simulationDate;
+                            StaticValues.collapseRealTime = startDate;
                             break;
                         }
                     }
@@ -298,7 +290,7 @@ public class AlgorithmThread implements Runnable {
 
                 if(type != 1) {
                     if (simulationDate.isAfter(nextDay)) {
-                        switch (type){
+                        /*switch (type){
                             case 2: {
                                 ConcurrentValues.newSimulationDay.release();
                                 break;
@@ -307,7 +299,8 @@ public class AlgorithmThread implements Runnable {
                                 ConcurrentValues.newCollapseDay.release();
                                 break;
                             }
-                        }
+                        }*/
+                        plantaRepository.fillDeposit(type);
                         nextDay = simulationDate.plusDays(1).truncatedTo(ChronoUnit.DAYS);
                     }
                 }
@@ -318,7 +311,7 @@ public class AlgorithmThread implements Runnable {
             System.out.println(e.getMessage());
         }
 
-        switch (type){
+        /*switch (type){
             case 2: {
                 ConcurrentValues.newSimulationDay.release();
                 break;
@@ -327,7 +320,7 @@ public class AlgorithmThread implements Runnable {
                 ConcurrentValues.newCollapseDay.release();
                 break;
             }
-        }
+        }*/
 
         System.out.println(LocalDateTime.now(StaticValues.zoneId) + " Terminando la ejecucion del algoritmo tipo " + type );
         /*try {
@@ -340,6 +333,19 @@ public class AlgorithmThread implements Runnable {
 
         if(type != 1)
             pedidoRepository.terminarSimulacion(type);
+
+        switch (type){
+            case 2: {
+                StaticValues.simInTime = null;
+                StaticValues.simRealTime = null;
+                break;
+            }
+            case 3: {
+                StaticValues.collapseInTime = null;
+                StaticValues.collapseRealTime = null;
+                break;
+            }
+        }
 
     }
 

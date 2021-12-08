@@ -36,6 +36,10 @@ public class StaticValues {
     public static InputStreamResource reportCapacity;
     public static InputStreamResource simReportCapacity;
     public static InputStreamResource collapseReportCapacity;
+    public static LocalDateTime simRealTime = null;
+    public static LocalDateTime simInTime = null;
+    public static LocalDateTime collapseRealTime = null;
+    public static LocalDateTime collapseInTime = null;
 
     public static ArrayList<Bloqueo> roadBlocks;
     public static ArrayList<NodoXBloqueo> blockedNodes;
