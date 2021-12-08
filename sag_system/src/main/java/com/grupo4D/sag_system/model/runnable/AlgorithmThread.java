@@ -269,12 +269,12 @@ public class AlgorithmThread implements Runnable {
                 switch (type){
                     case 2: {
                         StaticValues.simInTime = simulationDate;
-                        StaticValues.simRealTime = startDate;
+                        StaticValues.simRealTime = LocalDateTime.now(StaticValues.zoneId);
                         break;
                     }
                     case 3: {
                         StaticValues.collapseInTime = simulationDate;
-                        StaticValues.collapseRealTime = startDate;
+                        StaticValues.collapseRealTime = LocalDateTime.now(StaticValues.zoneId);
                         break;
                     }
                 }
