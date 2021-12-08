@@ -121,6 +121,10 @@ public class AlgorithmService {
                         ArrayList<PedidoHRFront> pedidos = new ArrayList<>();
                         for (RutaXPedido rxp:   pedidosDeRuta ) {
                             Pedido pedido1ruta = pedidoRepository.findPedidoByIdAndActivoTrue(rxp.getPedido().getId());
+                            if(pedido1ruta == null){
+                                System.out.print("Pedido es nulo");
+                                continue;
+                            }
                             //System.out.print("pedido de RutaXPedido "+rxp.getPedido().getId()+"\n");
                             PedidoHRFront pedidoHR = new PedidoHRFront();
                             pedidoHR.setIdPedido(pedido1ruta.getId());
@@ -223,9 +227,6 @@ public class AlgorithmService {
         }
         return  null;
     }
-
-
-
 
     public RespuestaObtenerRutaFront obtenerRutasSolucion(Fecha fecha, double velocidad, int tipo){
         //parametros varios
@@ -865,5 +866,60 @@ public class AlgorithmService {
         return new Fecha((nanosDiff != 0) ? result : null,tipo,velocidad);
     }
 
+    public HojaRutaFront hojaRutaNodos(int idRuta){
+        HojaRutaFront hojaRutaFront = new HojaRutaFront();
+        ArrayList<String > nodos = new ArrayList<>();
+        String route;
+        String dir = "";
+        String curDir = "";
+        int [] coorAnt = {-1,-1};
+        int [] curCoor = new int[2]; // -2 -1 1 2
+        ArrayList<RutaXNodo> nodosDeRuta = rutaXNodoRepository.listarRutaXNodosPorRuta(idRuta);
+        for (RutaXNodo r:
+             nodosDeRuta) {
+            curCoor[0] = r.getNodo().getCoordenadaX();
+            curCoor[1] = r.getNodo().getCoordenadaY();
+            if(coorAnt[0] == -1 && coorAnt[1] == -1){
+                coorAnt[0] = curCoor[0];
+                coorAnt[1] = curCoor[1];
+                continue;
+            }
+
+            switch (2*(curCoor[0]-coorAnt[0]) + (curCoor[1]-coorAnt[1])){
+                case -2:{
+                    curDir = "l";
+                    break;
+                }
+                case -1:{
+                    curDir = "u";
+                    break;
+                }
+                case 1:{
+                    curDir = "r";
+                    break;
+                }
+                case 2:{
+                    curDir = "d";
+                    break;
+                }
+                default:{
+                    break;
+                }
+            }
+
+            if(dir == ""){
+                dir = curDir;
+            }
+            if(dir != curDir){
+                route = coorAnt[0] + "," + coorAnt[1];
+                dir = curDir;
+                nodos.add(route);
+            }
+            coorAnt[0] = curCoor[0];
+            coorAnt[1] = curCoor[1];
+        }
+        hojaRutaFront.setNodos(nodos);
+        return hojaRutaFront;
+    }
 
 }

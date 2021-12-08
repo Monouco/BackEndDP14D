@@ -70,4 +70,9 @@ public class AlgorithmController {
         return algoritmoService.fechaSimulacion(obj.getTipo(), velocidad);
     }
 
+    @PostMapping("/obtenerNodosHojaRuta")
+    public HojaRutaFront obtenerNodosHojaRuta(@RequestBody Fecha obj) throws InterruptedException {
+        return algoritmoService.hojaRutaNodos(obj.getTipo());
+    }
+
 }
