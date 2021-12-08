@@ -83,4 +83,12 @@ public class Fecha {
     public void setEstado(String estado) {
         this.estado = estado;
     }
+
+    public LocalDateTime getHoraActual() {
+        return horaActual;
+    }
+
+    public void setHoraActual(LocalDateTime horaActual) {
+        this.horaActual = horaActual;
+    }
 }
