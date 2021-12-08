@@ -890,7 +890,7 @@ public class AlgorithmService {
             if(coorAnt[0] == -1 && coorAnt[1] == -1){
                 coorAnt[0] = curCoor[0];
                 coorAnt[1] = curCoor[1];
-                route = coorAnt[0] + "," + coorAnt[1];
+                route = coorAnt[0] + ", " + coorAnt[1];
                 nodos.add(route);
                 tipo = "-";
                 tipos.add(tipo);
@@ -938,12 +938,12 @@ public class AlgorithmService {
                     tipos.add(tipo);
                 }
             }else if (r.getPedido()>=0){ //Caso pedidos
-                route = coorAnt[0] + "," + coorAnt[1];
+                route = coorAnt[0] + ", " + coorAnt[1];
                 nodos.add(route);
                 tipo = "Pedido " + mapa.get(r.getSecuencia());
                 tipos.add(tipo);
             }else if (mapa.containsKey(r.getSecuencia())){ //Caso plantas
-                route = coorAnt[0] + "," + coorAnt[1];
+                route = coorAnt[0] + ", " + coorAnt[1];
                 nodos.add(route);
                 tipo = "Planta " + mapa.get(r.getSecuencia());
                 tipos.add(tipo);
@@ -952,7 +952,7 @@ public class AlgorithmService {
             coorAnt[1] = curCoor[1];
             //Caso planta final
             if (nodosDeRuta.indexOf(r) == nodosDeRuta.size()-1){
-                route = coorAnt[0] + "," + coorAnt[1];
+                route = coorAnt[0] + ", " + coorAnt[1];
                 nodos.add(route);
                 tipo = "Planta Principal";
                 tipos.add(tipo);
