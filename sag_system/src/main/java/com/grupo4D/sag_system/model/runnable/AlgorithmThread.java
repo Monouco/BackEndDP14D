@@ -152,42 +152,45 @@ public class AlgorithmThread implements Runnable {
                                 toUpgrade = toUpgrade +  nTypeC + " camiones del Tipo C \n";
                             if(nTypeD >0)
                                 toUpgrade = toUpgrade +  nTypeD + " camiones del Tipo D \n";
+
                             switch (type){
                                 case 1: {
+                                    StaticValues.collapseFlag = true;
+                                    StaticValues.comCollapseFlag = true;
                                     StaticValues.collapseStatus.setFechaColapso(simulationDate);
                                     StaticValues.collapseStatus.setPedidosAtendidos(pedidoRepository.pedidosAtendidos(type));
                                     StaticValues.collapseStatus.setPedidosPorAtender(pedidoRepository.pedidosPorAtendidos(type));
                                     StaticValues.collapseStatus.setHojaRuta(algorithmService.obtenerHojaDeRuta(new TipoSimulacionFront(type,multiplier)));
                                     StaticValues.collapseStatus.setPedidosEnCola(orders);
                                     StaticValues.collapseStatus.setFlotaFaltante(toUpgrade);
-                                    StaticValues.collapseFlag = true;
-                                    StaticValues.comCollapseFlag = true;
                                     StaticValues.reportCapacity = reportesService.reporteCapacidadAtencion(type);
                                     System.out.println(LocalDateTime.now(StaticValues.zoneId) + " Colapso Logistico tipo " + type + " a las " + simulationDate);
                                     break;
                                 }
                                 case 2: {
+                                    StaticValues.collapseSimulationFlag = true;
+                                    StaticValues.comSimCollapseFlag = true;
                                     StaticValues.collapseSimStatus.setFechaColapso(simulationDate);
                                     StaticValues.collapseSimStatus.setPedidosAtendidos(pedidoRepository.pedidosAtendidos(type));
                                     StaticValues.collapseSimStatus.setPedidosPorAtender(pedidoRepository.pedidosPorAtendidos(type));
+                                    System.out.println(LocalDateTime.now(StaticValues.zoneId) + " Entrando a colapso " + type + " a las " + simulationDate);
                                     StaticValues.collapseSimStatus.setHojaRuta(algorithmService.obtenerHojaDeRuta(new TipoSimulacionFront(type,multiplier)));
                                     StaticValues.collapseSimStatus.setPedidosEnCola(orders);
                                     StaticValues.collapseSimStatus.setFlotaFaltante(toUpgrade);
-                                    StaticValues.collapseSimulationFlag = true;
-                                    StaticValues.comSimCollapseFlag = true;
                                     StaticValues.simReportCapacity = reportesService.reporteCapacidadAtencion(type);
                                     System.out.println(LocalDateTime.now(StaticValues.zoneId) + " Colapso Logistico tipo " + type + " a las " + simulationDate);
                                     break;
                                 }
                                 case 3: {
+                                    StaticValues.fullCollapseFlag = true;
+                                    StaticValues.comFullCollapseFlag = true;
                                     StaticValues.fullCollapseStatus.setFechaColapso(simulationDate);
                                     StaticValues.fullCollapseStatus.setPedidosAtendidos(pedidoRepository.pedidosAtendidos(type));
                                     StaticValues.fullCollapseStatus.setPedidosPorAtender(pedidoRepository.pedidosPorAtendidos(type));
+                                    System.out.println(LocalDateTime.now(StaticValues.zoneId) + " Entrando a colapso " + type + " a las " + simulationDate);
                                     StaticValues.fullCollapseStatus.setHojaRuta(algorithmService.obtenerHojaDeRuta(new TipoSimulacionFront(type,multiplier)));
                                     StaticValues.fullCollapseStatus.setPedidosEnCola(orders);
                                     StaticValues.fullCollapseStatus.setFlotaFaltante(toUpgrade);
-                                    StaticValues.fullCollapseFlag = true;
-                                    StaticValues.comFullCollapseFlag = true;
                                     StaticValues.collapseReportCapacity = reportesService.reporteCapacidadAtencion(type);
                                     System.out.println(LocalDateTime.now(StaticValues.zoneId) + " Colapso Logistico tipo " + type + " a las " + simulationDate);
                                     break;

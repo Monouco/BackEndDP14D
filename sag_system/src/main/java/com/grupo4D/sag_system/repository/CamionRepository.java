@@ -22,9 +22,18 @@ public interface CamionRepository extends CrudRepository<Camion,Integer> {
                     "and ((estado = ?1 and 1 = ?2) " +
                     "or (estado_simulacion = ?1 and 2 = ?2) " +
                     "or (estado_colapso = ?1 and 3 = ?2))" +
-                    "order by id_tipo_camion asc",
+                    "order by id_tipo_camion desc",
             nativeQuery = true)
     public ArrayList<Camion> listarCamionesTipo(String estado, int tipo);
+
+    @Query(
+            value = "SELECT * FROM camion u WHERE u.activo = 1 " +
+                    "and ((estado = ?1 and 1 = ?2) " +
+                    "or (estado_simulacion = ?1 and 2 = ?2) " +
+                    "or (estado_colapso = ?1 and 3 = ?2))" +
+                    "order by id_tipo_camion asc",
+            nativeQuery = true)
+    public ArrayList<Camion> listarCamionesTipoAsc(String estado, int tipo);
 
     @Transactional
     @Modifying
