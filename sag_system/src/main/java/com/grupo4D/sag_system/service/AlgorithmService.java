@@ -1,6 +1,5 @@
 package com.grupo4D.sag_system.service;
 
-import com.grupo4D.sag_system.SagSystemApplication;
 import com.grupo4D.sag_system.model.*;
 import com.grupo4D.sag_system.model.algorithm.Ant;
 import com.grupo4D.sag_system.model.algorithm.DepositGLP;
@@ -10,21 +9,13 @@ import com.grupo4D.sag_system.model.algorithm.pathFinding.ACSAlgorithm;
 import com.grupo4D.sag_system.model.response.*;
 import com.grupo4D.sag_system.model.runnable.*;
 import com.grupo4D.sag_system.model.statics.ConcurrentValues;
-import com.grupo4D.sag_system.model.statics.OutputLog;
 import com.grupo4D.sag_system.model.statics.StaticValues;
 import com.grupo4D.sag_system.repository.*;
-import org.apache.tomcat.jni.Local;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
-import org.springframework.core.task.TaskExecutor;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.stereotype.Service;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.lang.reflect.Array;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
@@ -32,7 +23,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
 
 @Service
 public class AlgorithmService {
@@ -117,102 +107,105 @@ public class AlgorithmService {
                     //ArrayList<RutaXPedido> pedidosDeRuta = rutaXPedidoRepository.findRutaXPedidosByIdRuta(rutasIniciadas.get(i).getId());
                     for (int j=0;j<i;j++){
                         Ruta r = rutasIniciadas.get(j);
-                        ArrayList<RutaXPedido> pedidosDeRuta = rutaXPedidoRepository.findRutaXPedidosByRuta(r.getId());
-                        ArrayList<PedidoHRFront> pedidos = new ArrayList<>();
-                        for (RutaXPedido rxp:   pedidosDeRuta ) {
-                            Pedido pedido1ruta = pedidoRepository.findPedidoByIdAndActivoTrue(rxp.getPedido().getId());
-                            if(pedido1ruta == null){
-                                System.out.print("Pedido es nulo");
-                                continue;
+                        if (r.getCamion().getId() == c.getId()) {
+                            ArrayList<RutaXPedido> pedidosDeRuta = rutaXPedidoRepository.findRutaXPedidosByRuta(r.getId());
+                            ArrayList<PedidoHRFront> pedidos = new ArrayList<>();
+                            for (RutaXPedido rxp : pedidosDeRuta) {
+                                Pedido pedido1ruta = pedidoRepository.findPedidoByIdAndActivoTrue(rxp.getPedido().getId());
+                                if (pedido1ruta == null) {
+                                    System.out.print("Pedido es nulo");
+                                    continue;
+                                }
+                                //System.out.print("pedido de RutaXPedido "+rxp.getPedido().getId()+"\n");
+                                PedidoHRFront pedidoHR = new PedidoHRFront();
+                                pedidoHR.setIdPedido(pedido1ruta.getId());
+                                pedidoHR.setCantidadGLP(rxp.getCantidadGLPEnviado());
+                                UbicacionHRFront u = new UbicacionHRFront();
+                                u.setX(pedido1ruta.getNodo().getCoordenadaX());
+                                u.setY(pedido1ruta.getNodo().getCoordenadaY());
+                                pedidoHR.setUbicacion(u);
+                                String hora = String.format("%02d", rxp.getFechaEntrega().getHour());
+                                String minutos = String.format("%02d", rxp.getFechaEntrega().getMinute());
+                                String segundos = String.format("%02d", rxp.getFechaEntrega().getSecond());
+                                pedidoHR.setHoraLlegada(hora + ":" + minutos + ":" + segundos);
+                                LocalDateTime finAtencion = rxp.getFechaEntrega().plusMinutes(10);
+                                hora = String.format("%02d", finAtencion.getHour());
+                                minutos = String.format("%02d", finAtencion.getMinute());
+                                segundos = String.format("%02d", finAtencion.getSecond());
+                                pedidoHR.setHoraDeFinAtencion(hora + ":" + minutos + ":" + segundos);
+                                //System.out.print("pedido "+pedido1ruta.getId()+"\n");
+                                pedidos.add(pedidoHR);
+                                cantGLPTransportado += rxp.getCantidadGLPEnviado();
+
                             }
-                            //System.out.print("pedido de RutaXPedido "+rxp.getPedido().getId()+"\n");
-                            PedidoHRFront pedidoHR = new PedidoHRFront();
-                            pedidoHR.setIdPedido(pedido1ruta.getId());
-                            pedidoHR.setCantidadGLP(rxp.getCantidadGLPEnviado());
-                            UbicacionHRFront u = new UbicacionHRFront();
-                            u.setX(pedido1ruta.getNodo().getCoordenadaX());
-                            u.setY(pedido1ruta.getNodo().getCoordenadaY());
-                            pedidoHR.setUbicacion(u);
-                            String hora = String.format("%02d", rxp.getFechaEntrega().getHour());
-                            String minutos = String.format("%02d", rxp.getFechaEntrega().getMinute());
-                            String segundos = String.format("%02d", rxp.getFechaEntrega().getSecond());
-                            pedidoHR.setHoraLlegada( hora+":"+minutos+ ":"+ segundos);
-                            LocalDateTime finAtencion = rxp.getFechaEntrega().plusMinutes(10);
-                            hora = String.format("%02d", finAtencion.getHour());
-                            minutos = String.format("%02d", finAtencion.getMinute());
-                            segundos = String.format("%02d", finAtencion.getSecond());
-                            pedidoHR.setHoraDeFinAtencion(hora+ ":"+ minutos+":"+ segundos);
-                            //System.out.print("pedido "+pedido1ruta.getId()+"\n");
-                            pedidos.add(pedidoHR);
-                            cantGLPTransportado += rxp.getCantidadGLPEnviado();
-                        }
-                        camionHR.setNumPedidos(pedidos.size());
-                        camionHR.setPedidos(pedidos);
-                        camionHR.setCantGlpActual(cantGLPTransportado); //cantidad de glp entregado
-                        camionHR.setIdRuta(r.getId());
+                            camionHR.setNumPedidos(pedidos.size());
+                            camionHR.setPedidos(pedidos);
+                            camionHR.setCantGlpActual(cantGLPTransportado); //cantidad de glp entregado
+                            camionHR.setIdRuta(r.getId());
 
 
-                        //Se saca los nodos de una ruta en particular
-                        ArrayList<RutaXNodo> nodosDeRuta = rutaXNodoRepository.listarRutaXNodosPorRuta(r.getId());
-                        ArrayList<RutaXPlanta> nodosPorPlanta = rutaXPlantaRepository.listarRutaXPlantaPorRuta(r.getId());
-                        int sec=0; //indice para recorrer nodosPorPlanta
-                        double glp=0;
-                        double petroleo =0;
-                        double distancia = 0;
-                        double [] pesos = new double[nodosDeRuta.size()];
-                        double [] cantPetroleoTanque = new double[nodosDeRuta.size()];
-                        int salto=0;
+                            //Se saca los nodos de una ruta en particular
+                            ArrayList<RutaXNodo> nodosDeRuta = rutaXNodoRepository.listarRutaXNodosPorRuta(r.getId());
+                            ArrayList<RutaXPlanta> nodosPorPlanta = rutaXPlantaRepository.listarRutaXPlantaPorRuta(r.getId());
+                            int sec = 0; //indice para recorrer nodosPorPlanta
+                            double glp = 0;
+                            double petroleo = 0;
+                            double distancia = 0;
+                            double[] pesos = new double[nodosDeRuta.size()];
+                            double[] cantPetroleoTanque = new double[nodosDeRuta.size()];
+                            int salto = 0;
 
-                        if (nodosDeRuta.size()>0 && pedidosDeRuta.size()>0) {
-                            ArrayList<Integer> distancias = new ArrayList<>();
-                            TipoCamion tCamion = tipoCamionRepository.listarTipoCamion(c.getTipoCamion().getId());
-                            cantPetroleoTanque[0] = tCamion.getCapacidadPetroleo();
-                            pesos[0] = tCamion.getCapacidadGLP(); //comienza con el tanque lleno
-                            //Calculo de peso en el camion
-                            //System.out.println("Cantidad nodos de ruta: "+nodosDeRuta.size());
-                            for (int k = 0; k < nodosDeRuta.size(); k++) { //por cada nodo de la ruta
-                                //hallar el petroleo aca
-                                //0 a mas es entrega de pedido
-                                //-4,-3 es planta principal
-                                //distancia x peso/150
-                                if (nodosDeRuta.get(k).getPedido() >= 0) { //si se entrega un pedido
-                                    pesos[k] = (pesos[k - 1] -
-                                            pedidosDeRuta.get(salto).getCantidadGLPEnviado()) * 0.5 + tCamion.getPesoTara();
-                                    salto = salto++;
+                            if (nodosDeRuta.size() > 0 && pedidosDeRuta.size() > 0) {
+                                ArrayList<Integer> distancias = new ArrayList<>();
+                                TipoCamion tCamion = tipoCamionRepository.listarTipoCamion(c.getTipoCamion().getId());
+                                cantPetroleoTanque[0] = tCamion.getCapacidadPetroleo();
+                                pesos[0] = tCamion.getCapacidadGLP(); //comienza con el tanque lleno
+                                //Calculo de peso en el camion
+                                //System.out.println("Cantidad nodos de ruta: "+nodosDeRuta.size());
+                                for (int k = 0; k < nodosDeRuta.size(); k++) { //por cada nodo de la ruta
+                                    //hallar el petroleo aca
+                                    //0 a mas es entrega de pedido
+                                    //-4,-3 es planta principal
+                                    //distancia x peso/150
+                                    if (nodosDeRuta.get(k).getPedido() >= 0) { //si se entrega un pedido
+                                        pesos[k] = (pesos[k - 1] -
+                                                pedidosDeRuta.get(salto).getCantidadGLPEnviado()) * 0.5 + tCamion.getPesoTara();
+                                        salto = salto++;
 //                            } else if (nodosDeRuta.get(k).getPedido() == -1) { //si es un nodo camino
 //                                pesos[k] = pesos[k - 1] * 0.5 + tCamion.getPesoTara();
 //                            } else {                                         //si es una planta
 //                                pesos[k] = tCamion.getCapacidadGLP() * 0.5 + tCamion.getPesoTara();      //se rellena el tanque
 //                                cantPetroleoTanque[k] = tCamion.getCapacidadPetroleo();
 //                            }
-                                } else { //si es un nodo camino o una planta
-                                    if (k!=0) {
-                                        pesos[k] = pesos[k - 1] * 0.5 + tCamion.getPesoTara(); //si es un nodo camino
-                                    }else{
-                                        pesos[k] = tCamion.getCapacidadGLP() * 0.5 + tCamion.getPesoTara();      //se rellena el tanque
-                                        cantPetroleoTanque[k] = tCamion.getCapacidadPetroleo();
+                                    } else { //si es un nodo camino o una planta
+                                        if (k != 0) {
+                                            pesos[k] = pesos[k - 1] * 0.5 + tCamion.getPesoTara(); //si es un nodo camino
+                                        } else {
+                                            pesos[k] = tCamion.getCapacidadGLP() * 0.5 + tCamion.getPesoTara();      //se rellena el tanque
+                                            cantPetroleoTanque[k] = tCamion.getCapacidadPetroleo();
+                                        }
+                                        if (sec < nodosPorPlanta.size() && nodosDeRuta.get(k).getSecuencia() == nodosPorPlanta.get(sec).getSecuencia()) { //esta en una planta
+                                            pesos[k] = tCamion.getCapacidadGLP() * 0.5 + tCamion.getPesoTara();      //se rellena el tanque
+                                            cantPetroleoTanque[k] = tCamion.getCapacidadPetroleo();   //se rellena el tanque
+                                            sec = sec++;
+                                        }
                                     }
-                                    if (sec<nodosPorPlanta.size() && nodosDeRuta.get(k).getSecuencia() == nodosPorPlanta.get(sec).getSecuencia()) { //esta en una planta
-                                        pesos[k] = tCamion.getCapacidadGLP() * 0.5 + tCamion.getPesoTara();      //se rellena el tanque
-                                        cantPetroleoTanque[k] = tCamion.getCapacidadPetroleo();   //se rellena el tanque
-                                        sec = sec++;
+                                    // System.out.println("Nodos de ruta: "+nodosDeRuta.get(k).getPedido());
+                                }
+                                double petroleoConsumido = 0;
+                                double consumoTramoFinal = 0;
+                                double cantPetroleoFinalRuta = 0;
+                                int ind = Arrays.asList(petroleoConsumido).lastIndexOf(tCamion.getCapacidadPetroleo());
+                                for (int y = 0; y < pesos.length; y++) {
+                                    petroleoConsumido += pesos[y] / 150;
+                                    if (y >= ind) {
+                                        consumoTramoFinal += pesos[y] / 150;
                                     }
                                 }
-                                // System.out.println("Nodos de ruta: "+nodosDeRuta.get(k).getPedido());
+                                cantPetroleoFinalRuta = tCamion.getCapacidadPetroleo() - consumoTramoFinal;
+                                camionHR.setCantPetroleoFinalRuta(cantPetroleoFinalRuta);
+                                camionHR.setCantPetroleoActual(petroleoConsumido);
                             }
-                            double petroleoConsumido = 0;
-                            double consumoTramoFinal = 0;
-                            double cantPetroleoFinalRuta = 0;
-                            int ind = Arrays.asList(petroleoConsumido).lastIndexOf(tCamion.getCapacidadPetroleo());
-                            for (int y = 0; y < pesos.length; y++) {
-                                petroleoConsumido += pesos[y] / 150;
-                                if (y >= ind) {
-                                    consumoTramoFinal += pesos[y] / 150;
-                                }
-                            }
-                            cantPetroleoFinalRuta = tCamion.getCapacidadPetroleo() - consumoTramoFinal;
-                            camionHR.setCantPetroleoFinalRuta(cantPetroleoFinalRuta);
-                            camionHR.setCantPetroleoActual(petroleoConsumido);
                         }
 
                     }
@@ -868,20 +861,39 @@ public class AlgorithmService {
 
     public HojaRutaFront hojaRutaNodos(int idRuta){
         HojaRutaFront hojaRutaFront = new HojaRutaFront();
-        ArrayList<String > nodos = new ArrayList<>();
+        ArrayList<NodoHojaRutaFront> nodosHojaRuta = new ArrayList<>();
+        ArrayList<String> nodos = new ArrayList<>();
+        ArrayList<String> tipos = new ArrayList<>();
         String route;
         String dir = "";
         String curDir = "";
+        String tipo = "";
         int [] coorAnt = {-1,-1};
         int [] curCoor = new int[2]; // -2 -1 1 2
         ArrayList<RutaXNodo> nodosDeRuta = rutaXNodoRepository.listarRutaXNodosPorRuta(idRuta);
+        ArrayList<RutaXPlanta> plantas = rutaXPlantaRepository.listarRutaXPlantaPorRuta(idRuta);
+        ArrayList<RutaXPedido> pedidos = rutaXPedidoRepository.findRutaXPedidosByRuta(idRuta);
+        HashMap<Integer,Integer> mapa = new HashMap<Integer,Integer>();
+        for (RutaXPlanta rxp: plantas){
+            mapa.put(rxp.getSecuencia(),rxp.getPlanta().getId());
+        }
+        for (RutaXPedido rxp: pedidos){
+            mapa.put(rxp.getSecuencia(),rxp.getPedido().getId());
+        }
+
         for (RutaXNodo r:
              nodosDeRuta) {
+
             curCoor[0] = r.getNodo().getCoordenadaX();
             curCoor[1] = r.getNodo().getCoordenadaY();
+            //Caso planta inicial
             if(coorAnt[0] == -1 && coorAnt[1] == -1){
                 coorAnt[0] = curCoor[0];
                 coorAnt[1] = curCoor[1];
+                route = coorAnt[0] + "," + coorAnt[1];
+                nodos.add(route);
+                tipo = "-";
+                tipos.add(tipo);
                 continue;
             }
 
@@ -910,15 +922,63 @@ public class AlgorithmService {
             if(dir == ""){
                 dir = curDir;
             }
+            //Caso esquinas
             if(dir != curDir){
                 route = coorAnt[0] + "," + coorAnt[1];
                 dir = curDir;
                 nodos.add(route);
+                if (r.getPedido()>=0){ //Si es un pedido
+                    tipo = "Pedido " + mapa.get(r.getSecuencia());
+                    tipos.add(tipo);
+                }else if (mapa.containsKey(r.getSecuencia())){ //si no es un pedido pero si una planta
+                    tipo = "Planta " + mapa.get(r.getSecuencia());
+                    tipos.add(tipo);
+                }else{  //si es solo esquina
+                    tipo = "-";
+                    tipos.add(tipo);
+                }
+            }else if (r.getPedido()>=0){ //Caso pedidos
+                route = coorAnt[0] + "," + coorAnt[1];
+                nodos.add(route);
+                tipo = "Pedido " + mapa.get(r.getSecuencia());
+                tipos.add(tipo);
+            }else if (mapa.containsKey(r.getSecuencia())){ //Caso plantas
+                route = coorAnt[0] + "," + coorAnt[1];
+                nodos.add(route);
+                tipo = "Planta " + mapa.get(r.getSecuencia());
+                tipos.add(tipo);
             }
             coorAnt[0] = curCoor[0];
             coorAnt[1] = curCoor[1];
+            //Caso planta final
+            if (nodosDeRuta.indexOf(r) == nodosDeRuta.size()-1){
+                route = coorAnt[0] + "," + coorAnt[1];
+                nodos.add(route);
+                tipo = "Planta Principal";
+                tipos.add(tipo);
+            }
+
         }
-        hojaRutaFront.setNodos(nodos);
+        System.out.println(nodos.size());
+        System.out.println(tipos.size());
+        if (nodos.size()== tipos.size()) {
+            for (int j = 1; j < nodos.size(); j++) {
+                System.out.println(j);
+                NodoHojaRutaFront n = new NodoHojaRutaFront();
+                n.setInicio(nodos.get(j - 1));
+                n.setLlegada(nodos.get(j));
+                //Llenar si es planta o pedido o nada
+                if (j==nodos.size()-1){
+                    n.setTipo(tipos.get(j));
+                }else{
+                    n.setTipo(tipos.get(j-1));
+                }
+                nodosHojaRuta.add(n);
+                System.out.println(nodos.get(j));
+                System.out.println(tipos.get(j-1)+"\n");
+            }
+        }
+        hojaRutaFront.setNodos(nodosHojaRuta);
         return hojaRutaFront;
     }
 

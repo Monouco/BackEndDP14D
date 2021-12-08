@@ -1,5 +1,6 @@
 package com.grupo4D.sag_system.repository;
 
+import com.grupo4D.sag_system.model.Nodo;
 import com.grupo4D.sag_system.model.Pedido;
 import com.grupo4D.sag_system.model.Planta;
 import org.springframework.data.jpa.repository.Modifying;
@@ -31,5 +32,10 @@ public interface PlantaRepository extends CrudRepository<Planta,Integer> {
             value = "SELECT * FROM planta u WHERE u.activo = 1 and id_planta=?1 " ,
             nativeQuery = true)
     public Planta listarGLPRestanteXPlanta(int planta);
+
+    @Query(
+            value = "select * from planta where tipo_planta=1" ,
+            nativeQuery = true)
+    public Planta obtenerPlantaPrincipal();
 }
 

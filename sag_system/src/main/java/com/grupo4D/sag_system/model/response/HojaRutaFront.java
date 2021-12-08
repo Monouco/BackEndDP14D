@@ -3,16 +3,18 @@ package com.grupo4D.sag_system.model.response;
 import java.util.ArrayList;
 
 public class HojaRutaFront {
-    ArrayList<String> nodos;
+    ArrayList<NodoHojaRutaFront> nodos;
+
+
     public HojaRutaFront(){
         nodos = new ArrayList<>();
     }
 
-    public ArrayList<String> getNodos() {
+    public ArrayList<NodoHojaRutaFront> getNodos() {
         return nodos;
     }
 
-    public void setNodos(ArrayList<String> nodos) {
+    public void setNodos(ArrayList<NodoHojaRutaFront> nodos) {
         this.nodos = nodos;
     }
 
