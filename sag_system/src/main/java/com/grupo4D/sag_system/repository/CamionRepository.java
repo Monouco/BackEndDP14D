@@ -68,6 +68,11 @@ public interface CamionRepository extends CrudRepository<Camion,Integer> {
             nativeQuery = true)
     public String listarCodigo1Camion(int id);
 
+    @Query(
+            value = "select id_camion, concat(t.abreviatura , '-' , c.codigo_camion) from tipo_camion t inner join camion c on t.id_tipo_camion = c.id_tipo_camion",
+            nativeQuery = true)
+    public List<Object[]> listarCodigosCamionConID();
+
     public Camion findCamionById(int id);
 
     @Query(
