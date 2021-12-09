@@ -1,5 +1,7 @@
 package com.grupo4D.sag_system.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
@@ -16,6 +18,7 @@ public class RutaXPlanta {
     @Column(name="cantidadGlpRepostado")
     private double cantidadGLPRespostado;
 
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @Column(name="fechaLLegada")
     private LocalDateTime fechaLLegada;
 

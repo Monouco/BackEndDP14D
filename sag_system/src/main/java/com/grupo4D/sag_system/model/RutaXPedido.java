@@ -1,5 +1,7 @@
 package com.grupo4D.sag_system.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -30,6 +32,7 @@ public class RutaXPedido {
     @Column(name = "secuencia")
     private int secuencia;
 
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @Column(name="fechaEntrega")
     private LocalDateTime fechaEntrega;
 

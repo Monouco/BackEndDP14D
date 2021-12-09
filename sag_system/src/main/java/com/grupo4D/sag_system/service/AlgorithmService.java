@@ -878,21 +878,28 @@ public class AlgorithmService {
         ArrayList<NodoHojaRutaFront> lista = new ArrayList<>();
         ArrayList<String> nodos = new ArrayList<>();
         ArrayList<String> tipos = new ArrayList<>();
+        ArrayList<String> fechas = new ArrayList<>();
+
         String route;
         String dir = "";
         String curDir = "";
         String tipo = "";
+        String fecha = "";
         int [] coorAnt = {-1,-1};
         int [] curCoor = new int[2]; // -2 -1 1 2
         ArrayList<RutaXNodo> nodosDeRuta = rutaXNodoRepository.listarRutaXNodosPorRuta(idRuta);
         ArrayList<RutaXPlanta> plantas = rutaXPlantaRepository.listarRutaXPlantaPorRuta(idRuta);
         ArrayList<RutaXPedido> pedidos = rutaXPedidoRepository.findRutaXPedidosByRuta(idRuta);
+        HashMap<Integer,RutaXPlanta> mapaPlantas = new HashMap<Integer,RutaXPlanta>();
+        HashMap<Integer,RutaXPedido> mapaPedidos = new HashMap<Integer,RutaXPedido>();
         HashMap<Integer,Integer> mapa = new HashMap<Integer,Integer>();
         for (RutaXPlanta rxp: plantas){
             mapa.put(rxp.getSecuencia(),rxp.getPlanta().getId());
+            mapaPlantas.put(rxp.getSecuencia(),rxp);
         }
         for (RutaXPedido rxp: pedidos){
             mapa.put(rxp.getSecuencia(),rxp.getPedido().getId());
+            mapaPedidos.put(rxp.getSecuencia(),rxp);
         }
 
         for (RutaXNodo r:
@@ -908,6 +915,8 @@ public class AlgorithmService {
                 nodos.add(route);
                 tipo = "-";
                 tipos.add(tipo);
+                fecha = "-";
+                fechas.add(fecha);
                 continue;
             }
 
@@ -947,23 +956,34 @@ public class AlgorithmService {
                 if (nodosDeRuta.get(i-1).getPedido()>=0){ //Si es un pedido
                     tipo = "Pedido " + mapa.get(nodosDeRuta.get(i-1).getSecuencia());
                     tipos.add(tipo);
+                    fecha = mapaPedidos.get(nodosDeRuta.get(i-1).getSecuencia()).getFechaEntrega().toString();
+                    fechas.add(fecha);
+
                 }else if (mapa.containsKey(nodosDeRuta.get(i-1).getSecuencia())){ //si no es un pedido pero si una planta
                     tipo = "Planta " + mapa.get(nodosDeRuta.get(i-1).getSecuencia()) ;
                     tipos.add(tipo);
+                    fecha = mapaPlantas.get(nodosDeRuta.get(i-1).getSecuencia()).getFechaLLegada().toString();
+                    fechas.add(fecha);
                 }else{  //si es solo esquina
                     tipo = "-";
                     tipos.add(tipo);
+                    fecha = "-";
+                    fechas.add(fecha);
                 }
             }else if (r.getPedido()>=0){ //Caso pedidos
                 route = curCoor[0] + ", " + curCoor[1];
                 nodos.add(route);
                 tipo = "Pedido " + mapa.get(r.getSecuencia());
                 tipos.add(tipo);
+                fecha = mapaPedidos.get(r.getSecuencia()).getFechaEntrega().toString();
+                fechas.add(fecha);
             }else if (mapa.containsKey(r.getSecuencia())){ //Caso plantas
                 route = curCoor[0] + ", " + curCoor[1];
                 nodos.add(route);
                 tipo = "Planta " + mapa.get(r.getSecuencia());
                 tipos.add(tipo);
+                fecha = mapaPlantas.get(r.getSecuencia()).getFechaLLegada().toString();
+                fechas.add(fecha);
             }
             coorAnt[0] = curCoor[0];
             coorAnt[1] = curCoor[1];
@@ -973,12 +993,14 @@ public class AlgorithmService {
                 nodos.add(route);
                 tipo = "Planta Principal";
                 tipos.add(tipo);
+                fecha = "-";
+                fechas.add(fecha);
             }
 
         }
 
 
-        if (nodos.size()== tipos.size()) {
+        if (nodos.size()== tipos.size() && tipos.size()==fechas.size()) {
             for (int j = 1; j < nodos.size(); j++) {
                 System.out.println(j);
                 NodoHojaRutaFront n = new NodoHojaRutaFront();
@@ -987,8 +1009,9 @@ public class AlgorithmService {
                 //Llenar si es planta o pedido o nada
                 n.setTipo(tipos.get(j));
                 nodosHojaRuta.add(n);
-                System.out.println(nodos.get(j));
-                System.out.println(tipos.get(j-1)+"\n");
+                n.setFecha(fechas.get(j));
+//                System.out.println(nodos.get(j));
+//                System.out.println(tipos.get(j-1)+"\n");
             }
 
             for (NodoHojaRutaFront n : nodosHojaRuta){
