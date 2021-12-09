@@ -879,7 +879,7 @@ public class AlgorithmService {
         ArrayList<String> nodos = new ArrayList<>();
         ArrayList<String> tipos = new ArrayList<>();
         ArrayList<String> fechas = new ArrayList<>();
-
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         String route;
         String dir = "";
         String curDir = "";
@@ -956,13 +956,13 @@ public class AlgorithmService {
                 if (nodosDeRuta.get(i-1).getPedido()>=0){ //Si es un pedido
                     tipo = "Pedido " + mapa.get(nodosDeRuta.get(i-1).getSecuencia());
                     tipos.add(tipo);
-                    fecha = mapaPedidos.get(nodosDeRuta.get(i-1).getSecuencia()).getFechaEntrega().toString();
+                    fecha = mapaPedidos.get(nodosDeRuta.get(i-1).getSecuencia()).getFechaEntrega().format(formatter);
                     fechas.add(fecha);
 
                 }else if (mapa.containsKey(nodosDeRuta.get(i-1).getSecuencia())){ //si no es un pedido pero si una planta
                     tipo = "Planta " + mapa.get(nodosDeRuta.get(i-1).getSecuencia()) ;
                     tipos.add(tipo);
-                    fecha = mapaPlantas.get(nodosDeRuta.get(i-1).getSecuencia()).getFechaLLegada().toString();
+                    fecha = mapaPlantas.get(nodosDeRuta.get(i-1).getSecuencia()).getFechaLLegada().format(formatter);
                     fechas.add(fecha);
                 }else{  //si es solo esquina
                     tipo = "-";
@@ -975,14 +975,14 @@ public class AlgorithmService {
                 nodos.add(route);
                 tipo = "Pedido " + mapa.get(r.getSecuencia());
                 tipos.add(tipo);
-                fecha = mapaPedidos.get(r.getSecuencia()).getFechaEntrega().toString();
+                fecha = mapaPedidos.get(r.getSecuencia()).getFechaEntrega().format(formatter);
                 fechas.add(fecha);
             }else if (mapa.containsKey(r.getSecuencia())){ //Caso plantas
                 route = curCoor[0] + ", " + curCoor[1];
                 nodos.add(route);
                 tipo = "Planta " + mapa.get(r.getSecuencia());
                 tipos.add(tipo);
-                fecha = mapaPlantas.get(r.getSecuencia()).getFechaLLegada().toString();
+                fecha = mapaPlantas.get(r.getSecuencia()).getFechaLLegada().format(formatter);
                 fechas.add(fecha);
             }
             coorAnt[0] = curCoor[0];
@@ -1002,7 +1002,7 @@ public class AlgorithmService {
 
         if (nodos.size()== tipos.size() && tipos.size()==fechas.size()) {
             for (int j = 1; j < nodos.size(); j++) {
-                System.out.println(j);
+               // System.out.println(j);
                 NodoHojaRutaFront n = new NodoHojaRutaFront();
                 n.setInicio(nodos.get(j - 1));
                 n.setLlegada(nodos.get(j));
