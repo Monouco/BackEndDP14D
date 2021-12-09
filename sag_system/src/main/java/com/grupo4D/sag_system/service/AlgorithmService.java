@@ -11,18 +11,17 @@ import com.grupo4D.sag_system.model.runnable.*;
 import com.grupo4D.sag_system.model.statics.ConcurrentValues;
 import com.grupo4D.sag_system.model.statics.StaticValues;
 import com.grupo4D.sag_system.repository.*;
+import org.apache.logging.log4j.spi.ObjectThreadContextMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.criteria.CriteriaBuilder;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 @Service
 public class AlgorithmService {
@@ -67,6 +66,17 @@ public class AlgorithmService {
 
     public ArrayList<CamionHRFront> obtenerHojaDeRuta(TipoSimulacionFront t){
         try{
+            List<Object[]> codigosCamion = camionRepository.listarCodigosCamionConID();
+            HashMap<Integer, String> mapaCodigosCamion = new HashMap<Integer,String>();
+            for (Object[] cod : codigosCamion){
+                mapaCodigosCamion.put((int)cod[0],cod[1].toString());
+            }
+            ArrayList<TipoCamion> tiposDeCamion = tipoCamionRepository.findAllByActivoTrue();
+            HashMap<Integer,TipoCamion> mapaTiposDeCamion = new HashMap<Integer, TipoCamion>();
+            for (TipoCamion tc: tiposDeCamion){
+                mapaTiposDeCamion.put(tc.getId(),tc);
+            }
+
             ArrayList<CamionHRFront> hojaDeRuta = new ArrayList<>();
             //Se busca los camiones en ruta
             ArrayList<Camion> camionesEnRuta = camionRepository.listarCamionesTipo("En Ruta",t.getTipo());
@@ -82,7 +92,7 @@ public class AlgorithmService {
             for (Camion c: camionesEnRuta) {
                 CamionHRFront camionHR = new CamionHRFront();
                 camionHR.setId(c.getId());
-                camionHR.setCodigoCamion(camionRepository.listarCodigo1Camion(c.getId()));
+                camionHR.setCodigoCamion(mapaCodigosCamion.get(c.getId()));
                 int i = 0;
                 for (i=0;i<rutasIniciadas.size();i++){
                     if (rutasIniciadas.get(i).getCamion().getId() == c.getId()){
@@ -111,18 +121,18 @@ public class AlgorithmService {
                             ArrayList<RutaXPedido> pedidosDeRuta = rutaXPedidoRepository.findRutaXPedidosByRuta(r.getId());
                             ArrayList<PedidoHRFront> pedidos = new ArrayList<>();
                             for (RutaXPedido rxp : pedidosDeRuta) {
-                                Pedido pedido1ruta = pedidoRepository.findPedidoByIdAndActivoTrue(rxp.getPedido().getId());
-                                if (pedido1ruta == null) {
+                                //Pedido pedido1ruta = pedidoRepository.findPedidoByIdAndActivoTrue(rxp.getPedido().getId());
+                                if (rxp.getPedido() == null) {
                                     System.out.print("Pedido es nulo");
                                     continue;
                                 }
                                 //System.out.print("pedido de RutaXPedido "+rxp.getPedido().getId()+"\n");
                                 PedidoHRFront pedidoHR = new PedidoHRFront();
-                                pedidoHR.setIdPedido(pedido1ruta.getId());
+                                pedidoHR.setIdPedido(rxp.getPedido().getId());
                                 pedidoHR.setCantidadGLP(rxp.getCantidadGLPEnviado());
                                 UbicacionHRFront u = new UbicacionHRFront();
-                                u.setX(pedido1ruta.getNodo().getCoordenadaX());
-                                u.setY(pedido1ruta.getNodo().getCoordenadaY());
+                                u.setX(rxp.getPedido().getNodo().getCoordenadaX());
+                                u.setY(rxp.getPedido().getNodo().getCoordenadaY());
                                 pedidoHR.setUbicacion(u);
                                 String hora = String.format("%02d", rxp.getFechaEntrega().getHour());
                                 String minutos = String.format("%02d", rxp.getFechaEntrega().getMinute());
@@ -157,7 +167,7 @@ public class AlgorithmService {
 
                             if (nodosDeRuta.size() > 0 && pedidosDeRuta.size() > 0) {
                                 ArrayList<Integer> distancias = new ArrayList<>();
-                                TipoCamion tCamion = tipoCamionRepository.listarTipoCamion(c.getTipoCamion().getId());
+                                TipoCamion tCamion = mapaTiposDeCamion.get(c.getTipoCamion().getId());
                                 cantPetroleoTanque[0] = tCamion.getCapacidadPetroleo();
                                 pesos[0] = tCamion.getCapacidadGLP(); //comienza con el tanque lleno
                                 //Calculo de peso en el camion
@@ -886,7 +896,7 @@ public class AlgorithmService {
         }
 
         for (RutaXNodo r:
-             nodosDeRuta) {
+                nodosDeRuta) {
 
             curCoor[0] = r.getNodo().getCoordenadaX();
             curCoor[1] = r.getNodo().getCoordenadaY();
@@ -900,6 +910,7 @@ public class AlgorithmService {
                 tipos.add(tipo);
                 continue;
             }
+
 
             switch (2*(curCoor[0]-coorAnt[0]) + (curCoor[1]-coorAnt[1])){
                 case -2:{
@@ -991,5 +1002,6 @@ public class AlgorithmService {
         hojaRutaFront.setNodos(lista);
         return hojaRutaFront;
     }
+
 
 }

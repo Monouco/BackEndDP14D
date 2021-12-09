@@ -25,6 +25,8 @@ public interface TipoCamionRepository extends CrudRepository<TipoCamion,Integer>
             nativeQuery = true)
     public TipoCamion listarTipoCamion(int id);
 
+    public ArrayList<TipoCamion> findAllByActivoTrue();
+
     public TipoCamion findTipoCamionById(int id);
 
     @Query(
