@@ -221,7 +221,9 @@ public class AlgorithmService {
                     }
 
                 }
-                hojaDeRuta.add(camionHR);
+                if (camionHR.getNumPedidos() > 0) {
+                    hojaDeRuta.add(camionHR);
+                }
             }
 
             return hojaDeRuta;
