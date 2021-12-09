@@ -4,11 +4,20 @@ public class NodoHojaRutaFront {
     String inicio;
     String llegada;
     String tipo;
+    String fecha;
 
     public NodoHojaRutaFront(String inicio, String llegada, String tipo) {
         this.inicio = inicio;
         this.llegada = llegada;
         this.tipo = tipo;
+    }
+
+    public String getFecha() {
+        return fecha;
+    }
+
+    public void setFecha(String fecha) {
+        this.fecha = fecha;
     }
 
     public NodoHojaRutaFront() {
