@@ -171,6 +171,7 @@ public class AlgorithmThread implements Runnable {
                                     StaticValues.collapseSimStatus.setFechaColapso(simulationDate);
                                     StaticValues.collapseSimStatus.setPedidosAtendidos(pedidoRepository.pedidosAtendidos(type));
                                     StaticValues.collapseSimStatus.setPedidosPorAtender(pedidoRepository.pedidosPorAtendidos(type));
+                                    StaticValues.simRealTime = LocalDateTime.now(StaticValues.zoneId);
                                     StaticValues.collapseSimStatus.setPedidosEnCola(orders);
                                     StaticValues.collapseSimStatus.setFlotaFaltante(toUpgrade);
                                     StaticValues.simReportCapacity = reportesService.reporteCapacidadAtencion(type);
@@ -185,6 +186,7 @@ public class AlgorithmThread implements Runnable {
                                     StaticValues.fullCollapseStatus.setFechaColapso(simulationDate);
                                     StaticValues.fullCollapseStatus.setPedidosAtendidos(pedidoRepository.pedidosAtendidos(type));
                                     StaticValues.fullCollapseStatus.setPedidosPorAtender(pedidoRepository.pedidosPorAtendidos(type));
+                                    StaticValues.collapseRealTime = LocalDateTime.now(StaticValues.zoneId);
                                     StaticValues.fullCollapseStatus.setPedidosEnCola(orders);
                                     StaticValues.fullCollapseStatus.setFlotaFaltante(toUpgrade);
                                     StaticValues.collapseReportCapacity = reportesService.reporteCapacidadAtencion(type);
