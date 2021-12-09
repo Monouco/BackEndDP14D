@@ -894,10 +894,9 @@ public class AlgorithmService {
         for (RutaXPedido rxp: pedidos){
             mapa.put(rxp.getSecuencia(),rxp.getPedido().getId());
         }
-        int entro = 0;
-        int flag_nodoInteres = 0;
+
         for (RutaXNodo r:
-             nodosDeRuta) {
+                nodosDeRuta) {
 
             curCoor[0] = r.getNodo().getCoordenadaX();
             curCoor[1] = r.getNodo().getCoordenadaY();
@@ -911,6 +910,7 @@ public class AlgorithmService {
                 tipos.add(tipo);
                 continue;
             }
+
 
             switch (2*(curCoor[0]-coorAnt[0]) + (curCoor[1]-coorAnt[1])){
                 case -2:{
@@ -937,7 +937,6 @@ public class AlgorithmService {
             if(dir == ""){
                 dir = curDir;
             }
-
             //Caso esquinas
             if(dir != curDir){
                 route = coorAnt[0] + ", " + coorAnt[1];
@@ -948,47 +947,23 @@ public class AlgorithmService {
                 if (nodosDeRuta.get(i-1).getPedido()>=0){ //Si es un pedido
                     tipo = "Pedido " + mapa.get(nodosDeRuta.get(i-1).getSecuencia());
                     tipos.add(tipo);
-                    flag_nodoInteres = 1;
                 }else if (mapa.containsKey(nodosDeRuta.get(i-1).getSecuencia())){ //si no es un pedido pero si una planta
                     tipo = "Planta " + mapa.get(nodosDeRuta.get(i-1).getSecuencia()) ;
                     tipos.add(tipo);
-                    flag_nodoInteres = 1;
                 }else{  //si es solo esquina
                     tipo = "-";
                     tipos.add(tipo);
                 }
-                entro = 1;
             }else if (r.getPedido()>=0){ //Caso pedidos
-                if (entro==0) {
-                    route = curCoor[0] + ", " + curCoor[1];
-                    nodos.add(route);
-                    tipo = "Pedido " + mapa.get(r.getSecuencia());
-                    tipos.add(tipo);
-                    flag_nodoInteres = 0;
-                }else if (entro == 1 && flag_nodoInteres == 0) {
-                    route = curCoor[0] + ", " + curCoor[1];
-                    nodos.add(route);
-                    tipo = "Pedido " + mapa.get(r.getSecuencia());
-                    tipos.add(tipo);
-
-                }else{
-                    entro = 0;
-                }
+                route = curCoor[0] + ", " + curCoor[1];
+                nodos.add(route);
+                tipo = "Pedido " + mapa.get(r.getSecuencia());
+                tipos.add(tipo);
             }else if (mapa.containsKey(r.getSecuencia())){ //Caso plantas
-                if (entro == 0|| flag_nodoInteres == 1) {
-                    route = curCoor[0] + ", " + curCoor[1];
-                    nodos.add(route);
-                    tipo = "Planta " + mapa.get(r.getSecuencia());
-                    tipos.add(tipo);
-                    flag_nodoInteres = 0;
-                }else if (entro == 1 && flag_nodoInteres == 0) {
-                    route = curCoor[0] + ", " + curCoor[1];
-                    nodos.add(route);
-                    tipo = "Planta " + mapa.get(r.getSecuencia());
-                    tipos.add(tipo);
-                } else {
-                    entro = 0;
-                }
+                route = curCoor[0] + ", " + curCoor[1];
+                nodos.add(route);
+                tipo = "Planta " + mapa.get(r.getSecuencia());
+                tipos.add(tipo);
             }
             coorAnt[0] = curCoor[0];
             coorAnt[1] = curCoor[1];
@@ -1016,16 +991,17 @@ public class AlgorithmService {
                 System.out.println(tipos.get(j-1)+"\n");
             }
 
-//            for (NodoHojaRutaFront n : nodosHojaRuta){
-//                if (n.getInicio().equals(n.getLlegada())){
-//                    continue;
-//                }else{
-//                    lista.add(n);
-//                }
-//            }
+            for (NodoHojaRutaFront n : nodosHojaRuta){
+                if (n.getInicio().equals(n.getLlegada())){
+                    continue;
+                }else{
+                    lista.add(n);
+                }
+            }
         }
-        hojaRutaFront.setNodos(nodosHojaRuta);
+        hojaRutaFront.setNodos(lista);
         return hojaRutaFront;
     }
+
 
 }
