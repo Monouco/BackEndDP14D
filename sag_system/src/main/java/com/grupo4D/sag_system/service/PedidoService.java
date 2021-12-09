@@ -29,6 +29,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.Month;
+import java.util.HashMap;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
@@ -475,7 +476,13 @@ public Pedido guardarPedido(Pedido pedido){
     }
 
     public ArrayList<Pedido> guardarListaPedidos(ArrayList<Pedido> lista){
+        HashMap<String,Nodo> listaNodos = new HashMap<>();
+        ArrayList<Nodo> nodosAct = nodoRepository.listarNodos();
 
+        for (Nodo n:
+                nodosAct) {
+            listaNodos.put(n.getCoor(),n);
+        }
         ArrayList<Pedido> listaNueva = new ArrayList<>();
         try{
             for (Pedido p : lista ) {
